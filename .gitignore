@@ -1,0 +1,45 @@
+# --- data hygiene: never publish these ---------------------------------------------
+# No imaging is redistributed by this repository. Series are downloaded locally from
+# The Cancer Imaging Archive and identified in data/PROVENANCE.json by Series Instance
+# UID, collection and licence, so a reader re-fetches them rather than receiving them
+# from us. See docs/REPRODUCING_DATA.md.
+data/**
+!data/PROVENANCE.json
+!data/README.md
+*.dcm
+*.DCM
+*.ima
+*.IMA
+*.nii
+*.nii.gz
+*.zip
+
+# Segmentation output and the download/probe cache.
+segmentations/
+.tcia_work/
+tcia_downloads/
+
+# --- python -----------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# --- editors / os ------------------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Internal working notes stay on the author's disk. docs/ is an allow-list: only files
+# a reader of the paper needs are published.
+docs/*
+!docs/REPRODUCING_DATA.md

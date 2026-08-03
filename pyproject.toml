@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ctsegdose-core"
+version = "0.1.0"
+description = "Patient-specific absorbed organ dose from CT tube-current modulation, using deep-learning organ segmentation and HU-derived density."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "Institute of One, LISIT Co., Ltd." }]
+keywords = [
+  "CT",
+  "organ dose",
+  "dosimetry",
+  "tube current modulation",
+  "segmentation",
+  "DICOM",
+  "TotalSegmentator",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Healthcare Industry",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+  "pydicom>=2.3",
+  "numpy>=1.23",
+]
+
+[project.optional-dependencies]
+# TotalSegmentator is inference-only here and is always run as a separate process
+# (spawning it inside a long-lived parent deadlocks on Windows), so it is not imported
+# by the package itself.
+seg = ["TotalSegmentator>=2.0", "nibabel>=5.0"]
+# Data acquisition works over the public NBIA REST API with the standard library alone.
+# tcia_utils is used when it imports cleanly, but is not required: its transitive
+# idc-index dependency does not install on every supported Python.
+tcia = ["tcia_utils>=2.0"]
+dev = ["pytest>=7.4", "pytest-cov>=4.1", "ruff>=0.4"]
+
+[project.urls]
+Homepage = "https://github.com/Institute-of-One/ctsegdose-core"
+Issues = "https://github.com/Institute-of-One/ctsegdose-core/issues"
+Documentation = "https://github.com/Institute-of-One/ctsegdose-core#readme"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ctsegdose_core"]
+
+[tool.hatch.build.targets.sdist]
+include = ["ctsegdose_core", "tests", "tools", "results", "README.md", "LICENSE"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+  "network: needs network access to the TCIA NBIA API",
+  "local_data: needs the downloaded series described by data/PROVENANCE.json",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
