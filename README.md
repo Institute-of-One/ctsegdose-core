@@ -29,8 +29,15 @@ the measured Hounsfield units, not from a reference body.
 
 ## Status
 
-**Phase 1 — data acquisition — is implemented.** The organ, density and dose layers are
-next; the repository will say so plainly here until they exist.
+**Phase 1 (data acquisition) and Phase 2 (organ layer) are implemented.** The chain runs
+end to end as far as the organ-specific weighted CTDIvol, patient-specific organ volume
+and HU-derived organ mass.
+
+**The final step to mGy is deliberately not taken yet.** It needs CTDIvol-normalised
+organ dose coefficients from a published Monte-Carlo study under a licence that permits
+redistribution, and no such table is shipped here. `ctsegdose_core/coefficients.py`
+refuses to produce an absorbed dose without one, and refuses to load a table that does
+not carry its citation, DOI, licence and source hash. See *Coefficients* below.
 
 ## Phase 1: a balanced multi-vendor sample, without downloading the archive
 
@@ -60,6 +67,61 @@ download — and is supplemented by direct queries on abdominal CT collections.
 
 **A series with no per-slice tube current is dropped, and the drop is counted per
 vendor.** Which vendors omit (0018,1151) is a result to report, not a gap to hide.
+
+## Phase 2: the organ layer
+
+```bash
+python tools/run_organ_dose.py --per-vendor 1 --full-resolution --device gpu \
+    --python .venv-gpu/Scripts/python.exe        # cross-vendor check first
+python tools/check_segmentation.py --tag 1.5mm   # anatomical sanity screens
+python tools/run_organ_dose.py --full-resolution --device gpu \
+    --python .venv-gpu/Scripts/python.exe        # the whole sample
+```
+
+Segmentation is TotalSegmentator (Apache-2.0, inference only), always in a **separate
+child process** — nnU-Net spawns its own workers, and spawning those from a long-lived
+parent leaks runaway processes on Windows. `--python` points at the CUDA environment, so
+inference runs on the GPU while the analysis stays in the environment that has pydicom
+and ctdose-core. Which interpreter, which torch and which GPU ran a mask is recorded
+with it.
+
+Three things this layer does that are easy to get wrong, and are therefore checked:
+
+**The slice grid is resolved, not assumed.** Taking the spacing as
+`(z_last − z_first) / (n − 1)` was wrong on the first real series it met: 160 files but
+119 distinct positions, so the spacing came out 26% too small *and* the stack repeated
+anatomy. Both errors inflate organ volume and neither leaves any other trace.
+
+**The slice order is canonicalised.** On three of the four vendors in this sample, Slice
+Location (0020,1041) runs opposite to Image Position (Patient), so the volume arrives
+head-first. The segmentation is unaffected — the affine is built from patient
+coordinates — but the array index stops meaning "towards the head". Index 0 is now
+always the most inferior slice, and the tube current is reordered with it.
+
+**Truncated organs are flagged.** An organ whose mask reaches the first or last slice
+continues beyond the scan: its mass is the mass of the scanned part, and its modulation
+weighting describes only the exposed part. Neither is the organ's, so it is marked and
+excluded from whole-organ comparisons rather than reported as a small organ.
+
+`tools/check_segmentation.py` screens each series against facts of gross anatomy — the
+left kidney left of the right, the spleen left of the liver, the adrenals above the
+kidneys, solid-organ masses within a wide band of the ICRP 89 reference adult. These
+catch the failures that are otherwise silent: a mirrored or inverted segmentation
+produces entirely plausible volumes, masses and Hounsfield values, and weights every
+organ by the tube current of the wrong part of the patient.
+
+## Coefficients, and why none are shipped
+
+Converting the organ-specific weighted CTDIvol to an absorbed dose needs
+`h_o(D_w) = h_ref · exp(−α · (D_w − D_w,ref))` with organ-specific `h_ref` and `α` from a
+published Monte-Carlo study. Those values are **not** invented here, and no default
+table is shipped: a coefficient table must carry citation, DOI, licence, licence URL and
+source SHA-256 or it does not load.
+
+That strictness is inherited. The companion project shipped per-scanner values of
+CT-Expo lineage, and replacing them cost a re-derivation and a corrected archive —
+formulae are free to reimplement, transcribed values are not. Until a licence-cleared
+source is settled, the pipeline reports the index layer and says so in every record.
 
 ## Data policy
 

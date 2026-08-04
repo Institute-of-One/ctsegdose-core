@@ -12,6 +12,11 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 IMAGING_SUFFIXES = {".dcm", ".ima", ".nii", ".gz", ".zip"}
 
+#: Working directories that hold derived or downloaded artefacts and are git-ignored:
+#: the archive cache, the segmentation masks, the virtual environments. Imaging is
+#: *expected* here; what must not happen is imaging appearing anywhere else.
+WORKING_DIRS = {".git", ".tcia_work", "segmentations", ".venv", ".venv-gpu", "data"}
+
 
 def test_no_imaging_file_sits_anywhere_in_the_working_tree_outside_data():
     strays = [
@@ -19,11 +24,9 @@ def test_no_imaging_file_sits_anywhere_in_the_working_tree_outside_data():
         for p in REPO.rglob("*")
         if p.is_file()
         and p.suffix.lower() in IMAGING_SUFFIXES
-        and "data" not in p.relative_to(REPO).parts
-        and ".tcia_work" not in p.relative_to(REPO).parts
-        and ".git" not in p.relative_to(REPO).parts
+        and not WORKING_DIRS.intersection(p.relative_to(REPO).parts)
     ]
-    assert not strays, f"imaging outside data/: {strays}"
+    assert not strays, f"imaging outside the git-ignored working directories: {strays}"
 
 
 def test_the_ignore_rules_keep_the_downloaded_series_out_of_the_repository():

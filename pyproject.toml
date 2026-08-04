@@ -40,6 +40,13 @@ dependencies = [
 # (spawning it inside a long-lived parent deadlocks on Windows), so it is not imported
 # by the package itself.
 seg = ["TotalSegmentator>=2.0", "nibabel>=5.0"]
+# The dose engine of IORN-004: CTDIvol (recorded or reconstructed), the organ-specific
+# tube-current weighting and the TG-220 water-equivalent diameter. It is an extra, not a
+# hard dependency, because it is installed from source rather than an index -- and
+# because every import of it in this package is function-local, so the selection and
+# density layers work without it:
+#   pip install "ctdose-core @ git+https://github.com/Institute-of-One/ctdose-core"
+dose = ["ctdose-core>=0.1.1", "scipy>=1.9"]
 # Data acquisition works over the public NBIA REST API with the standard library alone.
 # tcia_utils is used when it imports cleanly, but is not required: its transitive
 # idc-index dependency does not install on every supported Python.
