@@ -126,8 +126,28 @@ usable variation in tube current across their organs.
 ## 4. Discussion
 
 - What the organ-level index adds over a whole-scan index, and what it still is not.
-- The pancreas and spleen offsets: segmentation behaviour vs genuine cohort anatomy;
-  what would separate them.
+
+- **The pancreas offset (0.61) is attributed to the segmentation.** The pancreas is the
+  weakest of the solid abdominal organs in TotalSegmentator's own validation — Dice
+  0.887, against 0.965 for the liver, 0.983 for the spleen and 0.953 / 0.939 for the
+  kidneys [Wasserthal 2023, per-class results]. A thin, low-contrast organ with a
+  variable course is exactly the case a conservative boundary under-segments, and a
+  deficit of this size, consistent across all four manufacturers and 36 whole organs, is
+  what that produces. One caveat belongs in the text rather than a footnote: **Dice is
+  symmetric and does not establish the *sign* of a bias**, so it supports lower boundary
+  agreement but not, on its own, under-segmentation. Separating model bias from cohort
+  anatomy needs a second segmentation model on the same series — deferred to future work.
+
+- **The spleen offset (1.72) is attributed to the cohort, not the method.** Two
+  independent lines: the four largest spleens (4.47x, 3.74x, 3.34x, 3.06x of reference)
+  were reviewed slice by slice against their own CT and the contours follow the splenic
+  boundary with correct laterality and no leakage into liver, kidney or stomach; and the
+  spleen is the *best*-segmented organ in TotalSegmentator's validation (Dice 0.983), so
+  a segmentation explanation would have to be the least likely one. The four cases arise
+  on four different manufacturers, which also argues against a vendor artefact. This is
+  an oncology cohort (renal cell, colorectal, adrenal carcinoma), in which splenomegaly
+  is common; the ICRP 89 reference adult is not that population. Review overlays are
+  shipped in `paper/figures/review/`.
 - The availability finding at the organ level, and what it means for anyone attempting
   retrospective organ dosimetry on archive data.
 - **The openness boundary.** Converting this index to absorbed dose in mGy requires
@@ -138,11 +158,42 @@ usable variation in tube current across their organs.
 - Limitations: n = 10 per vendor; oncology cohort, not a reference population; a single
   segmentation model; no absorbed dose; no independent ground truth for organ mass.
 
+### 4.1 Future work
+A second segmentation model on the same series, which would separate model bias from
+cohort anatomy for the pancreas and confirm the spleen reading; and absorbed organ dose
+via coefficients computed with an open Monte-Carlo engine, which removes the licensing
+barrier described above rather than working around it.
+
 ## 5. Conclusion
 
 [to draft]
 
 ---
+
+## References (partial — the ones the skeleton already commits to)
+
+1. Wasserthal J, Breit H-C, Meyer MT, Pradella M, Hinck D, Sauter AW, Heye T, Boll DT,
+   Cyriac J, Yang S, Bach M, Segeroth M. **TotalSegmentator: robust segmentation of 104
+   anatomic structures in CT images.** *Radiol Artif Intell.* 2023;5(5):e230024.
+   doi:10.1148/ryai.230024
+   *Per-class Dice used in §4: `resources/results_all_classes_v1.json` in the project
+   repository — spleen 0.983, liver 0.965, kidney L/R 0.953/0.939, pancreas 0.887,
+   gallbladder 0.875.*
+2. ICRP. **Publication 89: Basic anatomical and physiological data for use in
+   radiological protection — reference values.** *Ann ICRP.* 2002;32(3–4).
+3. ICRU. **Report 44: Tissue substitutes in radiation dosimetry and measurement.** 1989.
+4. Schneider U, Pedroni E, Lomax A. **The calibration of CT Hounsfield units for
+   radiotherapy treatment planning.** *Phys Med Biol.* 1996;41(1):111–124.
+5. AAPM. **Report 220: Use of water equivalent diameter for calculating patient size and
+   size-specific dose estimates (SSDE) in CT.** 2014.
+6. Dinwiddie LE, Baggett JM, Kofler JM, et al. **Survey of normalized CTDIvol values
+   across four major computed tomography vendors for use in the MIRDct software.**
+   *J Appl Clin Med Phys.* 2026;27(2):e70473. doi:10.1002/acm2.70473
+7. Yamamoto S. **ctdose-core** [software]. doi:10.5281/zenodo.21636082 — the open dose
+   engine this work builds on, and the whole-scan companion study.
+
+*(Turner 2011 and Tian 2013 to be cited in §1 and §4 as the coefficient sources whose
+licences prevent redistribution — cited as prior art, never transcribed.)*
 
 ## Data and code availability
 

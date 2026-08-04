@@ -94,6 +94,20 @@ def test_the_flat_weighting_count_matches(text, tables):
     assert f"{words.get(n, n)} series show no usable variation" in text
 
 
+def test_the_two_offsets_are_attributed_and_the_attribution_is_cited(text):
+    """Neither offset may sit in the Results unexplained: each has an attribution, and
+    the attribution names its source."""
+    assert "Wasserthal" in text and "10.1148/ryai.230024" in text
+    assert "0.887" in text and "0.983" in text, (
+        "the pancreas and spleen attributions rest on TotalSegmentator's own per-class "
+        "Dice; quote them so a reader can check the reasoning"
+    )
+    assert "Dice is symmetric" in text.replace("*", ""), (
+        "Dice supports lower boundary agreement but not the sign of a bias; the text "
+        "must say so rather than over-claim the pancreas attribution"
+    )
+
+
 def test_no_absorbed_dose_in_milligray_is_claimed_anywhere(text):
     """IORN-006 stops at the index. A claimed mGy organ dose would mean a coefficient
     table was used, which nothing in this repository is licensed to ship."""
