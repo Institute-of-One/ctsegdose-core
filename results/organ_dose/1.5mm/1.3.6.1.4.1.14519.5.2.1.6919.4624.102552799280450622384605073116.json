@@ -73,7 +73,7 @@
       0.7891
     ],
     "input_fingerprint": "841ac5303ef65702a0073600e15164e6",
-    "cached": false,
+    "cached": true,
     "licence": "TotalSegmentator, Apache-2.0, inference only; no weights redistributed",
     "process": "separate child process (python -m ctsegdose_core._ts_worker)",
     "body_contour_source": "ctdose-core threshold contour (AAPM TG-220)"
@@ -150,9 +150,9 @@
       "mean_tube_current_ma": 434.0,
       "relative_weight": 1.1025,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -165,7 +165,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     },
     {
@@ -188,9 +188,9 @@
       "mean_tube_current_ma": 434.0,
       "relative_weight": 1.1025,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -203,7 +203,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     },
     {
@@ -226,9 +226,9 @@
       "mean_tube_current_ma": 434.0,
       "relative_weight": 1.1025,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -241,7 +241,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     },
     {
@@ -264,9 +264,9 @@
       "mean_tube_current_ma": 433.6,
       "relative_weight": 1.1016,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -279,7 +279,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     },
     {
@@ -302,9 +302,9 @@
       "mean_tube_current_ma": 433.3,
       "relative_weight": 1.1007,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -317,7 +317,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     },
     {
@@ -340,9 +340,9 @@
       "mean_tube_current_ma": 431.9,
       "relative_weight": 1.0972,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -355,7 +355,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     },
     {
@@ -378,9 +378,9 @@
       "mean_tube_current_ma": 431.8,
       "relative_weight": 1.0968,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -393,7 +393,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     },
     {
@@ -416,9 +416,9 @@
       "mean_tube_current_ma": 431.3,
       "relative_weight": 1.0956,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -431,7 +431,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     },
     {
@@ -454,9 +454,9 @@
       "mean_tube_current_ma": 431.0,
       "relative_weight": 1.0948,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -469,7 +469,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     },
     {
@@ -492,9 +492,9 @@
       "mean_tube_current_ma": 409.9,
       "relative_weight": 1.0413,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -507,7 +507,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     },
     {
@@ -530,9 +530,9 @@
       "mean_tube_current_ma": 394.2,
       "relative_weight": 1.0014,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -545,7 +545,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     },
     {
@@ -568,9 +568,9 @@
       "mean_tube_current_ma": 372.6,
       "relative_weight": 0.9465,
       "truncated": false,
-      "ctdivol_mgy": NaN,
+      "ctdivol_mgy": null,
       "ctdivol_source": "unavailable",
-      "organ_weighted_ctdivol_mgy": NaN,
+      "organ_weighted_ctdivol_mgy": null,
       "coefficient_mgy_per_mgy": null,
       "absorbed_dose_mgy": null,
       "combined_relative_uncertainty": null,
@@ -583,7 +583,7 @@
         "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
       },
       "notes": [
-        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+        "the series carries no CTDIvol, recorded or reconstructable, so no dose index exists for this organ; its volume, mass and modulation weight do"
       ]
     }
   ],

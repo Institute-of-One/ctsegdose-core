@@ -76,7 +76,7 @@
       0.8633
     ],
     "input_fingerprint": "bf060eccfc164545abf8d16d5d51c87a",
-    "cached": false,
+    "cached": true,
     "licence": "TotalSegmentator, Apache-2.0, inference only; no weights redistributed",
     "process": "separate child process (python -m ctsegdose_core._ts_worker)",
     "body_contour_source": "ctdose-core threshold contour (AAPM TG-220)"

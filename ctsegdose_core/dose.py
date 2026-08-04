@@ -83,9 +83,13 @@ class OrganDose:
     mean_tube_current_ma: float
     relative_weight: float
     # -- dose
-    ctdivol_mgy: float
+    #: ``None`` when the series carries no dose index at all — neither recorded nor
+    #: reconstructable. Not a NaN: a missing value must serialise as JSON ``null``, so
+    #: that a reader parsing the results cannot mistake it for a number, and so that the
+    #: file stays valid JSON rather than the ``NaN`` extension.
+    ctdivol_mgy: float | None
     ctdivol_source: str
-    organ_weighted_ctdivol_mgy: float
+    organ_weighted_ctdivol_mgy: float | None
     #: The organ's mask reaches the first or last slice, so the organ continues beyond
     #: the scan. Its mass is the mass of the scanned part, and its modulation weighting
     #: describes only the exposed part -- neither is the organ's.
@@ -115,9 +119,12 @@ class OrganDose:
             "mean_tube_current_ma": round(self.mean_tube_current_ma, 1),
             "relative_weight": round(self.relative_weight, 4),
             "truncated": self.truncated,
-            "ctdivol_mgy": round(self.ctdivol_mgy, 3),
+            "ctdivol_mgy": None if self.ctdivol_mgy is None else round(self.ctdivol_mgy, 3),
             "ctdivol_source": self.ctdivol_source,
-            "organ_weighted_ctdivol_mgy": round(self.organ_weighted_ctdivol_mgy, 3),
+            "organ_weighted_ctdivol_mgy": (
+                None if self.organ_weighted_ctdivol_mgy is None
+                else round(self.organ_weighted_ctdivol_mgy, 3)
+            ),
             "coefficient_mgy_per_mgy": (
                 None if self.coefficient is None else round(self.coefficient, 4)
             ),
@@ -146,7 +153,7 @@ def organ_dose(
     slice_span: tuple[int, int],
     mean_tube_current_ma: float,
     relative_weight: float,
-    ctdivol_mgy: float,
+    ctdivol_mgy: float | None,
     ctdivol_source: str,
     ctdivol_relative_uncertainty: float = IEC_CTDIVOL_TOLERANCE,
     ctdivol_uncertainty_reference: str = IEC_REFERENCE,
@@ -156,7 +163,7 @@ def organ_dose(
     coefficient: OrganCoefficient | None = None,
 ) -> OrganDose:
     """Assemble one organ's result, converting to mGy only when a coefficient exists."""
-    weighted = ctdivol_mgy * relative_weight
+    weighted = None if ctdivol_mgy is None else ctdivol_mgy * relative_weight
     result = OrganDose(
         organ=mass.organ,
         n_voxels=mass.n_voxels,
@@ -181,6 +188,13 @@ def organ_dose(
             "is that of the scanned part and the weighting describes only the exposed "
             "part, so this organ must be excluded from a whole-organ dose"
         )
+
+    if weighted is None:
+        result.notes.append(
+            "the series carries no CTDIvol, recorded or reconstructable, so no dose "
+            "index exists for this organ; its volume, mass and modulation weight do"
+        )
+        return result
 
     if coefficient is None:
         result.notes.append(

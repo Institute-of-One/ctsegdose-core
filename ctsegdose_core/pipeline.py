@@ -363,7 +363,7 @@ def run_series(
                 mean_tube_current_ma=weight.mean_tube_current_ma,
                 relative_weight=weight.relative_weight,
                 truncated=weight.slice_span[0] == 0 or weight.slice_span[1] == series.n_slices - 1,
-                ctdivol_mgy=ctdivol if ctdivol is not None else float("nan"),
+                ctdivol_mgy=ctdivol,
                 ctdivol_source=source,
                 water_equivalent_diameter_cm=d_w,
                 centroid_zyx=centroid,

@@ -151,9 +151,11 @@ def main() -> int:
             print(f"          -> {result.stage_reached or 'failed'}: {result.error}")
         else:
             top = max(result.organs, key=lambda o: o.relative_weight)
+            ctdivol = (
+                "none" if result.ctdivol_mgy is None else f"{result.ctdivol_mgy:.2f} mGy"
+            )
             print(
-                f"          -> {len(result.organs)} organs, CTDIvol "
-                f"{result.ctdivol_mgy if result.ctdivol_mgy is not None else float('nan'):.2f} mGy "
+                f"          -> {len(result.organs)} organs, CTDIvol {ctdivol} "
                 f"({result.ctdivol_source}), highest weight {top.organ} "
                 f"w={top.relative_weight:.3f}, {time.monotonic() - t0:.0f}s"
             )
