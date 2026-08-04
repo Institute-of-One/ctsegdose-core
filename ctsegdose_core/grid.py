@@ -129,10 +129,78 @@ def resolve_grid(
             "longitudinal axis is unrecoverable and no volume can be built from it"
         )
     deviation = float(np.max(np.abs(steps - median)) / median)
-    if deviation > tolerance:
+    if deviation <= tolerance:
+        return SliceGrid(keep, median, int(z.size), n_duplicates, deviation, warnings)
+
+    recovered = _largest_uniform_subgrid(z, keep, tolerance=tolerance)
+    if recovered is None:
         raise NonUniformGrid(
             f"slice steps vary by {deviation:.1%} around {median:.3f} mm (tolerance "
-            f"{tolerance:.0%}); the series is not on one regular grid — it has a gap, or "
-            "two acquisitions were concatenated. A single affine cannot describe it."
+            f"{tolerance:.0%}) and no regular sub-grid covers enough of the series; it "
+            "has a gap, or two acquisitions were concatenated. A single affine cannot "
+            "describe it."
         )
-    return SliceGrid(keep, median, int(z.size), n_duplicates, deviation, warnings)
+    sub_keep, sub_spacing, sub_deviation = recovered
+    warnings.append(
+        f"slice steps varied by {deviation:.1%} around {median:.3f} mm, which is two "
+        f"reconstructions interleaved in one series rather than one volume; the largest "
+        f"regular sub-grid was taken instead — {len(sub_keep)} of {len(keep)} positions "
+        f"at {sub_spacing:.3f} mm"
+    )
+    return SliceGrid(sub_keep, sub_spacing, int(z.size), n_duplicates, sub_deviation, warnings)
+
+
+def _largest_uniform_subgrid(
+    z: np.ndarray, keep: list[int], *, tolerance: float, min_span_coverage: float = 0.9
+) -> tuple[list[int], float, float] | None:
+    """The longest run of positions at a constant step, when the whole is not regular.
+
+    Public archives publish series that are two reconstructions of one acquisition
+    interleaved under a single Series Instance UID -- a 2.5 mm set and a second 2.5 mm
+    set offset by 0.75 mm, which reads as steps of 0.75, 1.75, 2.5 repeating. That is
+    not a corrupt series and it is not one volume; it is two volumes sharing a UID, and
+    taking either one of them recovers a usable acquisition.
+
+    Acceptance is by **span**, not by count: the sub-grid must cover at least
+    ``min_span_coverage`` of the original longitudinal extent. That is what separates the
+    two cases. Taking one of two interleaved reconstructions keeps the full extent and
+    halves the count; dropping everything after a gap keeps the count and loses the
+    extent. Only the first is a recovery, and only the first is accepted.
+    """
+    positions = z[keep]
+    steps = np.diff(positions)
+    if steps.size == 0:
+        return None
+    full_span = float(positions[-1] - positions[0])
+    if full_span <= 0:
+        return None
+
+    best: tuple[list[int], float, float] | None = None
+    # Candidate steps: the distinct observed steps and their consecutive sums, which is
+    # what an interleaved pair produces (0.75 and 1.75 sum to the true 2.5 mm pitch).
+    candidates = {round(float(s), 3) for s in steps}
+    candidates |= {
+        round(float(a + b), 3) for a, b in zip(steps[:-1], steps[1:], strict=False)
+    }
+    for step in sorted(c for c in candidates if c > 0):
+        for start in range(len(positions)):
+            run = [start]
+            expected = positions[start] + step
+            for i in range(start + 1, len(positions)):
+                if abs(positions[i] - expected) <= tolerance * step:
+                    run.append(i)
+                    expected = positions[i] + step
+            if len(run) < 2:
+                continue
+            actual = np.diff(positions[run])
+            spacing = float(np.median(actual))
+            deviation = float(np.max(np.abs(actual - spacing)) / spacing)
+            if deviation > tolerance:
+                continue
+            span = float(positions[run[-1]] - positions[run[0]])
+            if span < min_span_coverage * full_span:
+                continue
+            if best is None or len(run) > len(best[0]):
+                best = ([keep[i] for i in run], spacing, deviation)
+
+    return best

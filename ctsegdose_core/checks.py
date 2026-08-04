@@ -176,7 +176,10 @@ def check_modulation(series: dict[str, Any]) -> list[Check]:
     checks = [
         Check("organ weights vary", ok,
               f"weights span {min(weights):.3f}-{max(weights):.3f}"
-              + ("" if ok else "  <-- the modulation weighting is not being applied"))
+              + ("" if ok else "  <-- either the weighting is not being applied, or the "
+                 "tube current is constant across every organ in this series; the second "
+                 "is a real acquisition and makes the series uninformative for a "
+                 "modulation study rather than faulty"))
     ]
     brackets = min(weights) <= 1.0 <= max(weights)
     checks.append(

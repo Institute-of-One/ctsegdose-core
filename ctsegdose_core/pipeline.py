@@ -26,10 +26,12 @@ from .grid import NonUniformGrid, SliceGrid, resolve_grid
 from .segment import (
     ABDOMINAL_ORGANS,
     BODY_STRUCTURE,
+    SegmentationUnavailable,
     dicom_affine,
     load_masks,
     segment_volume,
 )
+from .volume import load_volume_hu
 
 
 @dataclass
@@ -279,7 +281,8 @@ def run_series(
     result.warnings.extend(warns)
 
     try:
-        volume = series.load_volume()
+        volume, volume_notes = load_volume_hu(series)
+        result.warnings.extend(volume_notes)
         affine, spacing = series_geometry(series, grid)
         result.stage_reached = "volume"
     except Exception as exc:
@@ -292,11 +295,37 @@ def run_series(
             voxel_spacing_mm=spacing, organs=organs, fast=fast, device=device,
             python_executable=python_executable,
         )
+    except SegmentationUnavailable as exc:
+        if fast:
+            result.error = f"segmentation failed: {exc}"
+            return result
+        # The full-resolution model resamples to 1.5 mm isotropic, which on a wide-FOV
+        # series can exhaust host memory in nnU-Net's export worker. Dropping to the
+        # 3 mm model keeps the series in the sample; which model produced a mask is
+        # recorded with it, so the difference is visible rather than averaged away.
+        result.warnings.append(
+            f"the 1.5 mm model failed on this series ({exc}); it was segmented with the "
+            "3 mm model instead, and its masks are coarser than the rest of the sample"
+        )
+        try:
+            run = segment_volume(
+                volume, affine, Path(work_dir).parent / "3mm-fallback",
+                voxel_spacing_mm=spacing, organs=organs, fast=True, device=device,
+                python_executable=python_executable,
+            )
+        except Exception as retry_exc:
+            result.error = f"segmentation failed at both resolutions: {retry_exc}"
+            return result
+    except Exception as exc:
+        result.error = f"segmentation failed: {type(exc).__name__}: {exc}"
+        return result
+
+    try:
         masks = load_masks(run)
         result.segmentation = run.to_dict()
         result.stage_reached = "segmented"
     except Exception as exc:
-        result.error = f"segmentation failed: {type(exc).__name__}: {exc}"
+        result.error = f"masks unreadable: {type(exc).__name__}: {exc}"
         return result
 
     body = masks.pop(BODY_STRUCTURE, None)

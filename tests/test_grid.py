@@ -63,13 +63,34 @@ def test_positions_are_matched_to_micrometre_rounding_not_exactly():
 
 
 def test_a_gap_is_refused_because_one_affine_cannot_describe_it():
-    with pytest.raises(NonUniformGrid, match="not on one regular grid"):
+    with pytest.raises(NonUniformGrid, match="no regular sub-grid"):
         resolve_grid([0.0, 5.0, 10.0, 20.0, 25.0])
 
 
-def test_two_concatenated_acquisitions_are_refused():
-    with pytest.raises(NonUniformGrid, match="concatenated"):
-        resolve_grid([0.0, 1.0, 2.0, 3.0, 8.0, 13.0, 18.0])
+def test_two_interleaved_reconstructions_are_recovered_as_one_regular_volume():
+    """The real GE case: 459 files whose steps read 0.75, 1.75, 2.5 repeating -- two
+    2.5 mm reconstructions offset by 0.75 mm, sharing one Series Instance UID."""
+    a = np.arange(0.0, 100.0, 2.5)
+    b = a + 0.75
+    grid = resolve_grid(np.sort(np.concatenate([a, b])))
+    assert grid.spacing_mm == pytest.approx(2.5)
+    assert len(grid.keep) == len(a)
+    assert any("interleaved" in w for w in grid.warnings)
+
+
+def test_the_recovered_sub_grid_is_actually_regular():
+    a = np.arange(0.0, 60.0, 3.0)
+    z = np.sort(np.concatenate([a, a + 1.0]))
+    grid = resolve_grid(z)
+    steps = np.diff(np.asarray(z)[grid.keep])
+    assert np.allclose(steps, steps[0], rtol=0.02)
+
+
+def test_a_series_in_two_blocks_with_a_gap_is_still_refused():
+    """Recovery must not turn a series with a real gap into a short usable one: the
+    sub-grid is judged on the extent it covers, not on how many slices it keeps."""
+    with pytest.raises(NonUniformGrid, match="no regular sub-grid"):
+        resolve_grid([0.0, 2.0, 4.0, 6.0, 50.0, 52.0, 54.0, 56.0])
 
 
 def test_a_flattened_z_axis_is_refused_rather_than_silently_zero():

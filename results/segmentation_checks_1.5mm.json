@@ -1,0 +1,3467 @@
+{
+  "source": "results/organ_dose_1.5mm.json",
+  "tag": "1.5mm",
+  "n_series_checked": 40,
+  "n_series_with_failures": 14,
+  "reports": [
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.7009.2403.104753627722770752924713208933",
+      "vendor": "GE",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=326 vs kidney_right=158"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=358 vs liver=168"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=67 vs urinary_bladder=13"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=67 vs kidney_left=58"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=70 vs kidney_right=62"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2458 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "339 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "215 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "205 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "86 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.927-1.125"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.927-1.125"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.124206625223954387033910217866425393091",
+      "vendor": "GE",
+      "passed": false,
+      "n_failed": 1,
+      "n_organs": 11,
+      "truncated_organs": [
+        "colon",
+        "small_bowel"
+      ],
+      "n_whole_organs": 9,
+      "n_not_applicable": 1,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=369 vs kidney_right=156"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=411 vs liver=141"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: liver or urinary_bladder absent"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=57 vs kidney_left=36"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=51 vs kidney_right=34"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2249 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "502 g against ICRP 89 reference 150 g (band 60-375 g)  <-- outside the band"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "237 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "241 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "126 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.969-1.106"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.969-1.106"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.3098.5025.104712617917450619399991479763",
+      "vendor": "GE",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 11,
+      "truncated_organs": [],
+      "n_whole_organs": 11,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=360 vs kidney_right=168"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=390 vs liver=176"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=134 vs urinary_bladder=38"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=132 vs kidney_left=118"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=138 vs kidney_right=118"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1394 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "177 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "161 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "149 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "62 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.982-1.213"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.982-1.213"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.6919.4624.102552799280450622384605073116",
+      "vendor": "GE",
+      "passed": false,
+      "n_failed": 1,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=349 vs kidney_right=145"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=384 vs liver=148"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=164 vs urinary_bladder=58"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=165 vs kidney_left=150"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=166 vs kidney_right=150"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2308 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "448 g against ICRP 89 reference 150 g (band 60-375 g)  <-- outside the band"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "255 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "260 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "109 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.947-1.103"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.947-1.103"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.126451157075786057396180437022526798077",
+      "vendor": "GE",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 11,
+      "truncated_organs": [
+        "small_bowel",
+        "colon",
+        "kidney_right",
+        "kidney_left"
+      ],
+      "n_whole_organs": 7,
+      "n_not_applicable": 3,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=316 vs kidney_right=173"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=347 vs liver=191"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: liver or urinary_bladder absent"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=158 vs kidney_left=73"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=173 vs kidney_right=60"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2221 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "374 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (178 g of an unknown whole)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (144 g of an unknown whole)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "72 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 1.010-1.041"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": false,
+          "advisory": true,
+          "detail": "1.000 is outside 1.010-1.041  (expected when the scan extends beyond the abdomen: a chest-abdomen acquisition gives every abdominal organ more tube current than the scan mean)"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1.14850002370218603822287426909654457044",
+      "vendor": "GE",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=348 vs kidney_right=140"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=370 vs liver=178"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=160 vs urinary_bladder=39"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=140 vs kidney_left=122"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=147 vs kidney_right=130"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1653 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "90 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "158 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "144 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "88 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.872-1.150"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.872-1.150"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.110412737079958828416643878868827236377",
+      "vendor": "GE",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 11,
+      "truncated_organs": [],
+      "n_whole_organs": 11,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=331 vs kidney_right=187"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=363 vs liver=191"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=253 vs urinary_bladder=58"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=254 vs kidney_left=225"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=256 vs kidney_right=214"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "990 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "71 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "102 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "103 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "60 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.724-1.402"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.724-1.402"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.190738758608436907826741043480210378147",
+      "vendor": "GE",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 11,
+      "truncated_organs": [],
+      "n_whole_organs": 11,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=352 vs kidney_right=146"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=364 vs liver=170"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=157 vs urinary_bladder=35"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=158 vs kidney_left=146"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=163 vs kidney_right=134"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2249 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "211 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "160 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "168 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "91 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.929-1.139"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.929-1.139"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2932.1975.126887613559064617057929801994",
+      "vendor": "GE",
+      "passed": false,
+      "n_failed": 2,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=350 vs kidney_right=169"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=392 vs liver=184"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=298 vs urinary_bladder=79"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=287 vs kidney_left=234"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=296 vs kidney_right=238"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1738 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "392 g against ICRP 89 reference 150 g (band 60-375 g)  <-- outside the band"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "130 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "154 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "98 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": false,
+          "advisory": false,
+          "detail": "weights span 1.037-1.037  <-- either the weighting is not being applied, or the tube current is constant across every organ in this series; the second is a real acquisition and makes the series uninformative for a modulation study rather than faulty"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": false,
+          "advisory": true,
+          "detail": "1.000 is outside 1.037-1.037  (expected when the scan extends beyond the abdomen: a chest-abdomen acquisition gives every abdominal organ more tube current than the scan mean)"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.4320.5885.101839196455054321363367605040",
+      "vendor": "GE",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=296 vs kidney_right=196"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=316 vs liver=200"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=160 vs urinary_bladder=50"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=151 vs kidney_left=142"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=152 vs kidney_right=134"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1551 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "207 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "175 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "185 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "88 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.947-1.057"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.947-1.057"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.169260120790039889716250759344671861678",
+      "vendor": "Siemens",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 11,
+      "truncated_organs": [
+        "small_bowel",
+        "colon"
+      ],
+      "n_whole_organs": 9,
+      "n_not_applicable": 1,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=334 vs kidney_right=168"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=354 vs liver=176"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: liver or urinary_bladder absent"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=79 vs kidney_left=58"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=62 vs kidney_right=33"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "3233 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "172 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "230 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "242 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "82 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.860-1.112"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.860-1.112"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.6919.4624.492444591845205280171152909620",
+      "vendor": "Siemens",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=354 vs kidney_right=178"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=389 vs liver=175"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=72 vs urinary_bladder=21"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=70 vs kidney_left=60"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=66 vs kidney_right=55"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2269 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "247 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "298 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "221 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "86 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 1.001-1.018"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": false,
+          "advisory": true,
+          "detail": "1.000 is outside 1.001-1.018  (expected when the scan extends beyond the abdomen: a chest-abdomen acquisition gives every abdominal organ more tube current than the scan mean)"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.130269400384835727617577152120460443053",
+      "vendor": "Siemens",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 11,
+      "truncated_organs": [],
+      "n_whole_organs": 11,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=299 vs kidney_right=177"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=328 vs liver=176"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=196 vs urinary_bladder=80"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=195 vs kidney_left=178"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=194 vs kidney_right=175"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1852 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "174 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "166 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "137 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "81 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.691-1.279"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.691-1.279"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.117047503231020830753317635065264697398",
+      "vendor": "Siemens",
+      "passed": false,
+      "n_failed": 1,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=352 vs kidney_right=166"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=393 vs liver=167"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=150 vs urinary_bladder=37"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=165 vs kidney_left=149"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=158 vs kidney_right=112"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1274 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "124 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "125 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "127 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "54 g against ICRP 89 reference 140 g (band 56-350 g)  <-- outside the band"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.915-1.337"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.915-1.337"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1.11435509567176551466134346112512854888",
+      "vendor": "Siemens",
+      "passed": false,
+      "n_failed": 1,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=361 vs kidney_right=179"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=395 vs liver=170"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=128 vs urinary_bladder=36"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=119 vs kidney_left=98"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=131 vs kidney_right=108"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2554 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "561 g against ICRP 89 reference 150 g (band 60-375 g)  <-- outside the band"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "257 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "249 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "102 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.860-1.582"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.860-1.582"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.139028541272282999207461674394024845879",
+      "vendor": "Siemens",
+      "passed": false,
+      "n_failed": 1,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=361 vs kidney_right=167"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=373 vs liver=156"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=122 vs urinary_bladder=33"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=118 vs kidney_left=106"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=121 vs kidney_right=97"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2237 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "288 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "204 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "232 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "48 g against ICRP 89 reference 140 g (band 56-350 g)  <-- outside the band"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.971-1.242"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.971-1.242"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1.12144631656438139661502631773455627610",
+      "vendor": "Siemens",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 4,
+      "truncated_organs": [
+        "urinary_bladder",
+        "colon",
+        "small_bowel",
+        "kidney_right"
+      ],
+      "n_whole_organs": 0,
+      "n_not_applicable": 10,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: kidney_left or kidney_right absent"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: spleen or liver absent"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: liver or urinary_bladder absent"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: adrenal_gland_left or kidney_left absent"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: adrenal_gland_right or kidney_right absent"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not segmented in this series"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not segmented in this series"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not segmented in this series"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (0 g of an unknown whole)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not segmented in this series"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.804-1.043"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.804-1.043"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.124862978740839397384301699389733909446",
+      "vendor": "Siemens",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=335 vs kidney_right=135"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=373 vs liver=173"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=138 vs urinary_bladder=35"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=127 vs kidney_left=112"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=131 vs kidney_right=111"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1561 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "196 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "225 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "177 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "96 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.590-1.223"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.590-1.223"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.120283006789263156233439135960658945231",
+      "vendor": "Siemens",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=348 vs kidney_right=188"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=391 vs liver=169"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=222 vs urinary_bladder=99"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=224 vs kidney_left=200"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=228 vs kidney_right=202"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1998 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "282 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "173 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "192 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "65 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.888-1.064"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.888-1.064"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.99.1071.24503530203089772620259137946948",
+      "vendor": "Siemens",
+      "passed": false,
+      "n_failed": 1,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=324 vs kidney_right=184"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=337 vs liver=195"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=248 vs urinary_bladder=104"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=227 vs kidney_left=208"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=236 vs kidney_right=211"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1214 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "262 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "129 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "134 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "49 g against ICRP 89 reference 140 g (band 56-350 g)  <-- outside the band"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.923-1.072"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.923-1.072"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.3098.5025.146217110450191920006308432033",
+      "vendor": "Canon/Toshiba",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 10,
+      "truncated_organs": [
+        "small_bowel",
+        "pancreas",
+        "kidney_right",
+        "kidney_left",
+        "colon",
+        "adrenal_gland_left",
+        "stomach",
+        "liver"
+      ],
+      "n_whole_organs": 2,
+      "n_not_applicable": 5,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=346 vs kidney_right=188"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=403 vs liver=180"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: liver or urinary_bladder absent"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=10 vs kidney_left=9"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=14 vs kidney_right=9"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (1033 g of an unknown whole)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "128 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (69 g of an unknown whole)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (87 g of an unknown whole)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (17 g of an unknown whole)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 1.334-1.624"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": false,
+          "advisory": true,
+          "detail": "1.000 is outside 1.334-1.624  (expected when the scan extends beyond the abdomen: a chest-abdomen acquisition gives every abdominal organ more tube current than the scan mean)"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.6919.4624.125153249491081957890408272216",
+      "vendor": "Canon/Toshiba",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 11,
+      "truncated_organs": [
+        "small_bowel",
+        "colon"
+      ],
+      "n_whole_organs": 9,
+      "n_not_applicable": 1,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=331 vs kidney_right=164"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=375 vs liver=168"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: liver or urinary_bladder absent"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=69 vs kidney_left=58"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=68 vs kidney_right=52"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1788 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "267 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "169 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "229 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "96 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.901-1.046"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.901-1.046"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1.12026969269299422966770921088977968852",
+      "vendor": "Canon/Toshiba",
+      "passed": false,
+      "n_failed": 1,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=336 vs kidney_right=180"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=369 vs liver=187"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=69 vs urinary_bladder=16"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=67 vs kidney_left=57"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=69 vs kidney_right=59"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1113 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "213 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "107 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "118 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "25 g against ICRP 89 reference 140 g (band 56-350 g)  <-- outside the band"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.935-1.058"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.935-1.058"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1.29343766386826411185462290976788394151",
+      "vendor": "Canon/Toshiba",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=338 vs kidney_right=157"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=387 vs liver=179"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=111 vs urinary_bladder=34"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=112 vs kidney_left=97"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=112 vs kidney_right=93"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2238 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "349 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "100 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "137 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "102 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.768-1.549"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.768-1.549"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.235815435552836713008925930681449087181",
+      "vendor": "Canon/Toshiba",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=319 vs kidney_right=178"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=355 vs liver=195"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=201 vs urinary_bladder=65"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=198 vs kidney_left=180"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=200 vs kidney_right=160"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1949 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "281 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "218 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "223 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "86 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.642-1.686"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.642-1.686"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1.35060909971867492262237150543126705979",
+      "vendor": "Canon/Toshiba",
+      "passed": false,
+      "n_failed": 1,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=338 vs kidney_right=169"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=360 vs liver=175"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=180 vs urinary_bladder=59"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=175 vs kidney_left=155"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=184 vs kidney_right=158"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "3925 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "403 g against ICRP 89 reference 150 g (band 60-375 g)  <-- outside the band"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "221 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "226 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "134 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.906-1.169"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.906-1.169"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2932.1975.106756844835533656529983969250",
+      "vendor": "Canon/Toshiba",
+      "passed": false,
+      "n_failed": 2,
+      "n_organs": 11,
+      "truncated_organs": [],
+      "n_whole_organs": 11,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=354 vs kidney_right=181"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=378 vs liver=175"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=449 vs urinary_bladder=101"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=427 vs kidney_left=350"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=423 vs kidney_right=340"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2832 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "671 g against ICRP 89 reference 150 g (band 60-375 g)  <-- outside the band"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "200 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "201 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "110 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": false,
+          "advisory": false,
+          "detail": "weights span 1.059-1.059  <-- either the weighting is not being applied, or the tube current is constant across every organ in this series; the second is a real acquisition and makes the series uninformative for a modulation study rather than faulty"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": false,
+          "advisory": true,
+          "detail": "1.000 is outside 1.059-1.059  (expected when the scan extends beyond the abdomen: a chest-abdomen acquisition gives every abdominal organ more tube current than the scan mean)"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2932.1975.101293628603821133332259852363",
+      "vendor": "Canon/Toshiba",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 11,
+      "truncated_organs": [
+        "small_bowel",
+        "colon"
+      ],
+      "n_whole_organs": 9,
+      "n_not_applicable": 1,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=344 vs kidney_right=169"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=383 vs liver=161"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: liver or urinary_bladder absent"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=224 vs kidney_left=166"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=244 vs kidney_right=165"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1771 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "290 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "137 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "145 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "110 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.981-1.408"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.981-1.408"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1078.3273.178159594418154823809776931651",
+      "vendor": "Canon/Toshiba",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=345 vs kidney_right=156"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=385 vs liver=155"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=151 vs urinary_bladder=40"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=155 vs kidney_left=141"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=154 vs kidney_right=123"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2343 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "349 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "187 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "188 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "62 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.899-1.167"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.899-1.167"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2099.3754.178917260616042842392917847989",
+      "vendor": "Canon/Toshiba",
+      "passed": false,
+      "n_failed": 1,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=371 vs kidney_right=155"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=360 vs liver=142"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=372 vs urinary_bladder=73"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=379 vs kidney_left=328"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=386 vs kidney_right=344"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1173 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "58 g against ICRP 89 reference 150 g (band 60-375 g)  <-- outside the band"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "142 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "114 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "62 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.853-1.261"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.853-1.261"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.122681232740719558092171043097976012159",
+      "vendor": "Philips",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 11,
+      "truncated_organs": [
+        "colon",
+        "small_bowel"
+      ],
+      "n_whole_organs": 9,
+      "n_not_applicable": 1,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=352 vs kidney_right=168"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=377 vs liver=164"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: liver or urinary_bladder absent"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=64 vs kidney_left=43"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=70 vs kidney_right=39"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2365 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "355 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "219 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "227 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "120 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.983-1.137"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.983-1.137"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.6919.4624.105596304219458852186973583847",
+      "vendor": "Philips",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 11,
+      "truncated_organs": [
+        "liver"
+      ],
+      "n_whole_organs": 10,
+      "n_not_applicable": 1,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=397 vs kidney_right=159"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=421 vs liver=143"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=97 vs urinary_bladder=19"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=96 vs kidney_left=81"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=98 vs kidney_right=77"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (2314 g of an unknown whole)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "156 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "224 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "227 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "106 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.935-1.053"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.935-1.053"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.94531563816741245873445833243538669934",
+      "vendor": "Philips",
+      "passed": false,
+      "n_failed": 2,
+      "n_organs": 11,
+      "truncated_organs": [
+        "colon",
+        "gallbladder",
+        "small_bowel",
+        "kidney_left",
+        "stomach",
+        "liver",
+        "spleen"
+      ],
+      "n_whole_organs": 4,
+      "n_not_applicable": 4,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=340 vs kidney_right=178"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=384 vs liver=190"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: liver or urinary_bladder absent"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=50 vs kidney_left=16"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=70 vs kidney_right=54"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (1038 g of an unknown whole)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (341 g of an unknown whole)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (27 g of an unknown whole)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "46 g against ICRP 89 reference 155 g (band 62-388 g)  <-- outside the band"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "26 g against ICRP 89 reference 140 g (band 56-350 g)  <-- outside the band"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 1.267-1.372"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": false,
+          "advisory": true,
+          "detail": "1.000 is outside 1.267-1.372  (expected when the scan extends beyond the abdomen: a chest-abdomen acquisition gives every abdominal organ more tube current than the scan mean)"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.35849535652939153577452390867555563110",
+      "vendor": "Philips",
+      "passed": false,
+      "n_failed": 1,
+      "n_organs": 11,
+      "truncated_organs": [
+        "small_bowel",
+        "colon",
+        "pancreas",
+        "kidney_left",
+        "kidney_right",
+        "liver"
+      ],
+      "n_whole_organs": 5,
+      "n_not_applicable": 5,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=330 vs kidney_right=192"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=364 vs liver=190"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: liver or urinary_bladder absent"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=98 vs kidney_left=54"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=118 vs kidney_right=54"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (1579 g of an unknown whole)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "459 g against ICRP 89 reference 150 g (band 60-375 g)  <-- outside the band"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (154 g of an unknown whole)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (133 g of an unknown whole)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (93 g of an unknown whole)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.729-0.921"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": false,
+          "advisory": true,
+          "detail": "1.000 is outside 0.729-0.921  (expected when the scan extends beyond the abdomen: a chest-abdomen acquisition gives every abdominal organ more tube current than the scan mean)"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.13789879393431026461197285453898279533",
+      "vendor": "Philips",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 11,
+      "truncated_organs": [
+        "pancreas",
+        "colon",
+        "kidney_right",
+        "kidney_left",
+        "small_bowel",
+        "gallbladder",
+        "liver"
+      ],
+      "n_whole_organs": 4,
+      "n_not_applicable": 5,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=352 vs kidney_right=171"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=393 vs liver=151"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: liver or urinary_bladder absent"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=57 vs kidney_left=22"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=72 vs kidney_right=25"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (1594 g of an unknown whole)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "255 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (75 g of an unknown whole)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (89 g of an unknown whole)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "not checked: truncated by the scan boundary (83 g of an unknown whole)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 1.286-1.439"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": false,
+          "advisory": true,
+          "detail": "1.000 is outside 1.286-1.439  (expected when the scan extends beyond the abdomen: a chest-abdomen acquisition gives every abdominal organ more tube current than the scan mean)"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2932.1975.110136518027764333512179150738",
+      "vendor": "Philips",
+      "passed": false,
+      "n_failed": 2,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=488 vs kidney_right=278"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=522 vs liver=280"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=379 vs urinary_bladder=115"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": false,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=359 vs kidney_left=364  <-- head/foot appear inverted"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=378 vs kidney_right=315"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1518 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "121 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": false,
+          "advisory": false,
+          "detail": "4 g against ICRP 89 reference 155 g (band 62-388 g)  <-- outside the band"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "182 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "83 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 1.011-1.284"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": false,
+          "advisory": true,
+          "detail": "1.000 is outside 1.011-1.284  (expected when the scan extends beyond the abdomen: a chest-abdomen acquisition gives every abdominal organ more tube current than the scan mean)"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2857.3159.203983181868287072753321424140",
+      "vendor": "Philips",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=340 vs kidney_right=168"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=366 vs liver=153"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=164 vs urinary_bladder=38"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=165 vs kidney_left=149"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=161 vs kidney_right=133"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "2935 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "368 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "342 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "290 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "60 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.883-1.468"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.883-1.468"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2932.1975.119554862381870875314127355939",
+      "vendor": "Philips",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=493 vs kidney_right=275"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=532 vs liver=293"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=336 vs urinary_bladder=108"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=343 vs kidney_left=294"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=344 vs kidney_right=299"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1327 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "180 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "179 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "161 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "60 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 1.039-1.169"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": false,
+          "advisory": true,
+          "detail": "1.000 is outside 1.039-1.169  (expected when the scan extends beyond the abdomen: a chest-abdomen acquisition gives every abdominal organ more tube current than the scan mean)"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.3320.3273.114542284322103737687268266165",
+      "vendor": "Philips",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=383 vs kidney_right=167"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=393 vs liver=175"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=257 vs urinary_bladder=47"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=246 vs kidney_left=218"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=245 vs kidney_right=209"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1783 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "117 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "178 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "160 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "112 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.904-1.128"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.904-1.128"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2932.1975.256749960592074016578641330855",
+      "vendor": "Philips",
+      "passed": true,
+      "n_failed": 0,
+      "n_organs": 12,
+      "truncated_organs": [],
+      "n_whole_organs": 12,
+      "n_not_applicable": 0,
+      "checks": [
+        {
+          "name": "left kidney is left of right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid kidney_left=483 vs kidney_right=311"
+        },
+        {
+          "name": "spleen is left of liver",
+          "passed": true,
+          "advisory": false,
+          "detail": "x centroid spleen=527 vs liver=316"
+        },
+        {
+          "name": "liver is superior to bladder",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid liver=390 vs urinary_bladder=124"
+        },
+        {
+          "name": "left adrenal is superior to left kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_left=395 vs kidney_left=362"
+        },
+        {
+          "name": "right adrenal is superior to right kidney",
+          "passed": true,
+          "advisory": false,
+          "detail": "z centroid adrenal_gland_right=396 vs kidney_right=346"
+        },
+        {
+          "name": "liver mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "1805 g against ICRP 89 reference 1800 g (band 720-4500 g)"
+        },
+        {
+          "name": "spleen mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "159 g against ICRP 89 reference 150 g (band 60-375 g)"
+        },
+        {
+          "name": "kidney_left mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "183 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "kidney_right mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "162 g against ICRP 89 reference 155 g (band 62-388 g)"
+        },
+        {
+          "name": "pancreas mass plausible",
+          "passed": true,
+          "advisory": false,
+          "detail": "85 g against ICRP 89 reference 140 g (band 56-350 g)"
+        },
+        {
+          "name": "organ weights vary",
+          "passed": true,
+          "advisory": false,
+          "detail": "weights span 0.778-1.124"
+        },
+        {
+          "name": "weights bracket the scan mean",
+          "passed": true,
+          "advisory": true,
+          "detail": "1.000 lies within 0.778-1.124"
+        }
+      ],
+      "reference": "ICRP Publication 89 (2002), Basic Anatomical and Physiological Data for Use in Radiological Protection: Reference Values. Adult male reference organ masses."
+    }
+  ]
+}

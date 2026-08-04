@@ -1,0 +1,559 @@
+{
+  "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.122681232740719558092171043097976012159",
+  "vendor": "Philips",
+  "manufacturer": "Philips",
+  "model_name": "iCT 256",
+  "collection": "Adrenal-ACC-Ki67-Seg",
+  "patient_id": "Adrenal_Ki67_Seg_051",
+  "n_slices": 121,
+  "kvp": 120.0,
+  "ctdivol_mgy": 21.610235454545457,
+  "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+  "scan_mean_tube_current_ma": 432.24793388429754,
+  "stage_reached": "organ-weighted CTDIvol",
+  "error": "",
+  "warnings": [
+    "slices were stored head-first (Slice Location runs opposite to Image Position (Patient)); reordered so index 0 is the most inferior slice",
+    "recorded CTDIvol (0018,9345) is -3.68935e+19 mGy, outside the physically possible range 0.01-1000.0 mGy; the attribute is corrupt and is discarded in favour of the physics reconstruction"
+  ],
+  "slice_grid": {
+    "n_input_slices": 121,
+    "n_slices_used": 121,
+    "n_duplicate_positions_dropped": 0,
+    "slice_spacing_mm": 2.5,
+    "max_step_deviation": 0.0,
+    "uniformity_tolerance": 0.02,
+    "warnings": [
+      "slices were stored head-first (Slice Location runs opposite to Image Position (Patient)); reordered so index 0 is the most inferior slice"
+    ]
+  },
+  "segmentation": {
+    "mask_dir": "D:\\DevGit\\ctsegdose_core\\segmentations\\1.3.6.1.4.1.14519.5.2.1.122681232740719558092171043097976012159\\1.5mm\\masks",
+    "structures": [
+      "adrenal_gland_left",
+      "adrenal_gland_right",
+      "colon",
+      "gallbladder",
+      "kidney_left",
+      "kidney_right",
+      "liver",
+      "pancreas",
+      "small_bowel",
+      "spleen",
+      "stomach",
+      "urinary_bladder"
+    ],
+    "task": "total",
+    "fast": false,
+    "roi_subset": [
+      "liver",
+      "spleen",
+      "kidney_left",
+      "kidney_right",
+      "pancreas",
+      "stomach",
+      "gallbladder",
+      "adrenal_gland_left",
+      "adrenal_gland_right",
+      "small_bowel",
+      "colon",
+      "urinary_bladder"
+    ],
+    "device": "gpu",
+    "python_executable": "D:\\DevGit\\ctsegdose_core\\.venv-gpu\\Scripts\\python.exe",
+    "totalsegmentator_version": "2.17.0",
+    "torch_version": "2.11.0+cu128 (cuda=True) on NVIDIA GeForce RTX 3080",
+    "elapsed_s": 57.6,
+    "volume_shape_zyx": [
+      121,
+      512,
+      512
+    ],
+    "voxel_spacing_mm_zyx": [
+      2.5,
+      0.7793,
+      0.7793
+    ],
+    "input_fingerprint": "5916dbfb3e03ba82b7c0d26378b7e888",
+    "cached": true,
+    "licence": "TotalSegmentator, Apache-2.0, inference only; no weights redistributed",
+    "process": "separate child process (python -m ctsegdose_core._ts_worker)",
+    "body_contour_source": "ctdose-core threshold contour (AAPM TG-220)"
+  },
+  "density_calibration": {
+    "name": "icru44-piecewise-linear",
+    "reference": "Anchor densities: ICRU Report 44 (1989), Tissue Substitutes in Radiation Dosimetry and Measurement. Piecewise-linear HU-to-density construction after Schneider U, Pedroni E, Lomax A. The calibration of CT Hounsfield units for radiotherapy treatment planning. Phys Med Biol. 1996;41(1):111-124.",
+    "note": "Hounsfield anchor values are nominal for a 120 kVp abdominal acquisition. A scanner- and protocol-specific calibration measured on a density phantom should replace this curve where one is available; abdominal soft-tissue organs are insensitive to the choice because every such curve passes through water at 0 HU.",
+    "anchors": [
+      {
+        "hu": -1000.0,
+        "density_g_cm3": 0.00121,
+        "tissue": "air"
+      },
+      {
+        "hu": -700.0,
+        "density_g_cm3": 0.26,
+        "tissue": "lung, inflated"
+      },
+      {
+        "hu": -98.0,
+        "density_g_cm3": 0.95,
+        "tissue": "adipose tissue"
+      },
+      {
+        "hu": 0.0,
+        "density_g_cm3": 1.0,
+        "tissue": "water"
+      },
+      {
+        "hu": 52.0,
+        "density_g_cm3": 1.05,
+        "tissue": "skeletal muscle"
+      },
+      {
+        "hu": 260.0,
+        "density_g_cm3": 1.16,
+        "tissue": "trabecular bone"
+      },
+      {
+        "hu": 1524.0,
+        "density_g_cm3": 1.92,
+        "tissue": "cortical bone"
+      }
+    ],
+    "air_hu_floor": -950.0
+  },
+  "summary": {
+    "n_organs": 11,
+    "n_organs_with_absorbed_dose": 0,
+    "reached": "organ-specific weighted CTDIvol",
+    "total_organ_mass_g": 4558.4,
+    "coefficient_table": null,
+    "highest_weighted_organ": "gallbladder"
+  },
+  "organs": [
+    {
+      "organ": "gallbladder",
+      "n_voxels": 17723,
+      "volume_cm3": 26.91,
+      "mass_g": 27.3,
+      "mean_density_g_cm3": 1.0152,
+      "mean_hu": 13.9,
+      "slice_span": [
+        54,
+        68
+      ],
+      "centroid_zyx": [
+        61.4,
+        157.1,
+        179.4
+      ],
+      "water_equivalent_diameter_cm": 34.34,
+      "mean_tube_current_ma": 491.5,
+      "relative_weight": 1.1371,
+      "truncated": false,
+      "ctdivol_mgy": 21.61,
+      "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+      "organ_weighted_ctdivol_mgy": 24.573,
+      "coefficient_mgy_per_mgy": null,
+      "absorbed_dose_mgy": null,
+      "combined_relative_uncertainty": null,
+      "uncertainty_components": [],
+      "formulae": {
+        "organ_weighted_ctdivol": "CTDIvol_o = CTDIvol * w_o",
+        "w_o": "sum_z n_o(z) I(z) / sum_z n_o(z), divided by mean_z I(z)",
+        "absorbed_dose": "D_o = CTDIvol_o * h_o(D_w,o)",
+        "size_correction": "h_o(D_w) = h_ref * exp(-alpha * (D_w - D_w_ref))",
+        "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
+      },
+      "notes": [
+        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+      ]
+    },
+    {
+      "organ": "adrenal_gland_left",
+      "n_voxels": 2230,
+      "volume_cm3": 3.39,
+      "mass_g": 3.5,
+      "mean_density_g_cm3": 1.0293,
+      "mean_hu": 30.3,
+      "slice_span": [
+        59,
+        70
+      ],
+      "centroid_zyx": [
+        64.5,
+        250.6,
+        303.6
+      ],
+      "water_equivalent_diameter_cm": 34.34,
+      "mean_tube_current_ma": 489.4,
+      "relative_weight": 1.1323,
+      "truncated": false,
+      "ctdivol_mgy": 21.61,
+      "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+      "organ_weighted_ctdivol_mgy": 24.469,
+      "coefficient_mgy_per_mgy": null,
+      "absorbed_dose_mgy": null,
+      "combined_relative_uncertainty": null,
+      "uncertainty_components": [],
+      "formulae": {
+        "organ_weighted_ctdivol": "CTDIvol_o = CTDIvol * w_o",
+        "w_o": "sum_z n_o(z) I(z) / sum_z n_o(z), divided by mean_z I(z)",
+        "absorbed_dose": "D_o = CTDIvol_o * h_o(D_w,o)",
+        "size_correction": "h_o(D_w) = h_ref * exp(-alpha * (D_w - D_w_ref))",
+        "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
+      },
+      "notes": [
+        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+      ]
+    },
+    {
+      "organ": "pancreas",
+      "n_voxels": 75580,
+      "volume_cm3": 114.75,
+      "mass_g": 120.5,
+      "mean_density_g_cm3": 1.0501,
+      "mean_hu": 58.8,
+      "slice_span": [
+        37,
+        81
+      ],
+      "centroid_zyx": [
+        62.5,
+        217.7,
+        284.5
+      ],
+      "water_equivalent_diameter_cm": 34.34,
+      "mean_tube_current_ma": 487.1,
+      "relative_weight": 1.1268,
+      "truncated": false,
+      "ctdivol_mgy": 21.61,
+      "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+      "organ_weighted_ctdivol_mgy": 24.351,
+      "coefficient_mgy_per_mgy": null,
+      "absorbed_dose_mgy": null,
+      "combined_relative_uncertainty": null,
+      "uncertainty_components": [],
+      "formulae": {
+        "organ_weighted_ctdivol": "CTDIvol_o = CTDIvol * w_o",
+        "w_o": "sum_z n_o(z) I(z) / sum_z n_o(z), divided by mean_z I(z)",
+        "absorbed_dose": "D_o = CTDIvol_o * h_o(D_w,o)",
+        "size_correction": "h_o(D_w) = h_ref * exp(-alpha * (D_w - D_w_ref))",
+        "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
+      },
+      "notes": [
+        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+      ]
+    },
+    {
+      "organ": "adrenal_gland_right",
+      "n_voxels": 4511,
+      "volume_cm3": 6.85,
+      "mass_g": 6.9,
+      "mean_density_g_cm3": 1.0118,
+      "mean_hu": 6.4,
+      "slice_span": [
+        60,
+        79
+      ],
+      "centroid_zyx": [
+        70.3,
+        274.8,
+        211.1
+      ],
+      "water_equivalent_diameter_cm": 34.34,
+      "mean_tube_current_ma": 484.7,
+      "relative_weight": 1.1213,
+      "truncated": false,
+      "ctdivol_mgy": 21.61,
+      "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+      "organ_weighted_ctdivol_mgy": 24.233,
+      "coefficient_mgy_per_mgy": null,
+      "absorbed_dose_mgy": null,
+      "combined_relative_uncertainty": null,
+      "uncertainty_components": [],
+      "formulae": {
+        "organ_weighted_ctdivol": "CTDIvol_o = CTDIvol * w_o",
+        "w_o": "sum_z n_o(z) I(z) / sum_z n_o(z), divided by mean_z I(z)",
+        "absorbed_dose": "D_o = CTDIvol_o * h_o(D_w,o)",
+        "size_correction": "h_o(D_w) = h_ref * exp(-alpha * (D_w - D_w_ref))",
+        "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
+      },
+      "notes": [
+        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+      ]
+    },
+    {
+      "organ": "kidney_left",
+      "n_voxels": 137060,
+      "volume_cm3": 208.09,
+      "mass_g": 219.4,
+      "mean_density_g_cm3": 1.0542,
+      "mean_hu": 65.8,
+      "slice_span": [
+        19,
+        67
+      ],
+      "centroid_zyx": [
+        43.4,
+        266.3,
+        352.0
+      ],
+      "water_equivalent_diameter_cm": 34.39,
+      "mean_tube_current_ma": 468.0,
+      "relative_weight": 1.0828,
+      "truncated": false,
+      "ctdivol_mgy": 21.61,
+      "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+      "organ_weighted_ctdivol_mgy": 23.399,
+      "coefficient_mgy_per_mgy": null,
+      "absorbed_dose_mgy": null,
+      "combined_relative_uncertainty": null,
+      "uncertainty_components": [],
+      "formulae": {
+        "organ_weighted_ctdivol": "CTDIvol_o = CTDIvol * w_o",
+        "w_o": "sum_z n_o(z) I(z) / sum_z n_o(z), divided by mean_z I(z)",
+        "absorbed_dose": "D_o = CTDIvol_o * h_o(D_w,o)",
+        "size_correction": "h_o(D_w) = h_ref * exp(-alpha * (D_w - D_w_ref))",
+        "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
+      },
+      "notes": [
+        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+      ]
+    },
+    {
+      "organ": "liver",
+      "n_voxels": 1499192,
+      "volume_cm3": 2276.16,
+      "mass_g": 2364.6,
+      "mean_density_g_cm3": 1.0388,
+      "mean_hu": 42.2,
+      "slice_span": [
+        42,
+        105
+      ],
+      "centroid_zyx": [
+        79.6,
+        214.9,
+        164.1
+      ],
+      "water_equivalent_diameter_cm": 34.3,
+      "mean_tube_current_ma": 459.8,
+      "relative_weight": 1.0637,
+      "truncated": false,
+      "ctdivol_mgy": 21.61,
+      "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+      "organ_weighted_ctdivol_mgy": 22.988,
+      "coefficient_mgy_per_mgy": null,
+      "absorbed_dose_mgy": null,
+      "combined_relative_uncertainty": null,
+      "uncertainty_components": [],
+      "formulae": {
+        "organ_weighted_ctdivol": "CTDIvol_o = CTDIvol * w_o",
+        "w_o": "sum_z n_o(z) I(z) / sum_z n_o(z), divided by mean_z I(z)",
+        "absorbed_dose": "D_o = CTDIvol_o * h_o(D_w,o)",
+        "size_correction": "h_o(D_w) = h_ref * exp(-alpha * (D_w - D_w_ref))",
+        "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
+      },
+      "notes": [
+        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+      ]
+    },
+    {
+      "organ": "kidney_right",
+      "n_voxels": 141852,
+      "volume_cm3": 215.37,
+      "mass_g": 227.1,
+      "mean_density_g_cm3": 1.0543,
+      "mean_hu": 66.1,
+      "slice_span": [
+        17,
+        61
+      ],
+      "centroid_zyx": [
+        38.7,
+        242.8,
+        168.0
+      ],
+      "water_equivalent_diameter_cm": 34.43,
+      "mean_tube_current_ma": 459.6,
+      "relative_weight": 1.0634,
+      "truncated": false,
+      "ctdivol_mgy": 21.61,
+      "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+      "organ_weighted_ctdivol_mgy": 22.98,
+      "coefficient_mgy_per_mgy": null,
+      "absorbed_dose_mgy": null,
+      "combined_relative_uncertainty": null,
+      "uncertainty_components": [],
+      "formulae": {
+        "organ_weighted_ctdivol": "CTDIvol_o = CTDIvol * w_o",
+        "w_o": "sum_z n_o(z) I(z) / sum_z n_o(z), divided by mean_z I(z)",
+        "absorbed_dose": "D_o = CTDIvol_o * h_o(D_w,o)",
+        "size_correction": "h_o(D_w) = h_ref * exp(-alpha * (D_w - D_w_ref))",
+        "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
+      },
+      "notes": [
+        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+      ]
+    },
+    {
+      "organ": "colon",
+      "n_voxels": 269044,
+      "volume_cm3": 408.48,
+      "mass_g": 364.5,
+      "mean_density_g_cm3": 0.8924,
+      "mean_hu": -113.7,
+      "slice_span": [
+        0,
+        89
+      ],
+      "centroid_zyx": [
+        47.4,
+        174.9,
+        299.8
+      ],
+      "water_equivalent_diameter_cm": 34.34,
+      "mean_tube_current_ma": 455.7,
+      "relative_weight": 1.0541,
+      "truncated": true,
+      "ctdivol_mgy": 21.61,
+      "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+      "organ_weighted_ctdivol_mgy": 22.78,
+      "coefficient_mgy_per_mgy": null,
+      "absorbed_dose_mgy": null,
+      "combined_relative_uncertainty": null,
+      "uncertainty_components": [],
+      "formulae": {
+        "organ_weighted_ctdivol": "CTDIvol_o = CTDIvol * w_o",
+        "w_o": "sum_z n_o(z) I(z) / sum_z n_o(z), divided by mean_z I(z)",
+        "absorbed_dose": "D_o = CTDIvol_o * h_o(D_w,o)",
+        "size_correction": "h_o(D_w) = h_ref * exp(-alpha * (D_w - D_w_ref))",
+        "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
+      },
+      "notes": [
+        "5% of the mask is at or below -950 HU (gas or out-of-body); those voxels carry air density and almost no mass",
+        "the organ reaches the edge of the scan and continues beyond it; the mass is that of the scanned part and the weighting describes only the exposed part, so this organ must be excluded from a whole-organ dose",
+        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+      ]
+    },
+    {
+      "organ": "spleen",
+      "n_voxels": 221660,
+      "volume_cm3": 336.54,
+      "mass_g": 354.6,
+      "mean_density_g_cm3": 1.0538,
+      "mean_hu": 63.4,
+      "slice_span": [
+        64,
+        104
+      ],
+      "centroid_zyx": [
+        83.6,
+        319.5,
+        376.9
+      ],
+      "water_equivalent_diameter_cm": 34.19,
+      "mean_tube_current_ma": 455.5,
+      "relative_weight": 1.0539,
+      "truncated": false,
+      "ctdivol_mgy": 21.61,
+      "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+      "organ_weighted_ctdivol_mgy": 22.774,
+      "coefficient_mgy_per_mgy": null,
+      "absorbed_dose_mgy": null,
+      "combined_relative_uncertainty": null,
+      "uncertainty_components": [],
+      "formulae": {
+        "organ_weighted_ctdivol": "CTDIvol_o = CTDIvol * w_o",
+        "w_o": "sum_z n_o(z) I(z) / sum_z n_o(z), divided by mean_z I(z)",
+        "absorbed_dose": "D_o = CTDIvol_o * h_o(D_w,o)",
+        "size_correction": "h_o(D_w) = h_ref * exp(-alpha * (D_w - D_w_ref))",
+        "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
+      },
+      "notes": [
+        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+      ]
+    },
+    {
+      "organ": "stomach",
+      "n_voxels": 173924,
+      "volume_cm3": 264.06,
+      "mass_g": 240.8,
+      "mean_density_g_cm3": 0.912,
+      "mean_hu": -88.0,
+      "slice_span": [
+        59,
+        99
+      ],
+      "centroid_zyx": [
+        84.1,
+        208.0,
+        312.6
+      ],
+      "water_equivalent_diameter_cm": 34.3,
+      "mean_tube_current_ma": 454.1,
+      "relative_weight": 1.0506,
+      "truncated": false,
+      "ctdivol_mgy": 21.61,
+      "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+      "organ_weighted_ctdivol_mgy": 22.703,
+      "coefficient_mgy_per_mgy": null,
+      "absorbed_dose_mgy": null,
+      "combined_relative_uncertainty": null,
+      "uncertainty_components": [],
+      "formulae": {
+        "organ_weighted_ctdivol": "CTDIvol_o = CTDIvol * w_o",
+        "w_o": "sum_z n_o(z) I(z) / sum_z n_o(z), divided by mean_z I(z)",
+        "absorbed_dose": "D_o = CTDIvol_o * h_o(D_w,o)",
+        "size_correction": "h_o(D_w) = h_ref * exp(-alpha * (D_w - D_w_ref))",
+        "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
+      },
+      "notes": [
+        "7% of the mask is at or below -950 HU (gas or out-of-body); those voxels carry air density and almost no mass",
+        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+      ]
+    },
+    {
+      "organ": "small_bowel",
+      "n_voxels": 405684,
+      "volume_cm3": 615.93,
+      "mass_g": 629.2,
+      "mean_density_g_cm3": 1.0215,
+      "mean_hu": 17.7,
+      "slice_span": [
+        0,
+        69
+      ],
+      "centroid_zyx": [
+        29.7,
+        161.4,
+        319.1
+      ],
+      "water_equivalent_diameter_cm": 34.36,
+      "mean_tube_current_ma": 424.9,
+      "relative_weight": 0.9831,
+      "truncated": true,
+      "ctdivol_mgy": 21.61,
+      "ctdivol_source": "reconstructed (open MIRDct table, Philips iCT 256 Slice)",
+      "organ_weighted_ctdivol_mgy": 21.245,
+      "coefficient_mgy_per_mgy": null,
+      "absorbed_dose_mgy": null,
+      "combined_relative_uncertainty": null,
+      "uncertainty_components": [],
+      "formulae": {
+        "organ_weighted_ctdivol": "CTDIvol_o = CTDIvol * w_o",
+        "w_o": "sum_z n_o(z) I(z) / sum_z n_o(z), divided by mean_z I(z)",
+        "absorbed_dose": "D_o = CTDIvol_o * h_o(D_w,o)",
+        "size_correction": "h_o(D_w) = h_ref * exp(-alpha * (D_w - D_w_ref))",
+        "organ_mass": "m_o = sum over mask voxels of rho(HU) * V_voxel"
+      },
+      "notes": [
+        "the organ reaches the edge of the scan and continues beyond it; the mass is that of the scanned part and the weighting describes only the exposed part, so this organ must be excluded from a whole-organ dose",
+        "no CTDIvol-normalised coefficient available for this organ; reported to the organ-specific weighted CTDIvol only, which is a dose index and not an absorbed dose"
+      ]
+    }
+  ],
+  "ctsegdose_core_version": "0.1.0"
+}
