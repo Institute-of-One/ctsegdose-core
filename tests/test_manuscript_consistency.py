@@ -256,10 +256,20 @@ def test_the_title_does_not_begin_with_open():
     assert not title[2:].strip().lower().startswith("open")
 
 
-def test_every_figure_the_text_references_exists(text):
-    referenced = set(re.findall(r"\*\*Figure (\d)\*\*", text))
+def test_every_figure_is_referenced_captioned_and_present(raw):
+    """Strengthened after the first version passed vacuously: it matched a bold marker
+    the text did not use, so an empty set trivially satisfied it."""
     figures = REPO / "paper" / "figures"
     if not figures.exists():
         pytest.skip("figures not generated in this checkout")
-    present = {p.name[3] for p in figures.glob("fig*.png")}
-    assert referenced <= present, f"referenced but missing: {referenced - present}"
+
+    discussed = {int(n) for n in re.findall(r"\bFigure (\d)\b", raw)}
+    assert discussed == {1, 2, 3, 4}, f"the text discusses figures {sorted(discussed)}"
+
+    embedded = re.findall(r"!\[\*\*Figure (\d)\.\*\*[^\]]+\]\(figures/([^)]+?)\)", raw)
+    assert {int(n) for n, _ in embedded} == {1, 2, 3, 4}, (
+        "every figure needs an embedded image with an MDPI-style caption, or it will "
+        "not reach the reviewer in the built document"
+    )
+    for _, filename in embedded:
+        assert (figures / filename.split("{")[0].strip()).exists(), f"missing {filename}"

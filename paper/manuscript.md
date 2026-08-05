@@ -272,6 +272,8 @@ male [5], over organs not truncated by the scan boundary.
 | kidney (right) | 35 | 182 g | 1.17 |
 | pancreas | 36 | 86 g | 0.61 |
 
+![**Figure 1.** Segmented organ mass relative to the ICRP 89 reference adult male, by manufacturer. Each marker is one organ in one series; the horizontal bar is the median across all manufacturers. Organs truncated by the scan boundary are excluded, since their mass is that of the scanned part only. Manufacturer is encoded by marker shape as well as colour, so the figure is readable in greyscale.](figures/fig1_organ_mass_vs_icrp89.png){width=100%}
+
 The liver, the largest organ and the one contributing most mass, agrees with the reference
 to within 6%, and the kidneys to within 17%. Two organs depart systematically: the
 pancreas is low by 39% and the spleen high by 72%. Both are reported as measured; neither
@@ -282,6 +284,8 @@ was corrected. Their attribution is taken up in Section 4.
 Figure 2 gives the availability of a whole-scan dose index. Across the cohort, 29 of 40
 series carried a recorded CTDIvol, 5 were reconstructable from acquisition physics, and 6
 were neither.
+
+![**Figure 2.** Availability of a whole-scan dose index by manufacturer. A series counted unrecoverable carries no CTDIvol in its header and its scanner lies outside the open coefficient database, so no organ-level index can be formed from it at all. Segments are distinguished by fill pattern as well as tone.](figures/fig2_dose_index_availability.png){width=100%}
 
 All 6 unrecoverable series are GE, and GE recorded a CTDIvol in none of its ten series
 (GE 0/10); the other three manufacturers recorded one in 29 of 30 (Fisher exact test,
@@ -306,6 +310,8 @@ weights of 0.94 and indices near 15 mGy. Two organs in the same acquisition thus
 a factor of 1.8 in the exposure they receive, a difference no whole-scan number can
 express.
 
+![**Figure 3.** One acquisition end to end. (**a**) Each organ's longitudinal extent, annotated with the mean tube current recorded over it, against a scan mean of 265 mA. (**b**) The resulting organ-specific weighted CTDIvol, with the modulation weight beside each bar; the dashed line is the whole-scan CTDIvol of 16.1 mGy.](figures/fig3_demonstration_case.png){width=100%}
+
 ### 3.5. What Limits an Organ-Level Study
 
 Two conditions, neither a defect in the data nor in the method, reduce what an organ-level
@@ -314,6 +320,8 @@ study can measure, and both are vendor-dependent in this cohort (Figure 4).
 Truncation by the scan boundary affected 5.2% of organ records on GE, 5.5% on Siemens,
 10.4% on Canon/Toshiba and 20.0% on Philips. The organs most often cut are the colon and
 small bowel, which are longitudinally extensive, followed by the liver on Philips.
+
+![**Figure 4.** What limits an organ-level modulation study. (**a**) Percentage of organ records truncated by the scan boundary, by manufacturer, annotated with the counts. (**b**) Peak-to-peak spread of the organ weights within each series; the dashed line is the threshold below which a series carries no usable variation across its organs.](figures/fig4_study_limits.png){width=100%}
 
 3 of the 40 series showed a peak-to-peak spread of organ weights below 0.02: their tube
 current does not vary across the abdominal organs, so the modulation weighting has nothing
