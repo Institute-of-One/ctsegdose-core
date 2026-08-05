@@ -61,6 +61,73 @@ def tables():
     return _load()[1]
 
 
+def _abstract(raw: str) -> str:
+    return raw.split("## Abstract", 1)[1].split("**Keywords", 1)[0]
+
+
+def test_the_abstract_fits_the_journal_limit(raw):
+    """Tomography (MDPI) asks for about 200 words. An abstract grows during revision, so
+    the limit is pinned rather than checked once."""
+    assert len(_abstract(raw).split()) <= 200
+
+
+def test_the_abstract_is_one_paragraph_without_structured_headings(raw):
+    """MDPI wants the background-to-conclusion arc woven into a single paragraph, not
+    the Purpose:/Methods:/Results: labels a structured abstract uses."""
+    body = _abstract(raw).strip()
+    assert "\n\n" not in body, "the abstract must be a single paragraph"
+    for label in ("Purpose:", "Background:", "Methods:", "Results:", "Conclusions:"):
+        assert label not in body, f"remove the structured-abstract label {label!r}"
+
+
+def test_the_mdpi_back_matter_sections_are_present_and_ordered(raw):
+    required = [
+        "## Author Contributions",
+        "## Funding",
+        "## Institutional Review Board Statement",
+        "## Informed Consent Statement",
+        "## Data Availability Statement",
+        "## Conflicts of Interest",
+        "## Use of Generative Artificial Intelligence",
+        "## References",
+    ]
+    positions = []
+    for heading in required:
+        assert heading in raw, f"missing MDPI section: {heading}"
+        positions.append(raw.index(heading))
+    assert positions == sorted(positions), "MDPI back-matter sections are out of order"
+
+
+def test_the_imrad_headings_are_the_mdpi_ones(raw):
+    for heading in (
+        "## 1. Introduction", "## 2. Materials and Methods", "## 3. Results",
+        "## 4. Discussion", "## 5. Conclusions",
+    ):
+        assert heading in raw, f"missing MDPI heading: {heading}"
+
+
+def test_the_conflict_of_interest_statement_discloses_the_commercial_interest(raw):
+    coi = raw.split("## Conflicts of Interest", 1)[1].split("##", 1)[0]
+    for term in ("LISIT", "TexelCraft", "commercial interest", "MIT licence"):
+        assert term in coi, f"the conflicts statement must disclose {term!r}"
+
+
+def test_the_ai_use_is_disclosed(raw):
+    section = raw.split("## Use of Generative Artificial Intelligence", 1)[1]
+    assert "Claude" in section and "Anthropic" in section
+    assert "responsibility" in section
+
+
+def test_every_reference_is_cited_and_every_citation_resolves(raw):
+    """A reference list that has drifted from the text is the classic late-stage defect."""
+    numbers = {int(n) for n in re.findall(r"^(\d+)\.\s", raw.split("## References")[1], re.M)}
+    cited = set()
+    for group in re.findall(r"\[(\d+(?:,\s*\d+)*)\]", raw.split("## References")[0]):
+        cited.update(int(n) for n in group.split(","))
+    assert cited <= numbers, f"cited but not listed: {sorted(cited - numbers)}"
+    assert numbers <= cited, f"listed but never cited: {sorted(numbers - cited)}"
+
+
 def test_the_cohort_size_in_the_text_matches_the_results(text, tables):
     cohort = tables["cohort"]
     assert f"{cohort['n_series']} abdominal CT series" in text or f"{cohort['n_series']} series" in text
