@@ -15,7 +15,7 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[1]
-MANUSCRIPT = REPO / "paper" / "manuscript_skeleton.md"
+MANUSCRIPT = REPO / "paper" / "manuscript.md"
 TABLES = REPO / "results" / "analysis_1.5mm.json"
 
 
@@ -33,7 +33,27 @@ def text():
     against the raw file would make these tests fail on reflowing rather than on a
     number changing, which would train the author to ignore them.
     """
-    return re.sub(r"\s+", " ", _load()[0])
+    flat = re.sub(r"\s+", " ", _load()[0])
+    # Prose spells small numbers out; the results hold digits. Normalising here lets the
+    # manuscript read naturally while the tests still compare against the computed value.
+    words = {
+        "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
+        "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12,
+        "forty": 40,
+    }
+    for word, digit in words.items():
+        flat = re.sub(rf"\b{word}\b", str(digit), flat, flags=re.IGNORECASE)
+    return flat
+
+
+@pytest.fixture(scope="module")
+def raw():
+    """The manuscript exactly as written.
+
+    Needed wherever the assertion is about literal text rather than a number: the
+    number-word normalisation above would turn "Institute of One" into "Institute of 1".
+    """
+    return _load()[0]
 
 
 @pytest.fixture(scope="module")
@@ -69,8 +89,48 @@ def test_the_organ_mass_ratios_quoted_in_the_text_are_the_computed_ones(text, ta
 
 def test_the_availability_counts_quoted_in_the_text_are_the_computed_ones(text, tables):
     overall = tables["availability"]["overall"]
-    assert f"{overall['recorded']} of 40 series" in text or f"Recorded {overall['recorded']}/40" in text
-    assert f"{overall['unrecoverable']} — all GE" in text or f"{overall['unrecoverable']}/40, all GE" in text
+    assert f"{overall['recorded']} of 40 series" in text
+    assert f"{overall['reconstructed']} were reconstructable" in text
+    assert f"All {overall['unrecoverable']} unrecoverable series are GE" in text
+
+
+def test_the_organ_mass_table_in_the_text_matches_the_computed_medians(text, tables):
+    """The Results table is prose, so it is the easiest thing in the paper to edit by
+    hand and the hardest to notice going stale."""
+    overall = tables["organ_mass"]["overall"]
+    for organ, label in (
+        ("liver", "liver"), ("spleen", "spleen"),
+        ("kidney_left", "kidney (left)"), ("kidney_right", "kidney (right)"),
+        ("pancreas", "pancreas"),
+    ):
+        block = overall[organ]
+        row = (
+            f"| {label} | {block['mass_g']['n']} | {block['mass_g']['median']:.0f} g "
+            f"| {block['median_over_reference']:.2f} |"
+        )
+        assert row in text, f"the {label} row does not match the computed values: {row}"
+
+
+def test_the_organ_weight_range_quoted_in_the_text_is_the_computed_one(text, tables):
+    weights = tables["weighted_ctdivol"]["by_organ"]
+    lo = min(b["relative_weight"]["min"] for b in weights.values())
+    hi = max(b["relative_weight"]["max"] for b in weights.values())
+    assert f"{lo:.2f} to {hi:.2f}" in text, (
+        f"the organ weights span {lo:.2f}-{hi:.2f}; the manuscript quotes something else"
+    )
+
+
+def test_the_spleen_review_claims_match_the_reviewed_cases(text):
+    """The spleen attribution rests on four specific overlays; the overlays must exist
+    and the text must quote the ratios they were reviewed at."""
+    review = REPO / "paper" / "figures" / "review"
+    if not review.exists():
+        pytest.skip("review overlays not generated in this checkout")
+    rendered = sorted(p.name for p in review.glob("spleen_*.png"))
+    assert len(rendered) >= 4
+    for name in rendered[:4]:
+        ratio = name.split("_")[2].removesuffix("x")
+        assert ratio in text, f"the text does not quote the reviewed ratio {ratio}x"
 
 
 def test_the_headline_vendor_claim_is_still_true_of_the_data(text, tables):
@@ -90,8 +150,7 @@ def test_the_truncation_range_quoted_in_the_text_matches(text, tables):
 
 def test_the_flat_weighting_count_matches(text, tables):
     n = tables["study_limits"]["flat_weighting"]["n_series"]
-    words = {1: "One", 2: "Two", 3: "Three", 4: "Four"}
-    assert f"{words.get(n, n)} series show no usable variation" in text
+    assert f"{n} of the 40 series showed a peak-to-peak spread" in text
 
 
 def test_the_two_offsets_are_attributed_and_the_attribution_is_cited(text):
@@ -117,10 +176,10 @@ def test_no_absorbed_dose_in_milligray_is_claimed_anywhere(text):
         )
 
 
-def test_the_affiliation_convention_holds(text):
-    assert "Institute of One, LISIT Co., Ltd., Tokyo, Japan" in text
-    assert "0000-0001-9211-1071" in text
-    assert "National Cancer Center" not in text and "NCC" not in text
+def test_the_affiliation_convention_holds(raw):
+    assert "Institute of One, LISIT Co., Ltd., Tokyo, Japan" in raw
+    assert "0000-0001-9211-1071" in raw
+    assert "National Cancer Center" not in raw and "NCC" not in raw
 
 
 def test_the_title_does_not_begin_with_open():
