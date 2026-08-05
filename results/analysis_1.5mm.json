@@ -72,6 +72,40 @@
       "iCT 256"
     ]
   },
+  "record_flow": {
+    "expected_organ_series_combinations": 480,
+    "n_series": 40,
+    "n_requested_organs": 12,
+    "organ_records_produced": 455,
+    "absent_combinations": {
+      "total": 25,
+      "reason": "the organ lay outside the scanned longitudinal range, so its mask was empty and no record was produced",
+      "by_organ": {
+        "urinary_bladder": 10,
+        "gallbladder": 8,
+        "liver": 1,
+        "spleen": 1,
+        "kidney_left": 1,
+        "pancreas": 1,
+        "stomach": 1,
+        "adrenal_gland_left": 1,
+        "adrenal_gland_right": 1
+      }
+    },
+    "truncated_records": 47,
+    "whole_organ_records": 408,
+    "records_with_an_organ_weighted_ctdivol": 386,
+    "records_with_a_modulation_weight_only": 69,
+    "series_with_a_modulation_weight_only": 6,
+    "records_in_the_reference_mass_comparison": 177,
+    "reference_mass_comparison_by_organ": {
+      "spleen": 38,
+      "pancreas": 36,
+      "kidney_right": 35,
+      "kidney_left": 34,
+      "liver": 34
+    }
+  },
   "availability": {
     "definition": {
       "recorded": "CTDIvol read from the image header (0018,9345)",
@@ -125,8 +159,7 @@
         "other_recorded": 29,
         "other_not_recorded": 1
       },
-      "test": "Fisher exact, two-sided",
-      "p_value": 1.2976893032820328e-08
+      "inference": "reported descriptively; no significance test is applied, because series within this archive are not independent with respect to collection, site, scanner model, export pathway or de-identification"
     }
   },
   "organ_mass": {
@@ -980,7 +1013,7 @@
       },
       "dose_engine": "ctdose-core (IORN-004) for CTDIvol and the organ weighting"
     },
-    "generated_utc": "2026-08-04T08:14:38+00:00",
+    "generated_utc": "2026-08-05T14:12:27+00:00",
     "note": "Every value here is recomputed from the per-series records by tests/test_analysis_integrity.py; none is entered by hand."
   }
 }

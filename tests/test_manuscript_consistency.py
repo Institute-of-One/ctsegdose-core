@@ -156,7 +156,7 @@ def test_the_organ_mass_ratios_quoted_in_the_text_are_the_computed_ones(text, ta
 
 def test_the_availability_counts_quoted_in_the_text_are_the_computed_ones(text, tables):
     overall = tables["availability"]["overall"]
-    assert f"{overall['recorded']} of 40 series" in text
+    assert f"{overall['recorded']} of 40 series retained" in text
     assert f"{overall['reconstructed']} were reconstructable" in text
     assert f"All {overall['unrecoverable']} unrecoverable series are GE" in text
 
@@ -200,10 +200,92 @@ def test_the_spleen_review_claims_match_the_reviewed_cases(text):
         assert ratio in text, f"the text does not quote the reviewed ratio {ratio}x"
 
 
-def test_the_headline_vendor_claim_is_still_true_of_the_data(text, tables):
-    ge = tables["availability"]["by_vendor"]["GE"]
-    assert ge["recorded"] == 0
-    assert "GE 0/10" in text, "the headline is quoted as GE 0/10; keep text and data together"
+def test_the_vendor_availability_claim_is_true_of_the_data(tables):
+    assert tables["availability"]["by_vendor"]["GE"]["recorded"] == 0
+    table = tables["availability"]["ge_vs_rest_recorded"]["table"]
+    assert table["ge_recorded"] == 0
+    assert table["ge_recorded"] + table["ge_not_recorded"] == 10
+
+
+def test_no_significance_test_is_reported_for_the_availability_comparison(raw, tables):
+    """Removed deliberately: series in a curated archive are not independent with respect
+    to collection, site, scanner model or export pathway, so a p-value over that structure
+    would describe a sampling model the data do not satisfy. The text may *explain* that
+    absence — what it must not do is report a test result."""
+    assert "p_value" not in tables["availability"]["ge_vs_rest_recorded"]
+    assert "inference" in tables["availability"]["ge_vs_rest_recorded"]
+    assert "No significance test is applied" in raw
+    for banned in ("Fisher", "p = ", "p < 0.0", "χ2", "chi-square"):
+        assert banned not in raw, f"a significance test is still reported: {banned!r}"
+
+
+def test_the_availability_claim_is_scoped_to_this_archive_sample(raw):
+    """The finding concerns archived DICOM headers in one curated archive, not what a
+    manufacturer's scanners inherently do."""
+    assert "retained a recorded CTDIvol in the archived" in raw
+    assert "none of the ten sampled GE series" in raw
+    for overreach in ("GE recorded a CTDIvol in none", "GE records no CTDIvol", "GE 0/10"):
+        assert overreach not in raw, f"unscoped vendor claim: {overreach!r}"
+
+
+def test_the_confounders_of_the_availability_finding_are_named(text):
+    for confounder in (
+        "scanner implementation", "acquisition site", "export pathway",
+        "de-identification", "archive curation", "collection composition",
+    ):
+        assert confounder in text, f"the Discussion must name {confounder!r} as a confounder"
+
+
+def test_the_record_flow_in_the_text_reconciles_455_with_480(text, tables):
+    flow = tables["record_flow"]
+    assert f"{flow['expected_organ_series_combinations']} organ–series combinations" in text
+    assert f"Records were produced for {flow['organ_records_produced']}" in text
+    assert f"The remaining {flow['absent_combinations']['total']}" in text
+    assert f"{flow['whole_organ_records']} are untruncated" in text
+    assert f"{flow['records_with_an_organ_weighted_ctdivol']} carry" in text
+    assert f"the remaining {flow['records_with_a_modulation_weight_only']} records" in text
+    assert f"{flow['records_in_the_reference_mass_comparison']} untruncated records" in text
+    by_organ = flow["absent_combinations"]["by_organ"]
+    assert f"urinary bladder in {by_organ['urinary_bladder']} series" in text
+    assert f"gallbladder in {by_organ['gallbladder']}" in text
+
+
+def test_the_index_is_never_presented_as_an_absorbed_organ_dose(text):
+    """The central scoping requirement of this paper."""
+    assert "not an estimate of absorbed organ dose" in text
+    for omitted in (
+        "scattered radiation", "angular", "organ depth",
+        "Monte-Carlo radiation transport", "absorbed organ dose in milligray",
+    ):
+        assert omitted in text, f"Section 2.9 must state that {omitted!r} is not accounted for"
+    for overreach in (
+        "the dose received by", "exposure received by an organ",
+        "we characterised ct dose at the organ level", "organ-level dosimetry",
+    ):
+        assert overreach not in text.lower(), f"dose overreach: {overreach!r}"
+
+
+def test_organ_mass_is_presented_as_a_model_based_estimate(text):
+    assert "model-based estimates rather than physical ground truth" in text
+    for factor in ("Contrast enhancement", "reconstruction kernel", "scanner-specific HU"):
+        assert factor in text, f"the mass limitation must name {factor!r}"
+
+
+def test_the_reference_comparison_is_not_called_a_calibration(text):
+    """ICRP 89 is an external anchor, not a ground truth and not a calibration target."""
+    assert "external reference comparison" in text.lower()
+    assert "calibration of the segmented organ masses" not in text
+    assert "cannot be determined without subject-level reference contours" in text
+
+
+def test_the_two_offsets_are_explored_rather_than_asserted(text):
+    assert "most consistent with cohort anatomy among the explanations examined" in text
+    for overclaim in (
+        "The +72% median is cohort anatomy",
+        "The pancreas offset is attributed to the segmentation",
+        "The spleen offset is attributed to the cohort",
+    ):
+        assert overclaim not in text, f"over-strong attribution remains: {overclaim!r}"
 
 
 def test_the_truncation_range_quoted_in_the_text_matches(text, tables):
@@ -220,18 +302,19 @@ def test_the_flat_weighting_count_matches(text, tables):
     assert f"{n} of the 40 series showed a peak-to-peak spread" in text
 
 
-def test_the_two_offsets_are_attributed_and_the_attribution_is_cited(text):
-    """Neither offset may sit in the Results unexplained: each has an attribution, and
-    the attribution names its source."""
+def test_the_two_offsets_are_examined_with_their_evidence_quoted(text):
+    """Neither offset may sit in the Results unexplained; equally, neither explanation may
+    be stated more strongly than the evidence supports."""
     assert "Wasserthal" in text and "10.1148/ryai.230024" in text
     assert "0.887" in text and "0.983" in text, (
-        "the pancreas and spleen attributions rest on TotalSegmentator's own per-class "
+        "the pancreas and spleen discussions rest on TotalSegmentator's own per-class "
         "Dice; quote them so a reader can check the reasoning"
     )
-    assert "Dice is symmetric" in text.replace("*", ""), (
-        "Dice supports lower boundary agreement but not the sign of a bias; the text "
-        "must say so rather than over-claim the pancreas attribution"
+    assert "Dice is\nsymmetric".replace("\n", " ") in text.replace("*", ""), (
+        "Dice supports lower boundary agreement but not the direction of a disagreement; "
+        "the text must say so rather than over-claim the pancreas explanation"
     )
+    assert "alternative contributors that the present design\ncannot separate".replace("\n", " ") in text
 
 
 def test_no_absorbed_dose_in_milligray_is_claimed_anywhere(text):
@@ -266,10 +349,21 @@ def test_every_figure_is_referenced_captioned_and_present(raw):
     discussed = {int(n) for n in re.findall(r"\bFigure (\d)\b", raw)}
     assert discussed == {1, 2, 3, 4}, f"the text discusses figures {sorted(discussed)}"
 
-    embedded = re.findall(r"!\[\*\*Figure (\d)\.\*\*[^\]]+\]\(figures/([^)]+?)\)", raw)
-    assert {int(n) for n, _ in embedded} == {1, 2, 3, 4}, (
-        "every figure needs an embedded image with an MDPI-style caption, or it will "
-        "not reach the reviewer in the built document"
+    # Images carry no alt text and the caption is a following paragraph. Using pandoc's
+    # implicit figures instead would make the renderer add its own "Figure N:" on top of
+    # the caption's own label, which is where the doubled numbering came from.
+    embedded = re.findall(r"!\[\]\(figures/([^){]+)\)", raw)
+    assert len(embedded) == 4, f"expected four embedded figures, found {len(embedded)}"
+    for filename in embedded:
+        assert (figures / filename.strip()).exists(), f"missing {filename}"
+
+    captions = {int(n) for n in re.findall(r"^\*\*Figure (\d)\.\*\* ", raw, re.M)}
+    assert captions == {1, 2, 3, 4}, f"figures captioned: {sorted(captions)}"
+
+
+def test_no_figure_caption_carries_a_doubled_number(raw):
+    """The rendered output read 'Figure 1: Figure 1.' while the caption sat inside the
+    image's alt text and the renderer numbered it as well."""
+    assert not re.search(r"!\[\*\*Figure", raw), (
+        "a caption inside the image alt text makes the renderer number it twice"
     )
-    for _, filename in embedded:
-        assert (figures / filename.split("{")[0].strip()).exists(), f"missing {filename}"

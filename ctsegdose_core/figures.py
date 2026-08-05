@@ -122,23 +122,24 @@ def caption(kind: str, tables: dict[str, Any]) -> str:
     )
     return {
         "mass": (
-            f"Segmented organ mass relative to the ICRP 89 reference adult male. {stem}. "
-            "Organs truncated by the scan boundary are excluded, since their mass is that "
-            "of the scanned part only."
+            f"Attenuation-derived estimated organ mass relative to the ICRP 89 reference "
+            f"adult male value. {stem}. Organs truncated by the scan boundary are "
+            "excluded, since their mass is that of the scanned part only. The reference "
+            "is an external anchor, not a ground truth for these subjects."
         ),
         "availability": (
-            f"Availability of a whole-scan dose index, by manufacturer. {stem}. A series "
-            "counted unrecoverable carries no CTDIvol in its header and its scanner lies "
-            "outside the open coefficient database, so no organ-level index can be formed "
-            "from it at all."
+            f"Availability of a whole-scan dose index in the archived DICOM headers, by "
+            f"manufacturer. {stem}. A series counted unrecoverable retained no CTDIvol in "
+            "its header and its scanner lies outside the open coefficient database, so no "
+            "anatomy-weighted index can be formed from it at all."
         ),
         "demonstration": (
             "One acquisition end to end: the segmented organs, the recorded per-slice tube "
-            "current over each organ's extent, and the organ-specific weighted CTDIvol that "
-            "the modulation produces."
+            "current over each organ's longitudinal extent, and the anatomy-weighted "
+            "CTDIvol index the modulation produces."
         ),
         "limits": (
-            f"What limits an organ-level modulation study. {stem}. Truncation is the "
+            f"What limits an organ-level modulation analysis. {stem}. Truncation is the "
             "fraction of organ records the scan boundary cuts through; the weight spread is "
             "the peak-to-peak range of the organ weights within a series."
         ),

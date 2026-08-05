@@ -87,9 +87,22 @@ def report(tables: dict[str, Any]) -> None:
     for vendor, b in a["by_vendor"].items():
         print(f"  {vendor:14s} {b['n_series']:3d} {b['recorded']:9d} "
               f"{b['reconstructed']:9d} {b['unrecoverable']:8d}")
-    p = a["ge_vs_rest_recorded"].get("p_value")
-    print(f"  GE vs rest, recorded CTDIvol: Fisher exact p = "
-          f"{'n/a' if p is None else format(p, '.2g')}")
+    t = a["ge_vs_rest_recorded"]["table"]
+    print(f"  GE recorded {t['ge_recorded']}/{t['ge_recorded'] + t['ge_not_recorded']}; "
+          f"others {t['other_recorded']}/{t['other_recorded'] + t['other_not_recorded']} "
+          "(descriptive; no significance test — see analysis.py)")
+
+    f = tables["record_flow"]
+    print("\n== organ record flow ==")
+    print(f"  expected combinations   {f['expected_organ_series_combinations']}")
+    print(f"  records produced        {f['organ_records_produced']}")
+    print(f"  absent (out of range)   {f['absent_combinations']['total']}  "
+          f"{f['absent_combinations']['by_organ']}")
+    print(f"  truncated / whole       {f['truncated_records']} / {f['whole_organ_records']}")
+    print(f"  with organ-weighted CTDIvol {f['records_with_an_organ_weighted_ctdivol']}")
+    print(f"  weight only (no CTDIvol)    {f['records_with_a_modulation_weight_only']} "
+          f"from {f['series_with_a_modulation_weight_only']} series")
+    print(f"  in reference-mass comparison {f['records_in_the_reference_mass_comparison']}")
 
     print("\n== segmented organ mass vs ICRP 89 (whole organs only) ==")
     print(f"  {'organ':14s} {'n':>3s} {'median g':>9s} {'IQR':>17s} {'ICRP':>6s} {'ratio':>6s}")

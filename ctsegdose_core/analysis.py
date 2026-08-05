@@ -89,6 +89,75 @@ def _completed(series: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return [s for s in series if s.get("organs")]
 
 
+#: The organ set requested of the segmenter. Needed to state how many organ records were
+#: *expected*, which is what makes the number actually produced interpretable.
+REQUESTED_ORGANS: tuple[str, ...] = (
+    "liver", "spleen", "kidney_left", "kidney_right", "pancreas", "stomach",
+    "gallbladder", "adrenal_gland_left", "adrenal_gland_right", "small_bowel",
+    "colon", "urinary_bladder",
+)
+
+#: The organs compared against a published reference mass. Only solid organs: the
+#: segmenter delineates stomach, bowel, gallbladder and bladder including their contents,
+#: whereas the reference tabulates wall mass, so comparing those would manufacture a
+#: discrepancy rather than find one.
+SOLID_ORGANS: tuple[str, ...] = ("liver", "spleen", "kidney_left", "kidney_right", "pancreas")
+
+
+def record_flow(series: list[dict[str, Any]]) -> dict[str, Any]:
+    """How many organ records were expected, how many exist, and what each is usable for.
+
+    A bare count of organ records invites the reader to divide it by the organ set and
+    find it does not divide. It should not: an organ lying outside the scanned range has
+    no mask and therefore no record, which is a property of the acquisitions rather than
+    a failure. This function makes the whole chain explicit, from expected combinations
+    down to the subsets each analysis actually rests on.
+    """
+    completed = _completed(series)
+    records = [(s, o) for s in completed for o in s["organs"]]
+
+    absent: Counter = Counter()
+    for s in completed:
+        present = {o["organ"] for o in s["organs"]}
+        for organ in REQUESTED_ORGANS:
+            if organ not in present:
+                absent[organ] += 1
+
+    truncated = [(s, o) for s, o in records if o.get("truncated")]
+    with_index = [(s, o) for s, o in records if o.get("organ_weighted_ctdivol_mgy") is not None]
+    weight_only = [(s, o) for s, o in records if o.get("organ_weighted_ctdivol_mgy") is None]
+    mass_used = [
+        (s, o) for s, o in records
+        if o["organ"] in SOLID_ORGANS and not o.get("truncated")
+    ]
+
+    return {
+        "expected_organ_series_combinations": len(series) * len(REQUESTED_ORGANS),
+        "n_series": len(series),
+        "n_requested_organs": len(REQUESTED_ORGANS),
+        "organ_records_produced": len(records),
+        "absent_combinations": {
+            "total": sum(absent.values()),
+            "reason": (
+                "the organ lay outside the scanned longitudinal range, so its mask was "
+                "empty and no record was produced"
+            ),
+            "by_organ": dict(absent.most_common()),
+        },
+        "truncated_records": len(truncated),
+        "whole_organ_records": len(records) - len(truncated),
+        "records_with_an_organ_weighted_ctdivol": len(with_index),
+        "records_with_a_modulation_weight_only": len(weight_only),
+        "series_with_a_modulation_weight_only": len(
+            {s["series_instance_uid"] for s, _ in weight_only}
+        ),
+        "records_in_the_reference_mass_comparison": len(mass_used),
+        "reference_mass_comparison_by_organ": dict(
+            Counter(o["organ"] for _, o in mass_used).most_common()
+        ),
+    }
+
+
 # --- (1) dose-index availability, the headline ------------------------------------------
 
 
@@ -128,42 +197,48 @@ def availability(series: list[dict[str, Any]]) -> dict[str, Any]:
             "reconstructed": overall["reconstructed"],
             "unrecoverable": overall["unrecoverable"],
         },
-        "ge_vs_rest_recorded": _fisher_ge_vs_rest(series),
+        "ge_vs_rest_recorded": _ge_vs_rest(series),
     }
 
 
-def _fisher_ge_vs_rest(series: list[dict[str, Any]]) -> dict[str, Any]:
-    """Exact test of the recorded-CTDIvol difference between GE and the other vendors.
+def _ge_vs_rest(series: list[dict[str, Any]]) -> dict[str, Any]:
+    """The GE-versus-rest counts, reported descriptively and without a significance test.
 
-    A 2x2 count with ten per group is exactly the case Fisher's test exists for; a
-    chi-square approximation on cells this small would be the wrong instrument.
+    A two-by-two exact test was computed at one point and has been removed deliberately.
+    It would treat the forty series as independent observations, and they are not: they
+    are drawn from a curated archive in which collection, contributing site, scanner
+    model, export pathway and de-identification are shared within groups and confounded
+    with manufacturer. A p-value computed over that structure would describe a sampling
+    model the data do not satisfy, and would lend the comparison an inferential authority
+    the design cannot support. The counts are unambiguous on their own.
     """
     ge = [s for s in series if s["vendor"] == "GE"]
     rest = [s for s in series if s["vendor"] != "GE"]
     a = sum(1 for s in ge if _ctdivol_class(s["ctdivol_source"]) == "recorded")
-    b = len(ge) - a
     c = sum(1 for s in rest if _ctdivol_class(s["ctdivol_source"]) == "recorded")
-    d = len(rest) - c
-    result: dict[str, Any] = {
-        "table": {"ge_recorded": a, "ge_not_recorded": b, "other_recorded": c, "other_not_recorded": d},
-        "test": "Fisher exact, two-sided",
+    return {
+        "table": {
+            "ge_recorded": a, "ge_not_recorded": len(ge) - a,
+            "other_recorded": c, "other_not_recorded": len(rest) - c,
+        },
+        "inference": (
+            "reported descriptively; no significance test is applied, because series "
+            "within this archive are not independent with respect to collection, site, "
+            "scanner model, export pathway or de-identification"
+        ),
     }
-    try:
-        from scipy.stats import fisher_exact
-
-        _, p = fisher_exact([[a, b], [c, d]])
-        result["p_value"] = float(p)
-    except Exception:  # pragma: no cover - scipy is an extra
-        result["p_value"] = None
-        result["note"] = "scipy not available; the counts stand on their own"
-    return result
 
 
 # --- (2) segmented organ mass against a published reference -----------------------------
 
 
 def organ_mass(series: list[dict[str, Any]]) -> dict[str, Any]:
-    """Segmented organ mass, overall and by vendor, against ICRP 89.
+    """Attenuation-derived organ mass, overall and by vendor, beside ICRP 89.
+
+    This is an *external reference comparison*, not a calibration and not a validation:
+    the reference is a published value for a reference adult, and these subjects are an
+    oncology cohort for whom no subject-level ground truth exists. The ratio locates the
+    estimates against a common anchor; it does not measure error.
 
     Truncated organs are excluded throughout: an organ the scan cuts through has the
     mass of its scanned part, and comparing that with a whole-organ reference would
@@ -345,6 +420,7 @@ def build(payload: dict[str, Any]) -> dict[str, Any]:
             "collections": sorted({s["collection"] for s in series if s.get("collection")}),
             "scanner_models": sorted({s["model_name"] for s in series if s.get("model_name")}),
         },
+        "record_flow": record_flow(series),
         "availability": availability(series),
         "organ_mass": organ_mass(series),
         "weighted_ctdivol": weighted_ctdivol(series),

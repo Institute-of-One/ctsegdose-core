@@ -108,13 +108,16 @@ def figure_mass(organs: list[dict[str, Any]], tables: dict[str, Any], out: Path)
                 va="bottom", ha="center", fontweight="bold", zorder=5)
 
     ax.set_xticks(range(len(order)), [ORGAN_LABEL[o] for o in order])
-    ax.set_ylabel("segmented mass / ICRP 89 reference")
+    # Names both sides of the ratio: what was measured is an attenuation-derived
+    # estimate, and what it is placed beside is a published reference-adult value, not a
+    # ground truth for these subjects.
+    ax.set_ylabel("estimated mass / ICRP 89 reference adult male mass")
     ax.set_ylim(0, top_of_axis)
     ax.set_xlim(-0.6, len(order) - 0.15)
     ax.grid(axis="x", visible=False)
     strip_chrome(ax)
     vendor_legend(ax, loc="upper left")
-    ax.set_title("Segmented organ mass against a published reference", loc="left", pad=8)
+    ax.set_title("Estimated organ mass beside a published reference value", loc="left", pad=8)
     save(fig, out, "fig1_organ_mass_vs_icrp89")
 
 
@@ -163,11 +166,13 @@ def figure_availability(tables: dict[str, Any], out: Path) -> None:
     ax.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, -0.28),
               ncols=3, handlelength=1.6, handletextpad=0.5, columnspacing=1.6)
 
-    p = tables["availability"]["ge_vs_rest_recorded"].get("p_value")
-    note = "GE records no CTDIvol in any series"
-    if p is not None:
-        note += f"  (Fisher exact vs other vendors, p = {p:.1g})"
-    ax.set_title("Whole-scan dose index: recorded, reconstructed, or absent", loc="left", pad=16)
+    t = tables["availability"]["ge_vs_rest_recorded"]["table"]
+    ge_n = t["ge_recorded"] + t["ge_not_recorded"]
+    note = (
+        f"none of the {ge_n} sampled GE series retained a recorded CTDIvol "
+        "(descriptive; this archive sample only)"
+    )
+    ax.set_title("Whole-scan dose index in the archived headers", loc="left", pad=16)
     ax.text(0, 1.06, note, transform=ax.transAxes, fontsize=7.5, color=INK_SECONDARY)
     save(fig, out, "fig2_dose_index_availability")
 
@@ -237,11 +242,11 @@ def figure_demonstration(payload: dict[str, Any], out: Path) -> None:
                     f"×{o['relative_weight']:.2f}", fontsize=7, color=INK_PRIMARY, va="center")
     bottom.set_yticks(y, [ORGAN_LABEL.get(o["organ"], o["organ"]) for o in organs])
     bottom.invert_yaxis()
-    bottom.set_xlabel("organ-specific weighted CTDIvol (mGy)")
+    bottom.set_xlabel("organ-weighted CTDIvol index (mGy)")
     bottom.set_xlim(0, max(values) * 1.22)
     bottom.grid(axis="y", visible=False)
     strip_chrome(bottom)
-    bottom.set_title("(b) the organ-level dose index, and the weight that produced it",
+    bottom.set_title("(b) the anatomy-weighted CTDIvol index, and the weight producing it",
                      loc="left", pad=6)
 
     fig.suptitle(
