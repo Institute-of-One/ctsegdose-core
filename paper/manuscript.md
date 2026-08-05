@@ -43,10 +43,12 @@ Philips; three series showed no usable variation in tube current across their or
 
 **Conclusions.** Organ-level dose characterisation is achievable from routine metadata
 across all four major manufacturers, and the modulation makes a difference large enough
-to matter. The barrier to converting that index into an absorbed dose in milligray is
-not technical but one of licensing: no CTDIvol-normalised organ-dose coefficient set is
-openly licensed. That extends a known openness gap from the whole-scan index to the
-organ.
+to matter. Extending the chain to an absorbed dose in milligray is limited not by method
+but by the licensing convention for Monte-Carlo organ-dose coefficients, which are
+published under terms that preclude redistribution. An openly licensed chain therefore
+runs from the scanner to the organ-level index and stops there — the same openness gap
+already documented for the whole-scan index, observed one level down, and removable by
+the same means that removed it there.
 
 **Keywords:** computed tomography; organ dose; tube current modulation; deep-learning
 segmentation; dosimetry; reproducibility
@@ -78,10 +80,18 @@ effectively free.
 What is not free is the final conversion. Turning an organ-level dose *index* into an
 absorbed organ dose in milligray requires CTDIvol-normalised organ-dose coefficients,
 computed by Monte-Carlo simulation over anthropomorphic phantoms and corrected for
-patient size. Such coefficient sets exist and are well validated, but every set we were
-able to locate is published under a subscription or a no-derivatives licence. This is
-not a peripheral observation: it determines what an openly licensed pipeline can and
-cannot deliver, and it is a finding of this work rather than a caveat attached to it.
+patient size. Such coefficient sets exist, are well validated, and are in routine use.
+They are, however, distributed under terms that do not permit onward distribution:
+published in subscription journals, or bundled with research software licensed for use
+rather than redistribution. Open licensing has not become the convention for this class
+of reference data — in contrast to, for example, the normalised-CTDI databases on which
+the whole-scan index can now be rebuilt [6], which shows that the alternative is
+practicable rather than hypothetical.
+
+The consequence is structural, not incidental. An openly licensed measurement chain can
+be assembled from the scanner to an organ-level dose index and no further, and that
+boundary sits in the field rather than in any particular implementation. We treat it as
+an observation this study reports, not as a limitation it apologises for.
 
 This study therefore does three things. It computes a patient-specific, anatomy-aware
 organ dose *index* end to end from routine metadata across four manufacturers. It
@@ -370,17 +380,29 @@ organ-level dosimetry study drawn from an archive will therefore lose a manufact
 dependent fraction of its cohort before segmentation is even considered, and a study that
 does not report which series were lost will silently under-represent that manufacturer.
 
-**Where openness runs out.** Converting the organ-specific weighted CTDIvol into an
-absorbed organ dose in milligray requires CTDIvol-normalised coefficients with a
-patient-size correction. The published sets that match this application are under
-subscription or no-derivatives licences, and none may be redistributed in an openly
-licensed pipeline. We therefore stop at the index, and the software refuses to produce a
-dose in milligray without a coefficient table carrying its citation, licence and source
-hash. This is the same openness gap the companion study documented for the whole-scan
-index [7], now extended to the organ: the measurement chain is open from the scanner to
-the organ-level index, and closed for the final step. Computing coefficients with an
-open-source Monte-Carlo engine removes the barrier rather than working around it, and is
-the natural continuation of this work.
+**Where the open chain ends, and why.** Converting the organ-specific weighted CTDIvol
+into an absorbed organ dose in milligray requires CTDIvol-normalised coefficients with a
+patient-size correction. The coefficient sets the field relies on for this purpose are
+published in subscription journals or distributed with research software under terms
+granting use but not redistribution. This reflects a publishing convention for
+Monte-Carlo reference data rather than any deficiency in the coefficients themselves,
+which are well validated and widely applied; it simply means that no such set can be
+carried inside an openly licensed pipeline.
+
+The contrast with the layer below is instructive. Normalised-CTDI data of the kind used
+here to reconstruct a missing whole-scan index has recently been published under CC BY
+[6], and that single change is what makes the reconstruction in §3.3 possible at all.
+The same change at the organ layer would extend the open chain to absorbed dose without
+any methodological advance. The boundary is therefore a property of how this class of
+reference data is currently published, not of the method — and it is movable.
+
+We accordingly stop at the index, and the software enforces that: it refuses to produce a
+dose in milligray unless supplied with a coefficient table carrying its citation, DOI,
+licence and source hash. This is the openness gap the companion study documented for the
+whole-scan index [7], observed one level down: the measurement chain is open from the
+scanner to the organ-level index, and closed for the final step. Computing coefficients
+with an open-source Monte-Carlo engine would remove the barrier rather than work around
+it, and is the natural continuation of this work.
 
 **Limitations.** Ten series per manufacturer supports a median and an interquartile range,
 not a distributional claim. The cohort is oncological and not a reference population,
@@ -398,9 +420,17 @@ inference-only deep-learning segmentation and openly licensed inputs throughout.
 modulation weights span 0.59 to 1.69 within this cohort, so the organ layer is not a
 refinement of the whole-scan index but a materially different quantity. The segmented
 anatomy underpinning it agrees with published reference masses for the liver and kidneys,
-with two systematic offsets that we characterise and attribute rather than adjust. The
-remaining barrier to an absorbed organ dose is one of licensing rather than of method, and
-naming it precisely is part of what this work reports.
+with two systematic offsets that we characterise and attribute rather than adjust.
+
+The chain stops at the index, and where it stops is worth stating plainly. Monte-Carlo
+organ-dose coefficients are conventionally published under terms that permit use but not
+redistribution, so they cannot be carried inside an openly licensed pipeline. That is a
+property of current publishing practice for this class of reference data rather than of
+the coefficients, which are sound, or of the method, which is complete up to that point.
+The precedent one layer down — normalised-CTDI data released under CC BY, which is what
+makes the whole-scan reconstruction reported here possible — shows the convention can
+change. Until it does, the organ-level index is where an open chain ends, and it is worth
+having on its own terms.
 
 ---
 
