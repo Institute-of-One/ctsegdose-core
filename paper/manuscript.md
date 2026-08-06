@@ -15,21 +15,20 @@ Institute of One, LISIT Co., Ltd., Tokyo, Japan; yamamoto@lisit.jp; ORCID 0000-0
 ## Abstract
 
 CTDIvol is a scanner-output index, not a patient or organ dose, and cannot express how
-longitudinal tube-current modulation varies along a patient. We characterised
-longitudinal tube-current modulation at the organ level by deriving an anatomy-weighted
-CTDIvol index from routine DICOM metadata and automated organ segmentation; the index is
-not an estimate of absorbed organ dose. Forty abdominal CT series, ten from each of four
-manufacturers, were drawn from The Cancer Imaging Archive, and twelve organs segmented
-with TotalSegmentator at inference only. Of 480 organ–series combinations, 455 records
-were produced, the remainder organs outside the scanned range; 408 were untruncated and
-386 admitted an index. Modulation weights spanned 0.59 to 1.69, so the index departs from
-the whole-scan CTDIvol by up to 70% within one acquisition. A recorded CTDIvol was retained in the archived headers
-of 29 of 40 series, was reconstructable in 5 and unavailable in 6; availability differed
-markedly between manufacturers in this sample. Estimated organ mass was broadly consistent
-with ICRP 89 reference values for liver and kidneys, with pancreas and spleen offsets
-explored rather than empirically corrected. Conversion to absorbed organ dose requires
-Monte-Carlo coefficients this index does not replace. The implementation is open and
-reproducible.
+tube-current modulation varies along a patient. We derived an anatomy-weighted CTDIvol
+index from routine DICOM metadata and automated organ segmentation; it characterises
+organ-specific longitudinal tube-current modulation and is not an estimate of absorbed
+organ dose. Forty abdominal CT series, ten per manufacturer, were drawn from The Cancer
+Imaging Archive, and twelve organs segmented with TotalSegmentator at inference only. Of 480 requested organ–series combinations, 455 were
+produced; the remaining 25 organs lay outside the scanned range. Of the 455,
+408 were untruncated and an index could be calculated for 386. Modulation weights spanned
+0.59 to 1.69, so the index departs from the whole-scan CTDIvol by up to 70% within one
+acquisition. A recorded CTDIvol was retained in the archived headers of 29 of 40 series,
+was reconstructable in 5 and unavailable in 6, differing markedly between manufacturers in
+this sample. Estimated organ mass was broadly consistent with ICRP 89 values for liver and
+kidneys; pancreas and spleen offsets were explored rather than corrected. Conversion to
+absorbed organ dose requires Monte-Carlo coefficients this index does not replace. The
+implementation and derived records are openly available and reproducible.
 
 **Keywords:** computed tomography; CTDIvol; tube-current modulation; deep-learning
 segmentation; TotalSegmentator; image-based dosimetry indices; reproducibility; open data
@@ -94,8 +93,8 @@ transfers a series.
 
 The candidate index was built from 47,181 CT series across 21 abdominal collections, read
 as series-level JSON with no pixel data. Candidates were seeded from the public-archive
-survey distributed with the companion software release [6] and supplemented by direct
-collection queries. A metadata screen then rejected, in order and with each rejection
+survey distributed with the companion software release [6] — a software record, not a
+peer-reviewed study — and supplemented by direct collection queries. A metadata screen then rejected, in order and with each rejection
 counted: non-patient collections (imaging phantoms and de-identification benchmarks);
 projection and raw-data series, of which 398 were refused at this stage; non-diagnostic
 series (localisers, dose reports, screen captures); series shorter than 40 or longer than
@@ -198,8 +197,31 @@ per-slice tube current *I(z)*, the organ-specific modulation weight is
 *w_o* = [ Σ_z *n_o(z) I(z)* / Σ_z *n_o(z)* ] / mean_z *I(z)*     (1)
 
 and the anatomy-weighted CTDIvol index is CTDIvol · *w_o*. The weight is dimensionless and
-is the transferable quantity: it expresses the organ's longitudinal exposure conditions
-relative to the scan mean, independently of the scanner's own output.
+is the transferable quantity: it expresses the recorded longitudinal tube-current
+conditions over the organ relative to the scan mean, independently of the scanner's own
+output.
+
+The weighting assumes that, within each series, tube voltage, rotation or exposure time,
+pitch and beam collimation remain fixed, so that longitudinal changes in scanner output
+are proportional to the recorded tube current. We checked this directly by reading every
+slice header of every retained series; the result is shipped as
+`results/acquisition_constancy.json`. Tube voltage was verified constant in all 40 series,
+as were Image Type and convolution kernel, so no series mixes acquisition or
+reconstruction types. Exposure time was verified constant in 35 series and absent from the
+headers of 1; pitch was verified constant in 32 and absent in 8; total collimation width
+was verified constant in 31 and absent in 9; rotation time was verified constant in 20 and
+absent in 19. Attributes absent from the archived headers are reported as absent rather
+than as verified: they are assumed constant on the basis that the series is represented as
+a single acquisition, which the constant Image Type and kernel support, but this could not
+be confirmed.
+
+Exposure time varied within 4 series. In 3 of these, all Philips, the variation was below
+1% and reflects decimal rounding in the header rather than a change in the acquisition. In
+the remaining series — the GE acquisition also identified in Section 2.3 as two
+reconstructions sharing one Series Instance UID — exposure time takes the values 400 and
+800 ms and rotation time 0.4 and 0.8 s in contiguous blocks, so scanner output in that
+series is not proportional to tube current alone. Its organ weights lie between 0.98 and
+1.21 and do not contribute to the reported range; the consequence is treated in Section 4.
 
 CTDIvol was taken from the image header (0018,9345) where present. Where absent, it was
 reconstructed from acquisition physics against an openly licensed normalised-CTDI database
@@ -218,11 +240,17 @@ Forty series and twelve requested organs give 480 organ–series combinations. R
 produced for 455. The remaining 25 are organs that lay outside the scanned longitudinal
 range, so their masks were empty and no record exists: urinary bladder in 10 series,
 gallbladder in 8, and seven further organs in a single 41-slice pelvic acquisition that
-does not reach the upper abdomen. Of the 455 records, 408 are untruncated, and 386 carry
-an anatomy-weighted index; the remaining 69 records, from 6 series, carry a modulation
-weight but no index, because those series have no CTDIvol by either route. The external
-reference-mass comparison uses the 177 untruncated records of the five solid organs. The
-full flow is in the shipped `results/analysis_1.5mm.json`.
+does not reach the upper abdomen.
+
+Two further conditions apply to the 455 records, and they are **independent axes rather
+than nested subsets**. Truncation is a property of the organ: 408 records are untruncated
+and 47 reach a scan boundary. Index availability is a property of the series: 386 records
+carry an anatomy-weighted index, while the remaining 69 records, from 6 series, carry a
+modulation weight but no index, because those series have no CTDIvol by either route. The
+two conditions hold together for 345 records; 41 truncated records still carry an index,
+and 63 untruncated records do not. The external reference-mass comparison uses the 177
+untruncated records of the five solid organs. The full flow is in the shipped
+`results/analysis_1.5mm.json`.
 
 ### 2.9. What the Index Does and Does Not Represent
 
@@ -245,12 +273,14 @@ organ weights vary within a series. These screens exist because the failures the
 leave no other trace.
 
 Analyses were run with Python 3.14 (the package supports 3.10 and later), TotalSegmentator
-v2.17 (`total` task, 1.5 mm model) on PyTorch 2.11 with CUDA 12.8, pydicom 3.0 and NumPy
-2.5. Every reported value is re-derived from the per-series records by the test suite,
-including regenerating the complete analysis table and comparing it. Tables and figures are
-regenerated by `tools/make_analysis.py` and `tools/make_figures.py`; the acquisition and
-organ layers by `tools/select_and_download.py` and `tools/run_organ_dose.py`.
-`TODO-AUTHOR:` insert the release tag, commit hash and Zenodo version DOI at submission.
+v2.17 (`total` task, 1.5 mm full-resolution model) on PyTorch 2.11 with CUDA 12.8, pydicom
+3.0 and NumPy 2.5, using an NVIDIA RTX 3080. Every reported value is re-derived from the
+per-series records by the test suite, including regenerating the complete analysis table
+and comparing it. The acquisition, organ, analysis and figure layers are regenerated by
+`tools/select_and_download.py`, `tools/run_organ_dose.py`, `tools/make_analysis.py` and
+`tools/make_figures.py` respectively; the acquisition-parameter check by
+`tools/verify_acquisition_constancy.py`. The repository, its release tag, commit hash and
+archived version DOI are given in the Data Availability Statement.
 
 ## 3. Results
 
@@ -267,7 +297,7 @@ anatomy-weighted index therefore departs from the whole-scan CTDIvol by up to ro
 in either direction within a single acquisition, which is the variation the index exists
 to express.
 
-Figure 3 shows one acquisition end to end: a Canon/Toshiba Aquilion PRIME series of 268
+Figure 1 shows one acquisition end to end: a Canon/Toshiba Aquilion PRIME series of 268
 slices with a recorded CTDIvol of 16.1 mGy and a scan mean tube current of 265 mA. The
 small bowel and colon, lying in the inferior abdomen where the modulation raised the
 current to about 447 and 435 mA, take weights of 1.69 and 1.64 respectively, giving indices
@@ -275,9 +305,9 @@ near 27 mGy; the left kidney and stomach, higher in the scan, take weights of 0.
 indices near 15 mGy. Two organs in the same acquisition thus differ by a factor of 1.8 in
 their anatomy-weighted index, a difference no whole-scan value can express.
 
-![](figures/fig3_demonstration_case.png){width=100%}
+![](figures/fig1_demonstration_case.png){width=100%}
 
-**Figure 3.** One acquisition end to end. (**a**) Each organ's longitudinal extent,
+**Figure 1.** One acquisition end to end. (**a**) Each organ's longitudinal extent,
 annotated with the mean tube current recorded over it, against a scan mean of 265 mA.
 (**b**) The resulting anatomy-weighted CTDIvol index, with the organ-specific modulation
 weight beside each bar; the dashed line is the whole-scan CTDIvol of 16.1 mGy. The bars
@@ -306,7 +336,7 @@ distinguished by fill pattern as well as tone.
 
 ### 3.4. External Reference Comparison of Estimated Organ Mass
 
-Table 1 and Figure 1 place attenuation-derived estimated organ mass beside the ICRP 89
+Table 1 and Figure 3 place attenuation-derived estimated organ mass beside the ICRP 89
 reference adult male values [5], over the 177 untruncated records of the five solid
 organs.
 
@@ -327,9 +357,9 @@ the kidneys within 17%. Two organs departed more substantially: the pancreas est
 39% below the reference and the spleen 72% above. Neither was adjusted; possible
 explanations are examined in Section 4.
 
-![](figures/fig1_organ_mass_vs_icrp89.png){width=100%}
+![](figures/fig3_organ_mass_vs_icrp89.png){width=100%}
 
-**Figure 1.** Attenuation-derived estimated organ mass relative to the ICRP 89 reference
+**Figure 3.** Attenuation-derived estimated organ mass relative to the ICRP 89 reference
 adult male mass, by manufacturer. Each marker is one organ in one series; the horizontal
 bar is the median across all manufacturers. Organs truncated by the scan boundary are
 excluded. Manufacturer is encoded by marker shape as well as colour, so the figure is
@@ -415,10 +445,26 @@ organ-level analysis drawn from an archive will lose a manufacturer-associated f
 its cohort before segmentation is considered, and a study that does not report which
 series were lost will under-represent that manufacturer silently.
 
-**Reproducibility and open implementation.** The engine is MIT-licensed, no imaging is
-redistributed, and every reported value is re-derived from the per-series records by an
-automated test suite that regenerates the analysis tables and compares them. The
-acquisition procedure, the analysis and the figures are each a single command.
+**A series in which the weighting assumption does not hold.** As reported in Section 2.7,
+one GE series contains two contiguous blocks acquired at different rotation and exposure
+times, so its scanner output is not proportional to tube current alone. Weighting that
+series by the product of tube current and exposure time instead shifts its organ weights
+by up to about 35% in either direction. Its weights, 0.98 to 1.21, are interior to the
+cohort range, which is 0.59 to 1.69 with or without it, so no reported result depends on
+it; but the weights for that one series should be read as describing recorded tube current
+rather than scanner output. A current–time product would be the more faithful weighting in
+general, and is not adopted here because exposure time is absent from the archived headers
+of one other series, so it could not be applied uniformly across the cohort.
+
+**Reproducibility and open implementation.** The implementation is MIT-licensed, no
+imaging is redistributed, and every reported value is re-derived from the per-series
+records by an automated test suite that regenerates the analysis tables and compares them.
+The acquisition procedure, the analysis and the figures are each a single command. The
+components differ in status and are not claimed as uniformly open: the imaging is publicly
+accessible under collection-specific licences; the segmentation software and the `total`
+task weights are openly redistributable; the normalised-CTDI database is CC BY; the
+HU-to-density anchor values are used by citation to ICRU Report 44 [8] and Schneider et
+al. [9] rather than redistributed; and no Monte-Carlo coefficient table is included at all.
 
 **The boundary to absorbed organ dose.** Converting an anatomy-weighted index into an
 absorbed organ dose requires CTDIvol-normalised coefficients with a patient-size
@@ -438,8 +484,12 @@ to collection, site, scanner model or export pathway. The cohort is oncological 
 reference population. Contrast phase, tube voltage and reconstruction kernel were not
 controlled, and all affect attenuation-derived mass estimates. A single segmentation model
 was used, so segmentation behaviour and cohort anatomy cannot be separated. There is no
-subject-level ground truth for organ mass. The index addresses longitudinal modulation
-only, as set out in Section 2.9, and no absorbed dose is reported.
+subject-level ground truth for organ mass. Rotation time, pitch and collimation are absent
+from the archived headers of some series (19, 8 and 9 respectively), so their constancy
+within those series is assumed from the single-acquisition representation rather than
+verified, and in one series the weighting assumption does not hold as described above. The
+index addresses longitudinal modulation only, as set out in Section 2.9, and no absorbed
+dose is reported.
 
 **Future work.** Coefficients computed with an open-source Monte-Carlo engine would carry
 no licensing constraint and would permit the transport terms this index omits; an
@@ -455,13 +505,14 @@ tube-current modulation in routine abdominal CT by deriving an anatomy-weighted 
 index from metadata a scanner already records and organ masks obtained at inference.
 Organ-specific modulation weights spanned 0.59 to 1.69, and two organs within one
 acquisition differed by a factor of 1.8 in their index, so the variation a single
-whole-scan value conceals is substantial. The approach ran across four manufacturers with
-openly licensed inputs throughout, and in this archive cohort the availability of the
-whole-scan CTDIvol the index scales varied markedly between manufacturers, which
-constrains any retrospective analysis of this kind. The index is a step before conversion
-to absorbed organ dose, not a substitute for it: that conversion requires Monte-Carlo
-coefficients and the transport terms this index omits. The implementation is open,
-provenance-aware and reproducible from the shipped results.
+whole-scan value conceals is substantial. The approach ran across four manufacturers using
+publicly accessible imaging data and openly redistributable software components, and in
+this archive cohort the availability of the whole-scan CTDIvol the index scales varied
+markedly between manufacturers, which constrains any retrospective analysis of this kind.
+The index is a step before conversion to absorbed organ dose, not a substitute for it:
+that conversion requires Monte-Carlo coefficients and the transport terms this index
+omits. The implementation and derived records are openly available, provenance-aware and
+reproducible from the shipped results.
 
 ## Author Contributions
 
@@ -486,11 +537,11 @@ Cancer Imaging Archive.
 ## Data Availability Statement
 
 The software supporting this study, `ctsegdose-core`, is openly available under the MIT
-licence at https://github.com/Institute-of-One/ctsegdose-core and archived at Zenodo
-(`TODO-AUTHOR:` version DOI, release tag and commit hash to be inserted at submission).
-The machine-readable results the manuscript quotes, the per-organ records, the analysis
-tables and the figure scripts are included in that repository, together with the
-mask-review overlays underlying Section 4.
+licence at https://github.com/Institute-of-One/ctsegdose-core, release
+{{RELEASE_TAG}} (commit {{COMMIT_HASH}}), archived at Zenodo under
+{{ZENODO_VERSION_DOI}}. The machine-readable results the manuscript quotes, the per-organ
+records, the analysis tables, the acquisition-parameter check and the figure scripts are
+included in that repository, together with the mask-review overlays underlying Section 4.
 
 No DICOM imaging is redistributed. Every series analysed is identified in
 `data/PROVENANCE.json` by collection, collection DOI, Series Instance UID, manufacturer,
@@ -543,9 +594,9 @@ author's, who takes full responsibility for the content of this article.
    Clin. Med. Phys.* **2026**, *27*, e70473. https://doi.org/10.1002/acm2.70473
 5. ICRP. Basic Anatomical and Physiological Data for Use in Radiological Protection:
    Reference Values. ICRP Publication 89. *Ann. ICRP* **2002**, *32* (3–4).
-6. Yamamoto, S. ctsegdose-core's Companion: ctdose-core — Open, Auditable CT Dose
-   Surveillance from DICOM (Software Release). Zenodo, **2026**.
-   https://doi.org/10.5281/zenodo.21636082
+6. Yamamoto, S. ctdose-core: open, auditable CT dose surveillance from DICOM, with a
+   physics reconstruction when the dose attributes are missing (Version 0.1.1)
+   [Software]. Zenodo, **2026**. https://doi.org/10.5281/zenodo.21636082
 7. McCollough, C.; Bakalyar, D.M.; Bostani, M.; Brady, S.; Boedeker, K.; Boone, J.M.;
    Chen-Mayer, H.H.; Christianson, O.I.; Leng, S.; Li, B.; et al. Use of Water Equivalent
    Diameter for Calculating Patient Size and Size-Specific Dose Estimates (SSDE) in CT: The

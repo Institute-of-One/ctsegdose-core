@@ -97,6 +97,7 @@
     "records_with_an_organ_weighted_ctdivol": 386,
     "records_with_a_modulation_weight_only": 69,
     "series_with_a_modulation_weight_only": 6,
+    "records_untruncated_and_with_index": 345,
     "records_in_the_reference_mass_comparison": 177,
     "reference_mass_comparison_by_organ": {
       "spleen": 38,
@@ -1013,7 +1014,7 @@
       },
       "dose_engine": "ctdose-core (IORN-004) for CTDIvol and the organ weighting"
     },
-    "generated_utc": "2026-08-05T14:12:27+00:00",
+    "generated_utc": "2026-08-05T23:45:51+00:00",
     "note": "Every value here is recomputed from the per-series records by tests/test_analysis_integrity.py; none is entered by hand."
   }
 }

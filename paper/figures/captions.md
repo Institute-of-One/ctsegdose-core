@@ -1,8 +1,8 @@
-**Figure 1.** Attenuation-derived estimated organ mass relative to the ICRP 89 reference adult male value. 40 abdominal CT series, 455 organ records, 4 manufacturers. Organs truncated by the scan boundary are excluded, since their mass is that of the scanned part only. The reference is an external anchor, not a ground truth for these subjects.
+**Figure 1.** One acquisition end to end: the segmented organs, the recorded per-slice tube current over each organ's longitudinal extent, and the anatomy-weighted CTDIvol index the modulation produces.
 
 **Figure 2.** Availability of a whole-scan dose index in the archived DICOM headers, by manufacturer. 40 abdominal CT series, 455 organ records, 4 manufacturers. A series counted unrecoverable retained no CTDIvol in its header and its scanner lies outside the open coefficient database, so no anatomy-weighted index can be formed from it at all.
 
-**Figure 3.** One acquisition end to end: the segmented organs, the recorded per-slice tube current over each organ's longitudinal extent, and the anatomy-weighted CTDIvol index the modulation produces.
+**Figure 3.** Attenuation-derived estimated organ mass relative to the ICRP 89 reference adult male value. 40 abdominal CT series, 455 organ records, 4 manufacturers. Organs truncated by the scan boundary are excluded, since their mass is that of the scanned part only. The reference is an external anchor, not a ground truth for these subjects.
 
 **Figure 4.** What limits an organ-level modulation analysis. 40 abdominal CT series, 455 organ records, 4 manufacturers. Truncation is the fraction of organ records the scan boundary cuts through; the weight spread is the peak-to-peak range of the organ weights within a series.
 

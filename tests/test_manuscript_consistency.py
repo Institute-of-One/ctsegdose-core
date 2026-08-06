@@ -238,16 +238,93 @@ def test_the_confounders_of_the_availability_finding_are_named(text):
 
 def test_the_record_flow_in_the_text_reconciles_455_with_480(text, tables):
     flow = tables["record_flow"]
-    assert f"{flow['expected_organ_series_combinations']} organ–series combinations" in text
+    assert f"{flow['expected_organ_series_combinations']} requested organ–series combinations" in text
     assert f"Records were produced for {flow['organ_records_produced']}" in text
     assert f"The remaining {flow['absent_combinations']['total']}" in text
-    assert f"{flow['whole_organ_records']} are untruncated" in text
-    assert f"{flow['records_with_an_organ_weighted_ctdivol']} carry" in text
+    assert f"{flow['whole_organ_records']} records are untruncated" in text
+    assert f"{flow['records_with_an_organ_weighted_ctdivol']} records" in text
     assert f"the remaining {flow['records_with_a_modulation_weight_only']} records" in text
     assert f"{flow['records_in_the_reference_mass_comparison']} untruncated records" in text
     by_organ = flow["absent_combinations"]["by_organ"]
     assert f"urinary bladder in {by_organ['urinary_bladder']} series" in text
     assert f"gallbladder in {by_organ['gallbladder']}" in text
+
+
+def test_the_two_record_conditions_are_stated_as_independent_not_nested(text, tables):
+    """386 is not a subset of 408: truncation is a property of the organ, index
+    availability a property of the series. Reporting only the totals invites the reader to
+    nest them."""
+    flow = tables["record_flow"]
+    assert "independent axes rather" in text
+    assert f"hold together for {flow['records_untruncated_and_with_index']} records" in text
+    truncated_with_index = (
+        flow["records_with_an_organ_weighted_ctdivol"] - flow["records_untruncated_and_with_index"]
+    )
+    untruncated_without = (
+        flow["whole_organ_records"] - flow["records_untruncated_and_with_index"]
+    )
+    assert f"{truncated_with_index} truncated records still carry an index" in text
+    assert f"{untruncated_without} untruncated records do not" in text
+
+
+def test_the_weighting_assumption_is_stated_and_its_verification_reported(text, tables):
+    """The index treats tube current as a proxy for scanner output; that holds only if the
+    other output-governing parameters are fixed within a series."""
+    assert "The weighting assumes that, within each series" in text
+    assert "acquisition_constancy.json" in text
+    constancy = REPO / "results" / "acquisition_constancy.json"
+    if not constancy.exists():
+        pytest.skip("acquisition constancy check has not been run in this checkout")
+    summary = json.loads(constancy.read_text(encoding="utf-8"))["summary"]
+    kvp = summary["tube_voltage_kvp"]
+    assert kvp["constant"] == 40 and kvp["varies"] == 0
+    assert f"verified constant in all {kvp['constant']} series" in text
+    # An attribute absent from the headers must not be described as verified.
+    for name, label in (
+        ("exposure_time_ms", "Exposure time"),
+        ("spiral_pitch_factor", "pitch"),
+        ("rotation_time_s", "rotation time"),
+    ):
+        block = summary[name]
+        if block["absent"]:
+            assert f"absent in {block['absent']}" in text or \
+                   f"absent from the\nheaders of {block['absent']}".replace("\n", " ") in text, (
+                       f"{label} is absent in {block['absent']} series; say so rather than "
+                       "implying it was verified"
+                   )
+
+
+def test_the_series_that_breaks_the_assumption_is_disclosed(text, tables):
+    constancy = REPO / "results" / "acquisition_constancy.json"
+    if not constancy.exists():
+        pytest.skip("acquisition constancy check has not been run in this checkout")
+    summary = json.loads(constancy.read_text(encoding="utf-8"))["summary"]
+    if summary["rotation_time_s"]["varies"]:
+        assert "not proportional to tube current alone" in text
+        assert "0.98 and\n1.21".replace("\n", " ") in text or "0.98 to 1.21" in text
+
+
+def test_no_unqualified_claim_that_every_input_is_openly_licensed(raw):
+    """The HU-density anchor values are used by citation, not redistributed, so a blanket
+    claim would be wrong."""
+    for overclaim in (
+        "openly licensed inputs throughout",
+        "all inputs are openly licensed",
+        "fully open measurement chain",
+        "entirely open inputs",
+    ):
+        assert overclaim not in raw, f"over-broad openness claim: {overclaim!r}"
+
+
+def test_no_placeholder_or_todo_survives_into_the_prose(raw):
+    """Release fields are `{{NAME}}` placeholders that the submission build resolves or
+    refuses on; nothing else of the kind may be in the source."""
+    assert "TODO-AUTHOR" not in raw
+    assert "TODO" not in raw
+    for name in re.findall(r"\{\{([A-Z_]+)\}\}", raw):
+        assert name in {"RELEASE_TAG", "COMMIT_HASH", "ZENODO_VERSION_DOI"}, (
+            f"unexpected placeholder {name!r}"
+        )
 
 
 def test_the_index_is_never_presented_as_an_absorbed_organ_dose(text):

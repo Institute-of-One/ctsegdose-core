@@ -151,6 +151,14 @@ def record_flow(series: list[dict[str, Any]]) -> dict[str, Any]:
         "series_with_a_modulation_weight_only": len(
             {s["series_instance_uid"] for s, _ in weight_only}
         ),
+        # Untruncated and index-available are independent conditions, not nested: a
+        # truncated organ in a series that has a CTDIvol still has an index, and an
+        # untruncated organ in a series without one still has none. Reporting only the
+        # two totals invites the reader to treat the smaller as a subset of the larger.
+        "records_untruncated_and_with_index": len(
+            [1 for s, o in records
+             if not o.get("truncated") and o.get("organ_weighted_ctdivol_mgy") is not None]
+        ),
         "records_in_the_reference_mass_comparison": len(mass_used),
         "reference_mass_comparison_by_organ": dict(
             Counter(o["organ"] for _, o in mass_used).most_common()

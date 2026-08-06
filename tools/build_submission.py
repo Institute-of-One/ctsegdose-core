@@ -19,6 +19,7 @@ whose numbers have drifted from the results is exactly what must not reach a rev
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import subprocess
 import sys
@@ -32,6 +33,17 @@ STEM = "manuscript_tomography"
 #: Stripped before building: the file's internal note to its authors is not part of the
 #: article, and a reviewer should not receive it.
 HTML_COMMENT = re.compile(r"<!--.*?-->\s*", re.S)
+
+#: Fields that can only be filled once a release exists. They are placeholders in the
+#: source rather than prose, so that a submission build can *refuse* on finding them
+#: instead of a reviewer discovering a TODO in the PDF.
+PLACEHOLDER = re.compile(r"\{\{([A-Z_]+)\}\}")
+
+#: What each placeholder is replaced with in the internal build, so a reader of the
+#: internal PDF can see at a glance what is outstanding.
+INTERNAL_MARK = "[[ pending: {name} ]]"
+
+RELEASE_FILE = PAPER / "release_metadata.json"
 
 
 def check_consistency() -> None:
@@ -50,13 +62,51 @@ def check_consistency() -> None:
     print("  consistency tests pass")
 
 
-def prepare(source: Path, staged: Path) -> Path:
+def release_metadata() -> dict[str, str]:
+    """Release fields, if the author has recorded them. Never invented."""
+    if not RELEASE_FILE.exists():
+        return {}
+    # utf-8-sig, not utf-8: this file is hand-authored, and a Windows editor or a
+    # PowerShell redirect writes a byte-order mark that plain utf-8 decoding chokes on.
+    data = json.loads(RELEASE_FILE.read_text(encoding="utf-8-sig"))
+    return {k: str(v).strip() for k, v in data.items() if str(v).strip()}
+
+
+def prepare(source: Path, staged: Path, *, submission: bool) -> tuple[Path, list[str]]:
+    """Stage the manuscript for building, resolving the release placeholders.
+
+    Two builds come out of one source. The internal one marks what is still outstanding
+    so it is visible while reviewing; the submission one refuses to produce a file at all
+    while anything is outstanding, because the failure mode being designed against is a
+    reviewer opening a PDF and finding a placeholder in it.
+    """
     text = HTML_COMMENT.sub("", source.read_text(encoding="utf-8"), count=1)
     # Thematic breaks separate sections while drafting; in a typeset document the
     # headings already do that, and Typst has no use for them.
     text = re.sub(r"^-{3,}\s*$", "", text, flags=re.M)
+
+    known = release_metadata()
+    outstanding: list[str] = []
+
+    def resolve(match: re.Match[str]) -> str:
+        name = match.group(1)
+        value = known.get(name)
+        if value:
+            return value
+        outstanding.append(name)
+        return INTERNAL_MARK.format(name=name)
+
+    text = PLACEHOLDER.sub(resolve, text)
+
+    if submission and outstanding:
+        raise SystemExit(
+            "refusing to build a submission PDF with unresolved release fields: "
+            + ", ".join(sorted(set(outstanding)))
+            + f".\nRecord them in {RELEASE_FILE.relative_to(REPO)} once the release "
+            "exists, then re-run. Use --internal to build a working copy meanwhile."
+        )
     staged.write_text(text, encoding="utf-8")
-    return staged
+    return staged, sorted(set(outstanding))
 
 
 def build_pdf(staged: Path, out_dir: Path, common: list[str]) -> Path | None:
@@ -75,7 +125,9 @@ def build_pdf(staged: Path, out_dir: Path, common: list[str]) -> Path | None:
         print("  ! Typst not available; PDF not built.  pip install typst")
         return None
 
-    source = out_dir / f".{STEM}.typ"
+    # The intermediate always lives in PAPER, whatever --out is: Typst resolves the
+    # figure paths against its project root and refuses an input outside it.
+    source = PAPER / f".{STEM}.typ"
     try:
         pypandoc.convert_file(
             str(staged), "typst", outputfile=str(source),
@@ -119,8 +171,14 @@ def build(staged: Path, out_dir: Path) -> list[Path]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--skip-checks", action="store_true", help="build even if the numbers have drifted")
+    ap.add_argument("--internal", action="store_true",
+                    help="working copy: mark unresolved release fields instead of refusing")
     ap.add_argument("--out", type=Path, default=PAPER)
     args = ap.parse_args()
+
+    global STEM
+    if args.internal:
+        STEM = f"{STEM}_internal"
 
     if not SOURCE.exists():
         raise SystemExit(f"{SOURCE} not found")
@@ -129,13 +187,17 @@ def main() -> int:
 
     staged = PAPER / ".manuscript_staged.md"
     try:
-        prepare(SOURCE, staged)
+        _, outstanding = prepare(SOURCE, staged, submission=not args.internal)
         written = build(staged, args.out)
     finally:
         staged.unlink(missing_ok=True)
 
     for path in written:
         print(f"  {path.name}: {path.stat().st_size / 1024:.0f} kB")
+    if outstanding:
+        print("\n  outstanding release fields (see paper/PRE_SUBMISSION_CHECKLIST.md):")
+        for name in outstanding:
+            print(f"    - {name}")
     return 0
 
 

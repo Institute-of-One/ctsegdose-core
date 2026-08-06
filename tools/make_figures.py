@@ -118,7 +118,7 @@ def figure_mass(organs: list[dict[str, Any]], tables: dict[str, Any], out: Path)
     strip_chrome(ax)
     vendor_legend(ax, loc="upper left")
     ax.set_title("Estimated organ mass beside a published reference value", loc="left", pad=8)
-    save(fig, out, "fig1_organ_mass_vs_icrp89")
+    save(fig, out, "fig3_organ_mass_vs_icrp89")
 
 
 # --- figure 2: dose-index availability ---------------------------------------------------
@@ -254,7 +254,7 @@ def figure_demonstration(payload: dict[str, Any], out: Path) -> None:
         f"{series['n_slices']} slices",
         x=0.005, y=1.0, ha="left", fontsize=8, color=INK_SECONDARY, fontweight="normal",
     )
-    save(fig, out, "fig3_demonstration_case")
+    save(fig, out, "fig1_demonstration_case")
     return series
 
 
@@ -343,6 +343,8 @@ def main() -> int:
     ]
 
     apply_style(plt)
+    # Drawn in any order; *numbered* in order of first mention in the manuscript, which
+    # is demonstration, availability, mass, limits.
     figure_mass(organs, tables, args.out)
     figure_availability(tables, args.out)
     demo = figure_demonstration(payload, args.out)
@@ -350,7 +352,7 @@ def main() -> int:
 
     captions = "\n\n".join(
         f"**Figure {i}.** {caption(kind, tables)}"
-        for i, kind in enumerate(("mass", "availability", "demonstration", "limits"), 1)
+        for i, kind in enumerate(("demonstration", "availability", "mass", "limits"), 1)
     )
     captions += (
         f"\n\nFigure 3 demonstration series: {demo['vendor']}, {demo['model_name']}, "
