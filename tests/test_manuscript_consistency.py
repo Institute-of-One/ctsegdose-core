@@ -61,6 +61,14 @@ def tables():
     return _load()[1]
 
 
+@pytest.fixture(scope="module")
+def payload_or_skip():
+    path = REPO / "results" / "organ_dose_1.5mm.json"
+    if not path.exists():
+        pytest.skip("per-series records not generated in this checkout")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def _abstract(raw: str) -> str:
     return raw.split("## Abstract", 1)[1].split("**Keywords", 1)[0]
 
@@ -294,14 +302,50 @@ def test_the_weighting_assumption_is_stated_and_its_verification_reported(text, 
                    )
 
 
-def test_the_series_that_breaks_the_assumption_is_disclosed(text, tables):
-    constancy = REPO / "results" / "acquisition_constancy.json"
-    if not constancy.exists():
-        pytest.skip("acquisition constancy check has not been run in this checkout")
-    summary = json.loads(constancy.read_text(encoding="utf-8"))["summary"]
-    if summary["rotation_time_s"]["varies"]:
-        assert "not proportional to tube current alone" in text
-        assert "0.98 and\n1.21".replace("\n", " ") in text or "0.98 to 1.21" in text
+def test_the_ineligible_series_is_reported_and_excluded(text, tables):
+    """The criterion must be stated, its effect reported, and the excluded series kept in
+    the analyses it remains valid for."""
+    e = tables.get("modulation_eligibility")
+    if not e:
+        pytest.skip("eligibility has not been computed in this checkout")
+    assert e["n_ineligible"] == 1
+    assert f"{e['n_eligible']} met the acquisition-constancy criterion" in text
+    assert "retained for the segmentation, estimated-mass and archive-availability" in text
+    assert "not proportional to scanner output" in text
+    # The withdrawn justification must not creep back in.
+    assert "no reported result depends on it" not in text
+
+
+def test_the_modulation_analysis_excludes_the_ineligible_series(payload_or_skip, tables):
+    """The exclusion must be real in the numbers, not only described in the prose."""
+    e = tables["modulation_eligibility"]
+    ineligible = {r["series_instance_uid"] for r in e["ineligible_series"]}
+    flow = tables["record_flow"]
+    assert flow["modulation_eligible_series"] == e["n_eligible"]
+    counted = 0
+    for s in payload_or_skip["series"]:
+        if s["series_instance_uid"] in ineligible:
+            continue
+        counted += sum(
+            1 for o in s.get("organs", []) if o.get("organ_weighted_ctdivol_mgy") is not None
+        )
+    assert flow["records_in_the_modulation_analysis"] == counted
+    assert counted < flow["records_with_an_organ_weighted_ctdivol"], (
+        "the exclusion must actually remove records from the modulation analysis"
+    )
+
+
+def test_the_rounding_tolerance_separates_the_two_kinds_of_variation(tables):
+    """Three Philips series vary by under 1% and must survive; one GE series varies by a
+    factor of two and must not."""
+    from ctsegdose_core.eligibility import ROUNDING_TOLERANCE
+
+    e = tables["modulation_eligibility"]
+    assert e["rounding_tolerance"] == ROUNDING_TOLERANCE
+    counts = e["classification_counts"]["exposure_time_ms"]
+    assert counts.get("negligible_variation", 0) >= 1
+    assert counts.get("materially_variable", 0) == 1
+    assert counts.get("absent", 0) >= 1, "absence must be its own class, not a failure"
 
 
 def test_no_unqualified_claim_that_every_input_is_openly_licensed(raw):
@@ -423,19 +467,32 @@ def test_every_figure_is_referenced_captioned_and_present(raw):
     if not figures.exists():
         pytest.skip("figures not generated in this checkout")
 
-    discussed = {int(n) for n in re.findall(r"\bFigure (\d)\b", raw)}
-    assert discussed == {1, 2, 3, 4}, f"the text discusses figures {sorted(discussed)}"
+    discussed = [int(n) for n in re.findall(r"\bFigure (\d)\b", raw)]
+    assert set(discussed) == {1, 2, 3, 4, 5}, f"the text discusses figures {sorted(set(discussed))}"
+
+    # MDPI, like every journal, numbers figures by first mention.
+    first_mention: list[int] = []
+    for n in discussed:
+        if n not in first_mention:
+            first_mention.append(n)
+    assert first_mention == [1, 2, 3, 4, 5], (
+        f"figures are first mentioned in the order {first_mention}; they must be numbered "
+        "in order of first mention"
+    )
 
     # Images carry no alt text and the caption is a following paragraph. Using pandoc's
     # implicit figures instead would make the renderer add its own "Figure N:" on top of
     # the caption's own label, which is where the doubled numbering came from.
     embedded = re.findall(r"!\[\]\(figures/([^){]+)\)", raw)
-    assert len(embedded) == 4, f"expected four embedded figures, found {len(embedded)}"
-    for filename in embedded:
+    assert len(embedded) == 5, f"expected five embedded figures, found {len(embedded)}"
+    for i, filename in enumerate(embedded, 1):
         assert (figures / filename.strip()).exists(), f"missing {filename}"
+        assert filename.startswith(f"fig{i}"), (
+            f"figure {i} embeds {filename}; the file stem must match its number"
+        )
 
     captions = {int(n) for n in re.findall(r"^\*\*Figure (\d)\.\*\* ", raw, re.M)}
-    assert captions == {1, 2, 3, 4}, f"figures captioned: {sorted(captions)}"
+    assert captions == {1, 2, 3, 4, 5}, f"figures captioned: {sorted(captions)}"
 
 
 def test_no_figure_caption_carries_a_doubled_number(raw):

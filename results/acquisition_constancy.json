@@ -2,7 +2,7 @@
   "provenance": {
     "generated_by": "tools/verify_acquisition_constancy.py",
     "ctsegdose_core_version": "0.1.0",
-    "generated_utc": "2026-08-05T16:16:45+00:00",
+    "generated_utc": "2026-08-06T01:23:26+00:00",
     "question": "Within each series, are the acquisition parameters other than tube current constant, so that longitudinal variation in scanner output is proportional to the recorded tube current?",
     "note": "An attribute absent from the archived headers is reported as absent, not as constant: it cannot be verified either way."
   },
@@ -241,7 +241,10 @@
           "800.0"
         ],
         "n_distinct": 2,
-        "n_slices_absent": 0
+        "n_slices_absent": 0,
+        "min": 400.0,
+        "max": 800.0,
+        "relative_spread": 1.0
       },
       "rotation_time_s": {
         "status": "varies",
@@ -250,7 +253,10 @@
           "0.8"
         ],
         "n_distinct": 2,
-        "n_slices_absent": 0
+        "n_slices_absent": 0,
+        "min": 0.4,
+        "max": 0.8,
+        "relative_spread": 1.0
       },
       "spiral_pitch_factor": {
         "status": "constant",
@@ -2312,7 +2318,10 @@
           "505.0"
         ],
         "n_distinct": 3,
-        "n_slices_absent": 0
+        "n_slices_absent": 0,
+        "min": 503.0,
+        "max": 505.0,
+        "relative_spread": 0.003976143141153081
       },
       "rotation_time_s": {
         "status": "constant",
@@ -2391,7 +2400,10 @@
           "439.0"
         ],
         "n_distinct": 4,
-        "n_slices_absent": 0
+        "n_slices_absent": 0,
+        "min": 436.0,
+        "max": 439.0,
+        "relative_spread": 0.006880733944954129
       },
       "rotation_time_s": {
         "status": "constant",
@@ -2763,7 +2775,10 @@
           "706.0"
         ],
         "n_distinct": 5,
-        "n_slices_absent": 0
+        "n_slices_absent": 0,
+        "min": 702.0,
+        "max": 706.0,
+        "relative_spread": 0.005698005698005698
       },
       "rotation_time_s": {
         "status": "constant",

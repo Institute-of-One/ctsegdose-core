@@ -39,6 +39,26 @@ from ctsegdose_core.figures import (  # noqa: E402
     strip_chrome,
 )
 
+#: Colours for the segmentation overlay. Identity is carried by position and by the
+#: direct labels on each panel; colour is a supporting channel, because no twelve-way
+#: categorical palette is separable under colour-vision deficiency. Neighbouring organs
+#: are given well-separated hues so that adjacency, which is where confusion would
+#: actually occur, stays legible.
+ORGAN_COLOUR = {
+    "liver": "#2a78d6",
+    "spleen": "#eb6834",
+    "kidney_left": "#1baf7a",
+    "kidney_right": "#4a3aa7",
+    "stomach": "#eda100",
+    "pancreas": "#e34948",
+    "gallbladder": "#00a3a3",
+    "adrenal_gland_left": "#b45bd6",
+    "adrenal_gland_right": "#7a5c2e",
+    "small_bowel": "#e87ba4",
+    "colon": "#5b8c00",
+    "urinary_bladder": "#0f7fa8",
+}
+
 ORGAN_LABEL = {
     "liver": "liver", "spleen": "spleen", "kidney_left": "kidney (L)",
     "kidney_right": "kidney (R)", "pancreas": "pancreas", "stomach": "stomach",
@@ -57,7 +77,158 @@ def vendor_legend(ax, *, loc="upper right", title=None):
     ax.legend(handles=handles, loc=loc, title=title, handletextpad=0.4, borderpad=0.3)
 
 
-# --- figure 1: organ mass against the ICRP 89 reference ----------------------------------
+# --- figure 1: the segmentation the measurement chain rests on ---------------------------
+
+#: Soft-tissue window, level 40 / width 400 HU: how the abdomen is read clinically.
+CT_WINDOW = (-160.0, 240.0)
+#: Overlay opacity. Enough to identify the structure, light enough that the anatomy
+#: underneath -- which is what the reader is being asked to judge the mask against --
+#: remains visible.
+OVERLAY_ALPHA = 0.38
+
+#: Which organs to draw on each panel. Showing all twelve everywhere would be unreadable
+#: and would tell the reader less, not more.
+PANEL_ORGANS = {
+    "coronal": ("liver", "spleen", "kidney_left", "kidney_right", "urinary_bladder"),
+    "upper": ("liver", "spleen", "stomach", "pancreas",
+              "adrenal_gland_left", "adrenal_gland_right"),
+    "renal": ("kidney_left", "kidney_right", "liver", "spleen", "small_bowel"),
+    "pelvic": ("colon", "small_bowel", "urinary_bladder"),
+}
+
+
+def _overlay(ax, image, masks, organs, *, aspect=1.0, extent=None) -> set[str]:
+    """Draw one CT image with its organ masks, filled and outlined.
+
+    Returns the organs actually rendered, so the legend can be built from what is on the
+    page rather than from what was requested -- an organ whose mask does not intersect
+    the chosen plane must not appear in the key.
+    """
+    ax.imshow(image, cmap="gray", vmin=CT_WINDOW[0], vmax=CT_WINDOW[1],
+              interpolation="bilinear", aspect=aspect, extent=extent)
+    drawn: set[str] = set()
+    for organ in organs:
+        mask = masks.get(organ)
+        if mask is None or not mask.any():
+            continue
+        drawn.add(organ)
+        colour = ORGAN_COLOUR[organ]
+        rgba = np.zeros((*mask.shape, 4))
+        rgba[..., :3] = matplotlib.colors.to_rgb(colour)
+        rgba[..., 3] = mask * OVERLAY_ALPHA
+        ax.imshow(rgba, interpolation="nearest", aspect=aspect, extent=extent)
+        ax.contour(mask.astype(float), levels=[0.5], colors=colour, linewidths=0.9,
+                   extent=extent)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.grid(False)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    return drawn
+
+
+def figure_segmentation(payload, tag: str, out: Path, series_uid: str) -> dict[str, Any]:
+    """Representative TotalSegmentator output on the acquisition used end to end.
+
+    Real imaging and the masks this study actually generated: no schematic, no redrawn
+    contour, nothing rendered by hand. The panels exist to let a reader judge the
+    anatomical basis of the measurement chain, which is why the overlay is translucent
+    and the underlying anatomy stays visible.
+    """
+    from ctsegdose_core.pipeline import load_on_uniform_grid
+    from ctsegdose_core.segment import load_mask
+    from ctsegdose_core.volume import load_volume_hu
+
+    provenance = json.loads((REPO / "data" / "PROVENANCE.json").read_text(encoding="utf-8"))
+    row = next(r for r in provenance["series"] if r["series_instance_uid"] == series_uid)
+    series, grid = load_on_uniform_grid(REPO / row["local_path"], series_uid)
+    volume, _ = load_volume_hu(series)
+    shape = tuple(int(n) for n in volume.shape)
+
+    mask_dir = REPO / "segmentations" / series_uid / tag / "masks"
+    masks = {}
+    for organ in ORGAN_COLOUR:
+        path = mask_dir / f"{organ}.nii.gz"
+        if path.exists():
+            m = load_mask(path, shape)
+            if m.any():
+                masks[organ] = m
+
+    def centroid_z(organ, fallback):
+        m = masks.get(organ)
+        if m is None:
+            return fallback
+        occupied = np.flatnonzero(m.any(axis=(1, 2)))
+        return int(occupied.mean())
+
+    levels = {
+        "upper": centroid_z("liver", shape[0] * 3 // 4),
+        "renal": centroid_z("kidney_left", shape[0] // 2),
+        "pelvic": centroid_z("urinary_bladder", shape[0] // 6),
+    }
+
+    py, px = series.pixel_spacing_mm or (1.0, 1.0)
+    dz = grid.spacing_mm
+
+    fig, axes = plt.subplots(2, 2, figsize=(7.0, 6.6),
+                             gridspec_kw={"hspace": 0.08, "wspace": 0.04})
+
+    # -- (a) coronal, reconstructed from the axial stack.
+    # The plane is chosen to intersect as many of the panel's organs as possible rather
+    # than by geometry: a mid-body coronal cut passes anterior to the kidneys and shows
+    # only the liver, which would tell the reader nothing about the rest of the set.
+    coronal_targets = [o for o in PANEL_ORGANS["coronal"] if o in masks]
+    counts = np.zeros(shape[1])
+    for organ in coronal_targets:
+        present = masks[organ].any(axis=(0, 2))
+        counts += present.astype(float)
+    y_index = int(np.argmax(counts)) if counts.any() else shape[1] // 2
+    coronal = volume[:, y_index, :][::-1]
+    coronal_masks = {k: m[:, y_index, :][::-1] for k, m in masks.items()}
+    drawn = _overlay(axes[0, 0], coronal, coronal_masks, PANEL_ORGANS["coronal"],
+                     aspect=dz / px)
+
+    # -- (b-d) three axial levels
+    for ax, key, title in (
+        (axes[0, 1], "upper", "(b) upper abdomen"),
+        (axes[1, 0], "renal", "(c) renal level"),
+        (axes[1, 1], "pelvic", "(d) lower abdomen"),
+    ):
+        z = levels[key]
+        drawn |= _overlay(ax, volume[z], {k: m[z] for k, m in masks.items()},
+                          PANEL_ORGANS[key], aspect=py / px)
+        ax.set_title(title, loc="left", fontsize=8, color=INK_SECONDARY, pad=3)
+        ax.text(0.015, 0.5, "R", transform=ax.transAxes, color="#ffffff", fontsize=7,
+                va="center", ha="left")
+        ax.text(0.985, 0.5, "L", transform=ax.transAxes, color="#ffffff", fontsize=7,
+                va="center", ha="right")
+
+    axes[0, 0].set_title("(a) coronal", loc="left", fontsize=8, color=INK_SECONDARY, pad=3)
+    # The coronal panel carries left-right anatomy too, so it is marked like the axials.
+    axes[0, 0].text(0.02, 0.5, "R", transform=axes[0, 0].transAxes, color="#ffffff",
+                    fontsize=7, va="center", ha="left")
+    axes[0, 0].text(0.98, 0.5, "L", transform=axes[0, 0].transAxes, color="#ffffff",
+                    fontsize=7, va="center", ha="right")
+    # A scale bar on the coronal panel, drawn in image coordinates.
+    bar_mm = 100.0
+    axes[0, 0].plot([shape[2] * 0.06, shape[2] * 0.06 + bar_mm / px],
+                    [shape[0] * 0.94, shape[0] * 0.94], color="#ffffff", linewidth=2.0)
+    axes[0, 0].text(shape[2] * 0.06, shape[0] * 0.90, "10 cm", color="#ffffff", fontsize=7)
+
+    shown = sorted(drawn)
+    handles = [
+        plt.Line2D([], [], marker="s", linestyle="none", markersize=6,
+                   markerfacecolor=ORGAN_COLOUR[o], markeredgecolor=ORGAN_COLOUR[o],
+                   alpha=0.85, label=ORGAN_LABEL.get(o, o))
+        for o in shown
+    ]
+    fig.legend(handles=handles, loc="lower center", ncols=6, frameon=False, fontsize=7.5,
+               handletextpad=0.4, columnspacing=1.1, bbox_to_anchor=(0.5, -0.035))
+    save(fig, out, "fig1_segmentation")
+    return {"series": row, "levels": levels, "organs_shown": shown}
+
+
+# --- figure 4: organ mass against the ICRP 89 reference ----------------------------------
 
 
 def figure_mass(organs: list[dict[str, Any]], tables: dict[str, Any], out: Path) -> None:
@@ -118,7 +289,7 @@ def figure_mass(organs: list[dict[str, Any]], tables: dict[str, Any], out: Path)
     strip_chrome(ax)
     vendor_legend(ax, loc="upper left")
     ax.set_title("Estimated organ mass beside a published reference value", loc="left", pad=8)
-    save(fig, out, "fig3_organ_mass_vs_icrp89")
+    save(fig, out, "fig4_organ_mass_vs_icrp89")
 
 
 # --- figure 2: dose-index availability ---------------------------------------------------
@@ -174,21 +345,27 @@ def figure_availability(tables: dict[str, Any], out: Path) -> None:
     )
     ax.set_title("Whole-scan dose index in the archived headers", loc="left", pad=16)
     ax.text(0, 1.06, note, transform=ax.transAxes, fontsize=7.5, color=INK_SECONDARY)
-    save(fig, out, "fig2_dose_index_availability")
+    save(fig, out, "fig3_dose_index_availability")
 
 
 # --- figure 3: one acquisition, end to end ------------------------------------------------
 
 
-def figure_demonstration(payload: dict[str, Any], out: Path) -> None:
+def figure_demonstration(
+    payload: dict[str, Any], out: Path, ineligible: set[str] | None = None
+) -> None:
     """The method on a single series: I(z), organ extents, and the resulting index.
 
     Chosen automatically as the completed series with a recorded CTDIvol, the most
     untruncated organs and the widest weight spread -- i.e. the one where the modulation
     actually does something, which is what the figure is for.
     """
+    blocked = ineligible or set()
+
     def score(s):
         organs = [o for o in s["organs"] if not o["truncated"]]
+        if s["series_instance_uid"] in blocked:
+            return -1  # a series the constancy criterion excludes cannot be the exemplar
         if not organs or s["ctdivol_mgy"] is None or "recorded" not in s["ctdivol_source"]:
             return -1
         w = [o["relative_weight"] for o in organs]
@@ -254,7 +431,7 @@ def figure_demonstration(payload: dict[str, Any], out: Path) -> None:
         f"{series['n_slices']} slices",
         x=0.005, y=1.0, ha="left", fontsize=8, color=INK_SECONDARY, fontweight="normal",
     )
-    save(fig, out, "fig1_demonstration_case")
+    save(fig, out, "fig2_demonstration_case")
     return series
 
 
@@ -304,7 +481,7 @@ def figure_limits(tables: dict[str, Any], series_rows: list[dict[str, Any]], out
     strip_chrome(right)
     right.set_title("(b) does the modulation vary across the organs?", loc="left",
                     pad=6, fontsize=8)
-    save(fig, out, "fig4_study_limits")
+    save(fig, out, "fig5_study_limits")
 
 
 # --- driver ------------------------------------------------------------------------------
@@ -330,6 +507,11 @@ def main() -> int:
     organs = [
         {**o, "vendor": s["vendor"]} for s in payload["series"] for o in s.get("organs", [])
     ]
+
+    # Panels that describe modulation obey the acquisition-constancy criterion; panels
+    # that describe the archive or the segmentation cover the whole cohort.
+    eligibility = tables.get("modulation_eligibility") or {}
+    ineligible = {r["series_instance_uid"] for r in eligibility.get("ineligible_series", [])}
     series_rows = [
         {
             "vendor": s["vendor"],
@@ -340,19 +522,23 @@ def main() -> int:
             ),
         }
         for s in payload["series"]
+        if s["series_instance_uid"] not in ineligible
     ]
 
     apply_style(plt)
-    # Drawn in any order; *numbered* in order of first mention in the manuscript, which
-    # is demonstration, availability, mass, limits.
+    # Drawn in any order; *numbered* in order of first mention in the manuscript, which is
+    # segmentation, demonstration, availability, mass, limits.
     figure_mass(organs, tables, args.out)
     figure_availability(tables, args.out)
-    demo = figure_demonstration(payload, args.out)
+    demo = figure_demonstration(payload, args.out, ineligible)
+    figure_segmentation(payload, args.tag, args.out, demo["series_instance_uid"])
     figure_limits(tables, series_rows, args.out)
 
     captions = "\n\n".join(
         f"**Figure {i}.** {caption(kind, tables)}"
-        for i, kind in enumerate(("demonstration", "availability", "mass", "limits"), 1)
+        for i, kind in enumerate(
+            ("segmentation", "demonstration", "availability", "mass", "limits"), 1
+        )
     )
     captions += (
         f"\n\nFigure 3 demonstration series: {demo['vendor']}, {demo['model_name']}, "
@@ -365,3 +551,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

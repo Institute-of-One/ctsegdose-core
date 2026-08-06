@@ -92,6 +92,15 @@ def report(tables: dict[str, Any]) -> None:
           f"others {t['other_recorded']}/{t['other_recorded'] + t['other_not_recorded']} "
           "(descriptive; no significance test — see analysis.py)")
 
+    e = tables.get("modulation_eligibility")
+    if e:
+        print("\n== acquisition-constancy criterion ==")
+        print(f"  eligible for quantitative modulation analysis: "
+              f"{e['n_eligible']}/{e['n_series_assessed']} series")
+        for row in e["ineligible_series"]:
+            print(f"  ineligible: {row['vendor']} ...{row['series_instance_uid'][-12:]}  "
+                  f"({', '.join(row['disqualifying_attributes'])})")
+
     f = tables["record_flow"]
     print("\n== organ record flow ==")
     print(f"  expected combinations   {f['expected_organ_series_combinations']}")
@@ -139,7 +148,16 @@ def main() -> int:
         raise SystemExit(f"{source} not found; run tools/run_organ_dose.py first")
     payload = json.loads(source.read_text(encoding="utf-8"))
 
-    tables = build(payload)
+    constancy_path = args.results / "acquisition_constancy.json"
+    if not constancy_path.exists():
+        raise SystemExit(
+            f"{constancy_path} not found; run tools/verify_acquisition_constancy.py "
+            "first. The modulation analysis is restricted to series meeting the "
+            "acquisition-constancy criterion, so the tables cannot be built without it."
+        )
+    constancy = json.loads(constancy_path.read_text(encoding="utf-8"))
+
+    tables = build(payload, constancy)
     tables["provenance"] = {
         "generated_by": "tools/make_analysis.py",
         "ctsegdose_core_version": __version__,

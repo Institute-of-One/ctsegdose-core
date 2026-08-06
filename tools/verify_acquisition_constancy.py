@@ -91,12 +91,21 @@ def inspect_series(directory: Path, series_uid: str) -> dict[str, Any]:
             status = "constant"
         else:
             status = "varies"
-        report[name] = {
+        entry: dict[str, Any] = {
             "status": status,
             "distinct_values": sorted(str(v) for v in values)[:6],
             "n_distinct": len(values),
             "n_slices_absent": n_absent,
         }
+        # The magnitude of a variation decides whether it matters, so it is recorded
+        # rather than left to be inferred from a truncated list of distinct values.
+        numeric = [v for v in values if isinstance(v, float)]
+        if len(numeric) > 1:
+            lo, hi = min(numeric), max(numeric)
+            entry["min"] = lo
+            entry["max"] = hi
+            entry["relative_spread"] = (hi - lo) / lo if lo else None
+        report[name] = entry
     return report
 
 

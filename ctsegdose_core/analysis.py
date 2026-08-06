@@ -104,7 +104,9 @@ REQUESTED_ORGANS: tuple[str, ...] = (
 SOLID_ORGANS: tuple[str, ...] = ("liver", "spleen", "kidney_left", "kidney_right", "pancreas")
 
 
-def record_flow(series: list[dict[str, Any]]) -> dict[str, Any]:
+def record_flow(
+    series: list[dict[str, Any]], eligible: set[str] | None = None
+) -> dict[str, Any]:
     """How many organ records were expected, how many exist, and what each is usable for.
 
     A bare count of organ records invites the reader to divide it by the organ set and
@@ -162,6 +164,20 @@ def record_flow(series: list[dict[str, Any]]) -> dict[str, Any]:
         "records_in_the_reference_mass_comparison": len(mass_used),
         "reference_mass_comparison_by_organ": dict(
             Counter(o["organ"] for _, o in mass_used).most_common()
+        ),
+        # The quantitative modulation analysis draws on a subset of the cohort: series
+        # meeting the acquisition-constancy criterion, which have a CTDIvol.
+        "modulation_eligible_series": (
+            None if eligible is None
+            else len([s for s in completed if s["series_instance_uid"] in eligible])
+        ),
+        "records_in_the_modulation_analysis": (
+            None if eligible is None
+            else len([
+                1 for s, o in records
+                if s["series_instance_uid"] in eligible
+                and o.get("organ_weighted_ctdivol_mgy") is not None
+            ])
         ),
     }
 
@@ -297,14 +313,20 @@ def organ_mass(series: list[dict[str, Any]]) -> dict[str, Any]:
 # --- (3) the organ-level dose index -----------------------------------------------------
 
 
-def weighted_ctdivol(series: list[dict[str, Any]]) -> dict[str, Any]:
+def weighted_ctdivol(
+    series: list[dict[str, Any]], eligible: set[str] | None = None
+) -> dict[str, Any]:
     """Organ-specific weighted CTDIvol, and the modulation weight that produced it.
 
     The weight is the transferable quantity: it is dimensionless, it is what the
     modulation contributes, and unlike the weighted CTDIvol it does not depend on the
     scanner's own output. Both are reported, per organ and per vendor.
     """
-    usable = [s for s in _completed(series) if s["ctdivol_mgy"] is not None]
+    usable = [
+        s for s in _completed(series)
+        if s["ctdivol_mgy"] is not None
+        and (eligible is None or s["series_instance_uid"] in eligible)
+    ]
     weights: dict[str, list[float]] = {}
     indices: dict[str, list[float]] = {}
     for s in usable:
@@ -342,7 +364,10 @@ def weighted_ctdivol(series: list[dict[str, Any]]) -> dict[str, Any]:
             "w_o = [sum_z n_o(z) I(z) / sum_z n_o(z)] / mean_z I(z); "
             "organ-weighted CTDIvol = CTDIvol * w_o"
         ),
-        "excludes": "truncated organs, and series with no CTDIvol",
+        "excludes": (
+            "truncated organs; series with no CTDIvol; and series that do not meet the "
+            "acquisition-constancy criterion"
+        ),
         "n_series": len(usable),
         "by_organ": per_organ,
         "by_vendor": by_vendor,
@@ -352,7 +377,9 @@ def weighted_ctdivol(series: list[dict[str, Any]]) -> dict[str, Any]:
 # --- (4) what limits an organ-level modulation study ------------------------------------
 
 
-def study_limits(series: list[dict[str, Any]]) -> dict[str, Any]:
+def study_limits(
+    series: list[dict[str, Any]], eligible: set[str] | None = None
+) -> dict[str, Any]:
     """Truncation and flat weighting: the two ways a series fails to inform this question.
 
     Neither is a defect in the data or the method. A scan that ends mid-abdomen has
@@ -374,9 +401,13 @@ def study_limits(series: list[dict[str, Any]]) -> dict[str, Any]:
             "organs_most_often_cut": [o for o, _ in Counter(x["organ"] for x in cut).most_common(3)],
         }
 
+    # The weight spread is a statement about modulation, so it obeys the eligibility
+    # criterion; truncation is a statement about the scan range, so it does not.
     spreads = []
     flat = []
     for s in completed:
+        if eligible is not None and s["series_instance_uid"] not in eligible:
+            continue
         w = [float(o["relative_weight"]) for o in s["organs"]]
         if len(w) < 2:
             continue
@@ -412,11 +443,29 @@ def study_limits(series: list[dict[str, Any]]) -> dict[str, Any]:
 # --- assembly ----------------------------------------------------------------------------
 
 
-def build(payload: dict[str, Any]) -> dict[str, Any]:
-    """Every table, from one ``organ_dose_<tag>.json`` payload."""
+def build(payload: dict[str, Any], constancy: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Every table, from one ``organ_dose_<tag>.json`` payload.
+
+    ``constancy`` is the acquisition-constancy record. When supplied, the quantitative
+    modulation tables are restricted to the series meeting the eligibility criterion;
+    everything else -- the cohort, the archive-availability counts, the estimated-mass
+    comparison, the truncation tallies -- covers the whole cohort.
+    """
+    from .eligibility import assess
+    from .eligibility import summarise as summarise_eligibility
+
     series = payload["series"]
     completed = _completed(series)
+
+    eligible: set[str] | None = None
+    eligibility_block: dict[str, Any] | None = None
+    if constancy is not None:
+        assessed = assess(constancy)
+        eligible = {uid for uid, e in assessed.items() if e.eligible}
+        eligibility_block = summarise_eligibility(assessed)
+
     return {
+        "modulation_eligibility": eligibility_block,
         "cohort": {
             "n_series": len(series),
             "n_series_completed": len(completed),
@@ -428,9 +477,9 @@ def build(payload: dict[str, Any]) -> dict[str, Any]:
             "collections": sorted({s["collection"] for s in series if s.get("collection")}),
             "scanner_models": sorted({s["model_name"] for s in series if s.get("model_name")}),
         },
-        "record_flow": record_flow(series),
+        "record_flow": record_flow(series, eligible),
         "availability": availability(series),
         "organ_mass": organ_mass(series),
-        "weighted_ctdivol": weighted_ctdivol(series),
-        "study_limits": study_limits(series),
+        "weighted_ctdivol": weighted_ctdivol(series, eligible),
+        "study_limits": study_limits(series, eligible),
     }

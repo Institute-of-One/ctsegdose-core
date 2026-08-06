@@ -19,16 +19,17 @@ tube-current modulation varies along a patient. We derived an anatomy-weighted C
 index from routine DICOM metadata and automated organ segmentation; it characterises
 organ-specific longitudinal tube-current modulation and is not an estimate of absorbed
 organ dose. Forty abdominal CT series, ten per manufacturer, were drawn from The Cancer
-Imaging Archive, and twelve organs segmented with TotalSegmentator at inference only. Of 480 requested organ–series combinations, 455 were
-produced; the remaining 25 organs lay outside the scanned range. Of the 455,
-408 were untruncated and an index could be calculated for 386. Modulation weights spanned
-0.59 to 1.69, so the index departs from the whole-scan CTDIvol by up to 70% within one
+Imaging Archive, and twelve organs segmented with TotalSegmentator at inference only. Of
+480 requested organ–series combinations, 455 were produced; the remaining 25 organs lay
+outside the scanned range. A prespecified acquisition-constancy criterion admitted 39 of
+the 40 series to the quantitative modulation analysis. Modulation weights spanned 0.59 to
+1.69, so the index departs from the whole-scan CTDIvol by up to 70% within one
 acquisition. A recorded CTDIvol was retained in the archived headers of 29 of 40 series,
 was reconstructable in 5 and unavailable in 6, differing markedly between manufacturers in
 this sample. Estimated organ mass was broadly consistent with ICRP 89 values for liver and
 kidneys; pancreas and spleen offsets were explored rather than corrected. Conversion to
 absorbed organ dose requires Monte-Carlo coefficients this index does not replace. The
-implementation and derived records are openly available and reproducible.
+implementation and derived records are openly available.
 
 **Keywords:** computed tomography; CTDIvol; tube-current modulation; deep-learning
 segmentation; TotalSegmentator; image-based dosimetry indices; reproducibility; open data
@@ -170,7 +171,9 @@ rather than assumed. A mirrored segmentation would otherwise produce entirely pl
 volumes and Hounsfield values while pairing every organ with the wrong anatomy.
 
 The patient outline, used for the water-equivalent diameter, was taken from a
-deterministic threshold contour following AAPM Report 220 [7].
+deterministic threshold contour following AAPM Report 220 [7]. Figure 1 illustrates the
+segmentation output and its correspondence with the CT anatomy in the representative
+acquisition used for the end-to-end example.
 
 ### 2.6. Attenuation-Derived Estimated Organ Mass
 
@@ -203,25 +206,42 @@ output.
 
 The weighting assumes that, within each series, tube voltage, rotation or exposure time,
 pitch and beam collimation remain fixed, so that longitudinal changes in scanner output
-are proportional to the recorded tube current. We checked this directly by reading every
-slice header of every retained series; the result is shipped as
-`results/acquisition_constancy.json`. Tube voltage was verified constant in all 40 series,
-as were Image Type and convolution kernel, so no series mixes acquisition or
-reconstruction types. Exposure time was verified constant in 35 series and absent from the
-headers of 1; pitch was verified constant in 32 and absent in 8; total collimation width
-was verified constant in 31 and absent in 9; rotation time was verified constant in 20 and
-absent in 19. Attributes absent from the archived headers are reported as absent rather
-than as verified: they are assumed constant on the basis that the series is represented as
-a single acquisition, which the constant Image Type and kernel support, but this could not
-be confirmed.
+are proportional to the recorded tube current.
 
-Exposure time varied within 4 series. In 3 of these, all Philips, the variation was below
-1% and reflects decimal rounding in the header rather than a change in the acquisition. In
-the remaining series — the GE acquisition also identified in Section 2.3 as two
-reconstructions sharing one Series Instance UID — exposure time takes the values 400 and
-800 ms and rotation time 0.4 and 0.8 s in contiguous blocks, so scanner output in that
-series is not proportional to tube current alone. Its organ weights lie between 0.98 and
-1.21 and do not contribute to the reported range; the consequence is treated in Section 4.
+### 2.8. The Acquisition-Constancy Criterion
+
+Rather than assume that assumption, we stated it as an eligibility rule in advance and
+applied it mechanically:
+
+> A series is eligible for quantitative anatomy-weighted CTDIvol analysis only when the
+> acquisition parameters required for scanner output to remain proportional to the
+> recorded tube current are constant within that series, to the extent verifiable from the
+> archived DICOM headers.
+
+Every slice header of every series was read and each output-governing attribute — tube
+voltage, exposure time, rotation time, pitch and total collimation width — classified into
+one of four states. *Verified constant*: one value throughout. *Absent*: never written to
+the archived headers, so constancy can be neither confirmed nor refuted; absence alone
+does not disqualify a series, since excluding on it would remove series for a property of
+the de-identified export rather than of the acquisition. *Negligible variation*: varying
+by less than a relative tolerance of 0.02, attributable to the numeric representation —
+exposure time is written as an integer number of milliseconds, so a one-unit step on a
+value of a few hundred is a rounding artefact. *Materially variable*: varying by at least
+that tolerance, which disqualifies the series. The tolerance is not fitted to these data:
+any value between roughly 1% and 50% classifies this cohort identically, because the only
+material variation observed is a factor of two.
+
+Tube voltage was verified constant in all 40 series, as were Image Type and convolution
+kernel, so no series mixes acquisition or reconstruction types. Exposure time was verified
+constant in 35 series, negligibly variable in 3, materially variable in 1 and absent in 1;
+rotation time verified constant in 20, materially variable in 1 and absent in 19; pitch
+verified constant in 32 and absent in 8; total collimation width verified constant in 31
+and absent in 9. The full record is shipped as `results/acquisition_constancy.json` and
+the eligibility decision for every series in `results/analysis_1.5mm.json`.
+
+Series failing the criterion are retained for the archive-availability, segmentation,
+estimated-mass and provenance analyses, and excluded only from quantitative
+modulation-weight and anatomy-weighted-index summaries.
 
 CTDIvol was taken from the image header (0018,9345) where present. Where absent, it was
 reconstructed from acquisition physics against an openly licensed normalised-CTDI database
@@ -234,7 +254,7 @@ An organ whose mask reaches the first or last slice of the series continues beyo
 scan; its estimated mass is that of the scanned part and its weight describes only the
 exposed part. Such organs are flagged and excluded from whole-organ comparisons.
 
-### 2.8. Organ Record Flow
+### 2.9. Organ Record Flow
 
 Forty series and twelve requested organs give 480 organ–series combinations. Records were
 produced for 455. The remaining 25 are organs that lay outside the scanned longitudinal
@@ -252,7 +272,7 @@ and 63 untruncated records do not. The external reference-mass comparison uses t
 untruncated records of the five solid organs. The full flow is in the shipped
 `results/analysis_1.5mm.json`.
 
-### 2.9. What the Index Does and Does Not Represent
+### 2.10. What the Index Does and Does Not Represent
 
 The anatomy-weighted CTDIvol index describes organ-specific *longitudinal* tube-current
 modulation relative to the whole-scan CTDIvol. It does not account for scattered
@@ -263,7 +283,7 @@ is therefore not a surrogate for absorbed organ dose and must not be read as one
 does provide is a dimensionless, patient-specific, organ-specific measure of longitudinal
 modulation, and a derived index in the units of the parent CTDIvol.
 
-### 2.10. Verification and Reproducibility
+### 2.11. Verification and Reproducibility
 
 Every series is screened against facts of gross anatomy that hold for any adult: the left
 kidney lies to the patient's left of the right kidney and the spleen to the left of the
@@ -288,16 +308,36 @@ archived version DOI are given in the Data Availability Statement.
 
 Forty series were analysed — ten from each of GE, Siemens, Canon/Toshiba and Philips —
 drawn from 21 collections and 23 scanner models. Of 480 organ–series combinations, 455
-organ records were produced across 12 organs, with the flow as given in Section 2.8.
+organ records were produced across 12 organs, with the flow as given in Section 2.9.
+Figure 1 shows the segmentation output for a representative acquisition.
+
+Of the 40 segmented series, 39 met the acquisition-constancy criterion of Section 2.8. One
+archived GE series contained two blocks with different exposure and rotation times; it was
+retained for the segmentation, estimated-mass and archive-availability analyses and
+excluded from the modulation-weight and anatomy-weighted-index summaries. The quantitative
+modulation analysis therefore rests on 375 organ records from the 33 eligible series that
+also carry a CTDIvol.
+
+![](figures/fig1_segmentation.png){width=100%}
+
+**Figure 1.** Representative TotalSegmentator output from one abdominal CT series used in
+the analysis. (**a**) Coronal reformat with multi-organ overlays. (**b**–**d**) Axial
+levels through the upper abdomen, the renal level and the lower abdomen. Masks were
+generated with TotalSegmentator v2.17 using the 1.5 mm full-resolution `total` task and
+returned to the native DICOM-derived image grid; overlays are translucent so the anatomy
+they are drawn against remains visible, and the key lists the structures actually shown.
+The same acquisition appears in Figure 2. Images are displayed in radiological convention,
+with the patient's left on the viewer's right. Only de-identified imaging from The Cancer
+Imaging Archive is shown.
 
 ### 3.2. Organ-Specific Modulation Weights
 
-Organ-specific modulation weights across the cohort span 0.59 to 1.69. The
+Across the eligible series, organ-specific modulation weights span 0.59 to 1.69. The
 anatomy-weighted index therefore departs from the whole-scan CTDIvol by up to roughly 70%
 in either direction within a single acquisition, which is the variation the index exists
 to express.
 
-Figure 1 shows one acquisition end to end: a Canon/Toshiba Aquilion PRIME series of 268
+Figure 2 shows one acquisition end to end: a Canon/Toshiba Aquilion PRIME series of 268
 slices with a recorded CTDIvol of 16.1 mGy and a scan mean tube current of 265 mA. The
 small bowel and colon, lying in the inferior abdomen where the modulation raised the
 current to about 447 and 435 mA, take weights of 1.69 and 1.64 respectively, giving indices
@@ -305,9 +345,9 @@ near 27 mGy; the left kidney and stomach, higher in the scan, take weights of 0.
 indices near 15 mGy. Two organs in the same acquisition thus differ by a factor of 1.8 in
 their anatomy-weighted index, a difference no whole-scan value can express.
 
-![](figures/fig1_demonstration_case.png){width=100%}
+![](figures/fig2_demonstration_case.png){width=100%}
 
-**Figure 1.** One acquisition end to end. (**a**) Each organ's longitudinal extent,
+**Figure 2.** One acquisition end to end. (**a**) Each organ's longitudinal extent,
 annotated with the mean tube current recorded over it, against a scan mean of 265 mA.
 (**b**) The resulting anatomy-weighted CTDIvol index, with the organ-specific modulation
 weight beside each bar; the dashed line is the whole-scan CTDIvol of 16.1 mGy. The bars
@@ -316,7 +356,7 @@ are modulation-weighted indices, not absorbed doses.
 ### 3.3. Availability of a Dose Index in the Archived Headers
 
 Across the cohort, 29 of 40 series retained a recorded CTDIvol in the archived DICOM
-headers, 5 were reconstructable from acquisition physics, and 6 were neither (Figure 2).
+headers, 5 were reconstructable from acquisition physics, and 6 were neither (Figure 3).
 
 All 6 unrecoverable series are GE, and none of the ten sampled GE series retained a
 recorded CTDIvol in the archived headers; the other three manufacturers retained one in 29
@@ -327,16 +367,16 @@ structure would describe a sampling model the data do not satisfy. For the six
 unrecoverable series the organ masks, volumes, mass estimates and modulation weights are
 all computable and reported, but no anatomy-weighted index exists for them.
 
-![](figures/fig2_dose_index_availability.png){width=100%}
+![](figures/fig3_dose_index_availability.png){width=100%}
 
-**Figure 2.** Availability of a whole-scan dose index in the archived DICOM headers, by
+**Figure 3.** Availability of a whole-scan dose index in the archived DICOM headers, by
 manufacturer, in this TCIA sample. A series counted unrecoverable retained no CTDIvol in
 its header and its scanner lies outside the open coefficient database. Segments are
 distinguished by fill pattern as well as tone.
 
 ### 3.4. External Reference Comparison of Estimated Organ Mass
 
-Table 1 and Figure 3 place attenuation-derived estimated organ mass beside the ICRP 89
+Table 1 and Figure 4 place attenuation-derived estimated organ mass beside the ICRP 89
 reference adult male values [5], over the 177 untruncated records of the five solid
 organs.
 
@@ -357,9 +397,9 @@ the kidneys within 17%. Two organs departed more substantially: the pancreas est
 39% below the reference and the spleen 72% above. Neither was adjusted; possible
 explanations are examined in Section 4.
 
-![](figures/fig3_organ_mass_vs_icrp89.png){width=100%}
+![](figures/fig4_organ_mass_vs_icrp89.png){width=100%}
 
-**Figure 3.** Attenuation-derived estimated organ mass relative to the ICRP 89 reference
+**Figure 4.** Attenuation-derived estimated organ mass relative to the ICRP 89 reference
 adult male mass, by manufacturer. Each marker is one organ in one series; the horizontal
 bar is the median across all manufacturers. Organs truncated by the scan boundary are
 excluded. Manufacturer is encoded by marker shape as well as colour, so the figure is
@@ -368,7 +408,7 @@ readable in greyscale.
 ### 3.5. What Limits an Organ-Level Modulation Analysis
 
 Two conditions reduce what such an analysis can measure, and both differ across the
-sampled manufacturers (Figure 4).
+sampled manufacturers (Figure 5).
 
 Truncation by the scan boundary affected 5.2% of organ records on GE, 5.5% on Siemens,
 10.4% on Canon/Toshiba and 20.0% on Philips, reflecting the scan ranges of the sampled
@@ -381,9 +421,9 @@ express. These series passed the modulation screen at selection, where the curre
 across the whole scan; the flatness is local to the abdomen. They are uninformative for
 this analysis rather than faulty.
 
-![](figures/fig4_study_limits.png){width=100%}
+![](figures/fig5_study_limits.png){width=100%}
 
-**Figure 4.** What limits an organ-level modulation analysis. (**a**) Percentage of organ
+**Figure 5.** What limits an organ-level modulation analysis. (**a**) Percentage of organ
 records truncated by the scan boundary, by manufacturer, annotated with the counts.
 (**b**) Peak-to-peak spread of the organ-specific modulation weights within each series;
 the dashed line is the threshold below which a series carries no usable variation.
@@ -401,7 +441,7 @@ current was distributed over an organ's own longitudinal extent in that patient.
 requires no phantom, no simulation and no additional acquisition — only metadata the
 scanner already writes and a segmentation obtained at inference.
 
-**What the index is, and what it is not.** As set out in Section 2.9, the index addresses
+**What the index is, and what it is not.** As set out in Section 2.10, the index addresses
 longitudinal modulation alone. It does not account for scatter, for irradiation
 originating outside the organ's segmented extent, for angular modulation, for organ depth
 and attenuation, or for radiation transport, and it is not an estimate of absorbed organ
@@ -445,16 +485,15 @@ organ-level analysis drawn from an archive will lose a manufacturer-associated f
 its cohort before segmentation is considered, and a study that does not report which
 series were lost will under-represent that manufacturer silently.
 
-**A series in which the weighting assumption does not hold.** As reported in Section 2.7,
-one GE series contains two contiguous blocks acquired at different rotation and exposure
-times, so its scanner output is not proportional to tube current alone. Weighting that
-series by the product of tube current and exposure time instead shifts its organ weights
-by up to about 35% in either direction. Its weights, 0.98 to 1.21, are interior to the
-cohort range, which is 0.59 to 1.69 with or without it, so no reported result depends on
-it; but the weights for that one series should be read as describing recorded tube current
-rather than scanner output. A current–time product would be the more faithful weighting in
-general, and is not adopted here because exposure time is absent from the archived headers
-of one other series, so it could not be applied uniformly across the cohort.
+**Why acquisition constancy has to be screened.** The acquisition-constancy criterion
+identified one series in which tube current alone was not proportional to scanner output,
+because the acquisition changed rotation and exposure time part-way through. Excluding it
+prevents a mixed acquisition from entering the quantitative modulation analysis, and
+illustrates why constancy must be verified rather than assumed: nothing in the images, the
+segmentation or the weights themselves would have revealed it. A current–time product
+would be the more faithful weighting in general; it is not adopted here because exposure
+time is absent from the archived headers of one other series and could not be applied
+uniformly across the cohort.
 
 **Reproducibility and open implementation.** The implementation is MIT-licensed, no
 imaging is redistributed, and every reported value is re-derived from the per-series
@@ -486,10 +525,10 @@ controlled, and all affect attenuation-derived mass estimates. A single segmenta
 was used, so segmentation behaviour and cohort anatomy cannot be separated. There is no
 subject-level ground truth for organ mass. Rotation time, pitch and collimation are absent
 from the archived headers of some series (19, 8 and 9 respectively), so their constancy
-within those series is assumed from the single-acquisition representation rather than
-verified, and in one series the weighting assumption does not hold as described above. The
-index addresses longitudinal modulation only, as set out in Section 2.9, and no absorbed
-dose is reported.
+within those series could not be fully verified and is assumed from the single-acquisition
+representation; the acquisition-constancy criterion is therefore a screen against
+detectable violations rather than a guarantee. The index addresses longitudinal modulation
+only, as set out in Section 2.10, and no absorbed dose is reported.
 
 **Future work.** Coefficients computed with an open-source Monte-Carlo engine would carry
 no licensing constraint and would permit the transport terms this index omits; an

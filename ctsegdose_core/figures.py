@@ -121,6 +121,13 @@ def caption(kind: str, tables: dict[str, Any]) -> str:
         f"{len(VENDOR_COLOURS)} manufacturers"
     )
     return {
+        "segmentation": (
+            "Representative TotalSegmentator output from one abdominal CT series used in "
+            "the analysis, shown as translucent overlays on the acquisition's own images. "
+            "The same acquisition appears in Figure 2. Images are displayed in "
+            "radiological convention (patient left on the viewer's right); only "
+            "de-identified imaging from The Cancer Imaging Archive is shown."
+        ),
         "mass": (
             f"Attenuation-derived estimated organ mass relative to the ICRP 89 reference "
             f"adult male value. {stem}. Organs truncated by the scan boundary are "

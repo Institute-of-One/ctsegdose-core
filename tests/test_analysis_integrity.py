@@ -57,7 +57,11 @@ def organs(payload):
 
 def test_the_shipped_tables_are_reproduced_exactly_from_the_per_series_records(payload, tables):
     """The whole file, regenerated. A hand edit anywhere fails here."""
-    rebuilt = build(payload)
+    constancy_path = REPO / "results" / "acquisition_constancy.json"
+    if not constancy_path.exists():
+        pytest.skip("acquisition constancy record not generated in this checkout")
+    constancy = json.loads(constancy_path.read_text(encoding="utf-8"))
+    rebuilt = build(payload, constancy)
     shipped = {k: v for k, v in tables.items() if k != "provenance"}
     assert rebuilt == shipped
 
@@ -187,12 +191,19 @@ def test_a_missing_dose_index_is_json_null_and_never_a_nan(payload):
 
 
 def test_the_weight_distributions_are_re_derived(tables, organs):
+    """Recomputed over the series the acquisition-constancy criterion admits, which is
+    what the shipped table is restricted to."""
+    ineligible = {
+        r["series_instance_uid"]
+        for r in (tables.get("modulation_eligibility") or {}).get("ineligible_series", [])
+    }
     for organ, block in tables["weighted_ctdivol"]["by_organ"].items():
         weights = [
             o["relative_weight"] for o in organs
             if o["organ"] == organ
             and not o["truncated"]
             and o["organ_weighted_ctdivol_mgy"] is not None
+            and o["series"] not in ineligible
         ]
         assert block["relative_weight"]["n"] == len(weights)
         assert block["relative_weight"]["median"] == pytest.approx(
