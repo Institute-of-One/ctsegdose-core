@@ -207,6 +207,17 @@ def main() -> int:
     finally:
         staged.unlink(missing_ok=True)
 
+    if not args.internal:
+        # A successful submission build makes any internal build obsolete, and leaving
+        # one beside it is a trap: the names differ by a suffix, the stale copy still
+        # carries "[[ pending: ]]" markers and whatever the manuscript said when it was
+        # made, and it is the file that has been open in a viewer for days.
+        for suffix in ("pdf", "docx"):
+            stale = args.out / f"{STEM}_internal.{suffix}"
+            if stale.exists():
+                stale.unlink()
+                print(f"  removed superseded {stale.name}")
+
     for path in written:
         print(f"  {path.name}: {path.stat().st_size / 1024:.0f} kB")
     if outstanding:
