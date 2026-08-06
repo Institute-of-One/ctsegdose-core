@@ -1,22 +1,30 @@
-"""ctsegdose-core: patient-specific absorbed organ dose from CT tube-current modulation.
+"""ctsegdose-core: anatomy-weighted CTDIvol from routine CT metadata.
 
-The chain this package completes:
+What this computes, and what it does not:
 
-    recorded tube current I(z)  ->  organ-specific weighted CTDIvol   (ctdose-core)
-    segmented organ masks       ->  organ volume and HU-derived mass  (here)
-    CTDIvol-normalised organ-dose coefficients, scaled patient-specifically
-                                ->  absorbed organ dose in mGy        (here)
+    recorded tube current I(z)  +  segmented organ masks
+      ->  organ-specific modulation weight w_o            (dimensionless)
+      ->  anatomy-weighted CTDIvol index = CTDIvol * w_o  (mGy)
+      +   organ volume and attenuation-derived organ mass
 
-ctdose-core (IORN-004) stops at the organ-specific weighted CTDIvol, which is a dose
-*index*. This package takes that index to an absorbed organ dose made patient-specific
-by the patient's own segmented anatomy and HU-derived density.
+The quantity is not new: it is the organ-specific weighted CTDIvol of Khatonabadi et al.
+(2013) and Tian et al. (2015). What this package provides is an open, end-to-end
+implementation of it that runs from routine archived DICOM alone, with organ contours
+obtained at inference.
 
-Phase 1, implemented here, is the data layer: selecting and retrieving a small, balanced
-multi-vendor abdominal sample from a public archive without downloading the archive.
+**It is not an estimate of absorbed organ dose.** The index describes *longitudinal*
+tube-current modulation only, and does not account for scattered radiation, irradiation
+originating outside an organ's segmented extent, angular modulation, organ depth and
+attenuation, or radiation transport. Converting it to milligray needs CTDIvol-normalised
+organ-dose coefficients, which :mod:`ctsegdose_core.coefficients` requires the caller to
+supply, with citation, DOI, licence and source hash, and which this package never ships.
+
+The whole-scan CTDIvol the weight scales -- recorded, or reconstructed from acquisition
+physics -- comes from ctdose-core.
 """
 
 from __future__ import annotations
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 __all__ = ["__version__"]

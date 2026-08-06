@@ -1,7 +1,7 @@
 # ctsegdose-core
 
-**Patient-specific absorbed organ dose from CT tube-current modulation, using
-deep-learning organ segmentation and HU-derived density.**
+**Anatomy-weighted CTDIvol from routine CT metadata: organ-specific longitudinal
+tube-current modulation, using deep-learning organ segmentation.**
 
 Institute of One, LISIT Co., Ltd., Tokyo, Japan · MIT licence
 
@@ -9,35 +9,35 @@ Institute of One, LISIT Co., Ltd., Tokyo, Japan · MIT licence
 
 ## What this is
 
-A CT dose *index* is not a dose. [ctdose-core][ctdose] reconstructs CTDIvol, DLP, SSDE
-and effective dose from DICOM, and takes the tube-current record as far as an
-organ-specific **weighted CTDIvol** — still an index, and still tied to a reference
-phantom rather than to the patient in the scanner.
-
-This package completes the chain:
+A CT dose *index* is not a dose, and one value per series cannot express how the tube
+current varied along the patient. This package computes an **anatomy-weighted CTDIvol
+index**: the whole-scan CTDIvol scaled by a dimensionless, organ-specific weight formed
+from the recorded per-slice tube current over that organ's segmented longitudinal extent.
 
 ```
-recorded tube current I(z)   ->  organ-specific weighted CTDIvol      (ctdose-core)
-segmented organ masks        ->  organ volume, HU-derived organ mass  (here)
-CTDIvol-normalised organ-dose coefficients, scaled patient-specifically
-                             ->  absorbed organ dose in mGy           (here)
+recorded tube current I(z)  +  segmented organ masks
+      ->  organ-specific modulation weight  w_o          (dimensionless)
+      ->  anatomy-weighted CTDIvol index = CTDIvol · w_o (mGy)
+      +   organ volume and attenuation-derived organ mass
 ```
 
-The patient specificity comes from the patient's own anatomy: organs are segmented from
-the same series the dose is computed for, and the density used for the mass comes from
-the measured Hounsfield units, not from a reference body.
+**The quantity is not new.** It is the organ-specific weighted CTDIvol of Khatonabadi et
+al. (2013) and Tian et al. (2015). What this package provides is an open, end-to-end
+implementation of it that runs from routine archived DICOM alone, with organ contours
+obtained at inference.
 
-## Status
+## What this is not
 
-**Phase 1 (data acquisition) and Phase 2 (organ layer) are implemented.** The chain runs
-end to end as far as the organ-specific weighted CTDIvol, patient-specific organ volume
-and HU-derived organ mass.
+**It is not an estimate of absorbed organ dose.** The index describes *longitudinal*
+tube-current modulation only. It does not account for scattered radiation, irradiation
+originating outside an organ's segmented extent, angular modulation, organ depth and
+attenuation, or radiation transport.
 
-**The final step to mGy is deliberately not taken yet.** It needs CTDIvol-normalised
-organ dose coefficients from a published Monte-Carlo study under a licence that permits
-redistribution, and no such table is shipped here. `ctsegdose_core/coefficients.py`
-refuses to produce an absorbed dose without one, and refuses to load a table that does
-not carry its citation, DOI, licence and source hash. See *Coefficients* below.
+Converting it to a dose in milligray requires CTDIvol-normalised organ-dose coefficients
+from a published Monte-Carlo study, under a licence permitting redistribution. **No such
+table is shipped here**: `ctsegdose_core/coefficients.py` refuses to emit a dose without
+one, and refuses to load a table lacking its citation, DOI, licence and source hash. See
+*Coefficients* below.
 
 ## Phase 1: a balanced multi-vendor sample, without downloading the archive
 

@@ -1,10 +1,10 @@
 {
-  "title": "ctsegdose-core: patient-specific absorbed organ dose from CT tube-current modulation, using deep-learning organ segmentation and HU-derived density",
-  "description": "<p>A Python package (MIT) that takes a CT acquisition from its recorded tube-current modulation to an <em>absorbed organ dose</em> in mGy, made patient-specific by the patient's own anatomy. Organs are segmented from the same series with a deep-learning segmenter; organ mass comes from the measured Hounsfield units rather than from a reference body; the organ-specific weighted CTDIvol of <code>ctdose-core</code> is converted to absorbed dose with CTDIvol-normalised organ-dose coefficients scaled to that patient. Every value carries its formula, its inputs, its assumptions and its source.</p><p><strong>No imaging data is redistributed.</strong> The public series used are identified in <code>data/PROVENANCE.json</code> by collection, collection DOI, Series Instance UID and licence, and can be re-fetched from The Cancer Imaging Archive by following <code>docs/REPRODUCING_DATA.md</code>.</p>",
+  "title": "ctsegdose-core: anatomy-weighted CTDIvol from routine CT metadata, using deep-learning organ segmentation",
+  "description": "<p>A Python package (MIT) that computes an <em>anatomy-weighted CTDIvol index</em> from routine CT DICOM metadata and automated organ segmentation: the whole-scan CTDIvol scaled by a dimensionless, organ-specific weight formed from the recorded per-slice tube current over that organ's segmented longitudinal extent. It also reports organ volume and attenuation-derived estimated organ mass.</p><p><strong>The quantity is not new</strong> &mdash; it is the organ-specific weighted CTDIvol of Khatonabadi et al. (2013) and Tian et al. (2015). What this software provides is an open, end-to-end implementation that runs from archived DICOM alone, with contours obtained at inference.</p><p><strong>It is not an estimate of absorbed organ dose.</strong> The index describes longitudinal tube-current modulation only, and does not account for scatter, irradiation from outside the segmented extent, angular modulation, organ depth and attenuation, or radiation transport. No organ-dose coefficient table is redistributed, and the software refuses to emit a dose in milligray without one.</p><p><strong>No imaging data is redistributed.</strong> The public series analysed are identified in <code>data/PROVENANCE.json</code> by collection, collection DOI, Series Instance UID and licence, and can be re-fetched from The Cancer Imaging Archive by following <code>docs/REPRODUCING_DATA.md</code>.</p>",
   "upload_type": "software",
   "license": "MIT",
   "access_right": "open",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "language": "eng",
   "creators": [
     {
@@ -15,14 +15,14 @@
   ],
   "keywords": [
     "computed tomography",
-    "organ dose",
-    "absorbed dose",
+    "CTDIvol",
     "tube current modulation",
     "organ segmentation",
-    "Hounsfield units",
+    "TotalSegmentator",
+    "image-based dosimetry indices",
     "DICOM",
     "reproducibility",
-    "open source"
+    "open data"
   ],
   "related_identifiers": [
     {

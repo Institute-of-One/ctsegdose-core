@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 title: >-
-  ctsegdose-core: patient-specific absorbed organ dose from CT tube-current
-  modulation, using deep-learning organ segmentation and HU-derived density
+  ctsegdose-core: anatomy-weighted CTDIvol from routine CT metadata, using
+  deep-learning organ segmentation
 message: >-
   If you use this software, please cite it, and cite ctdose-core for the dose
   engine it builds on.
@@ -15,26 +15,30 @@ authors:
 repository-code: https://github.com/Institute-of-One/ctsegdose-core
 url: https://github.com/Institute-of-One/ctsegdose-core
 abstract: >-
-  A Python package that takes a CT acquisition from its recorded tube-current
-  modulation to an absorbed organ dose in mGy, made patient-specific by the
-  patient's own anatomy: organs are segmented from the same series with a
-  deep-learning segmenter, organ mass is derived from the measured Hounsfield
-  units, and the organ-specific weighted CTDIvol of ctdose-core is converted to
-  absorbed dose with CTDIvol-normalised organ-dose coefficients scaled to that
-  patient. Every value carries its formula, its inputs, its assumptions and its
-  source. No imaging is redistributed: the public series used are identified by
-  Series Instance UID, collection and licence so they can be re-fetched.
+  A Python package that computes an anatomy-weighted CTDIvol index from routine
+  CT DICOM metadata and automated organ segmentation: the whole-scan CTDIvol
+  scaled by a dimensionless, organ-specific weight formed from the recorded
+  per-slice tube current over that organ's segmented longitudinal extent. Organ
+  volume and attenuation-derived estimated organ mass are reported alongside.
+  The quantity is not new -- it is the organ-specific weighted CTDIvol of
+  Khatonabadi et al. (2013) and Tian et al. (2015); what this software provides
+  is an open, end-to-end implementation that runs from archived DICOM alone,
+  with contours obtained at inference. It is not an estimate of absorbed organ
+  dose: the index describes longitudinal tube-current modulation only, and no
+  organ-dose coefficient table is redistributed. No imaging is redistributed;
+  the public series analysed are identified by Series Instance UID, collection
+  and licence so they can be re-fetched.
 keywords:
   - computed tomography
-  - organ dose
-  - absorbed dose
+  - CTDIvol
   - tube current modulation
   - organ segmentation
-  - Hounsfield units
+  - TotalSegmentator
+  - image-based dosimetry indices
   - DICOM
   - reproducibility
 license: MIT
-version: 0.1.0
+version: 0.1.1
 references:
   - type: software
     title: >-
@@ -42,10 +46,28 @@ references:
       physics reconstruction when the dose attributes are missing
     doi: 10.5281/zenodo.21636082
     notes: >-
-      The open dose engine this work builds on. It stops at the dose index; this
-      package continues to absorbed organ dose.
+      The open dose engine this work builds on. It supplies the whole-scan
+      CTDIvol -- recorded or reconstructed -- that the organ weight scales.
     authors:
       - family-names: Yamamoto
         given-names: Shuji
         orcid: 'https://orcid.org/0000-0001-9211-1071'
         affiliation: Institute of One, LISIT Co., Ltd., Tokyo, Japan
+  - type: article
+    title: >-
+      The feasibility of a regional CTDIvol to estimate organ dose from tube
+      current modulated CT exams
+    doi: 10.1118/1.4798561
+    year: 2013
+    notes: Origin of the regional / organ-specific CTDIvol this software computes.
+    authors:
+      - family-names: Khatonabadi
+        given-names: Maryam
+  - type: article
+    title: Prospective estimation of organ dose in CT under tube current modulation
+    doi: 10.1118/1.4907955
+    year: 2015
+    notes: Formalises the weighted organ-specific CTDIvol this software operationalises.
+    authors:
+      - family-names: Tian
+        given-names: Xiaoyu
