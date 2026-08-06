@@ -138,7 +138,57 @@ def test_every_reference_is_cited_and_every_citation_resolves(raw):
 
 def test_the_reference_list_is_the_size_an_original_article_needs(raw):
     numbers = {int(n) for n in re.findall(r"^(\d+)\.\s", raw.split("## References")[1], re.M)}
-    assert 18 <= len(numbers) <= 22, f"{len(numbers)} references; the target is 18-22"
+    assert 18 <= len(numbers) <= 24, f"{len(numbers)} references; the target is 18-22"
+
+
+def test_references_are_numbered_in_order_of_first_mention(raw):
+    """MDPI requires it, and maintaining it by hand fails silently: inserting one citation
+    early renumbers everything after it while the bibliography still looks correct."""
+    body = raw.split("## References")[0]
+    order: list[int] = []
+    for group in re.findall(r"\[(\d+(?:\s*,\s*\d+)*)\]", body):
+        for token in group.split(","):
+            n = int(token.strip())
+            if n not in order:
+                order.append(n)
+    assert order == sorted(order), (
+        f"references are not in order of first mention: {order[:12]}...  "
+        "run tools/renumber_references.py"
+    )
+    assert order == list(range(1, len(order) + 1)), (
+        f"citation numbering has gaps or duplicates: {order[:12]}"
+    )
+
+
+def test_the_three_closest_studies_are_cited_with_verified_dois(raw):
+    """Added at the author's direction; each DOI was checked against Crossref."""
+    for doi, who in (
+        ("10.1002/acm2.70321", "Nuntue et al. 2025, DICOM-header TCM profiles"),
+        ("10.3390/tomography10120151", "Eom et al. 2024, TotalSegmentator dose calculation"),
+        ("10.1002/mp.15402", "Li et al. 2022, SSDE(z)"),
+    ):
+        assert doi in raw, f"missing citation: {who}"
+    for author in ("Nuntue", "Eom", "Li, X."):
+        assert author in raw, f"{author} must appear in the bibliography"
+
+
+def test_the_criterion_is_not_described_as_prespecified(raw):
+    """It was formalised after the anomalous series was found, so calling it prespecified
+    would misrepresent the sequence."""
+    for word in ("prespecified", "pre-specified", "stated in advance", "defined a priori"):
+        assert word not in raw.lower(), f"the criterion is described as {word!r}"
+    assert "rule-based acquisition-constancy criterion" in raw
+
+
+def test_priority_claims_are_not_overstated(raw):
+    body = raw.split("## References")[0]
+    for overclaim in (
+        "The first multi-vendor", "first multi-vendor", "never reported",
+        "not previously reported", "no previous study", "unprecedented",
+        "The existing work does not answer",
+    ):
+        assert overclaim not in body, f"unsupported priority claim: {overclaim!r}"
+    assert "only partially answers" in body
 
 
 def test_the_prior_art_for_the_quantity_is_cited(raw):
@@ -460,8 +510,14 @@ def test_the_truncation_range_quoted_in_the_text_matches(text, tables):
 
 
 def test_the_flat_weighting_count_matches(text, tables):
+    """Reported against the eligible denominator, since the weight spread is a modulation
+    statement and the ineligible series contributes none."""
     n = tables["study_limits"]["flat_weighting"]["n_series"]
-    assert f"{n} of the 40 series showed a peak-to-peak spread" in text
+    eligible = tables["modulation_eligibility"]["n_eligible"]
+    assert (
+        f"{n} of the {eligible} series eligible for quantitative modulation analysis "
+        "showed a peak-to-peak spread"
+    ) in text
 
 
 def test_the_two_offsets_are_examined_with_their_evidence_quoted(text):
