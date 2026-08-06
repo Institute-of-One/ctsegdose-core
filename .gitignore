@@ -45,3 +45,11 @@ Thumbs.db
 # a reader of the paper needs are published.
 docs/*
 !docs/REPRODUCING_DATA.md
+
+# The internal manuscript build carries "[[ pending: ... ]]" markers for release fields
+# that are not yet known. It is a working artefact, regenerable with
+# `python tools/build_submission.py --internal`, and must not be published; the
+# submission build, which refuses to run until those fields are real, is the one that
+# belongs in a release.
+paper/manuscript_tomography_internal.*
+paper/release_metadata.json
