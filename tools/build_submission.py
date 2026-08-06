@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -137,7 +138,21 @@ def build_pdf(staged: Path, out_dir: Path, common: list[str]) -> Path | None:
                         "-V", "fontsize=10pt"],
         )
         pdf = out_dir / f"{STEM}.pdf"
-        typst.compile(str(source), output=str(pdf), root=str(PAPER))
+        # Compile beside the target and move into place. Writing directly fails with a
+        # bare OSError when the previous PDF is open in a viewer -- a routine thing to
+        # have happen while reviewing a draft -- and the message says nothing useful.
+        staged_pdf = PAPER / f".{STEM}.pdf"
+        typst.compile(str(source), output=str(staged_pdf), root=str(PAPER))
+        try:
+            # shutil.move, not Path.replace: --out may name another drive, and rename
+            # cannot cross one.
+            shutil.move(str(staged_pdf), str(pdf))
+        except OSError as exc:
+            staged_pdf.unlink(missing_ok=True)
+            raise SystemExit(
+                f"built the PDF but could not write it to {pdf.name}: it is open in "
+                f"another program. Close it and re-run.\n  ({exc})"
+            ) from exc
     finally:
         source.unlink(missing_ok=True)
     print(f"  wrote {pdf.name}")

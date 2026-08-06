@@ -160,6 +160,23 @@ def test_references_are_numbered_in_order_of_first_mention(raw):
     )
 
 
+def test_a_software_reference_naming_a_version_cites_that_version_doi(raw):
+    """A concept DOI resolves to whichever release is latest, so pairing it with an
+    explicit version number cites two different things at once. The companion software is
+    cited at Version 0.1.1, so it must carry that version's DOI, not the concept DOI."""
+    refs = raw.split("## References")[1]
+    entry = next(
+        (line for line in refs.split("\n18. ")[1].split("\n19. ")[0].splitlines()),
+        "",
+    ) + refs.split("\n18. ")[1].split("\n19. ")[0]
+    assert "Version 0.1.1" in entry
+    assert "zenodo.21636719" in entry, "must be the v0.1.1 version DOI"
+    assert "zenodo.21636082" not in entry, (
+        "that is the concept DOI, which resolves to the latest release rather than to "
+        "the version the entry names"
+    )
+
+
 def test_the_three_closest_studies_are_cited_with_verified_dois(raw):
     """Added at the author's direction; each DOI was checked against Crossref."""
     for doi, who in (

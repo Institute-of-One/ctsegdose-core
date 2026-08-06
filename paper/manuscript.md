@@ -743,7 +743,7 @@ author's, who takes full responsibility for the content of this article.
     Imaging* **2013**, *26*, 1045–1057. https://doi.org/10.1007/s10278-013-9622-7
 18. Yamamoto, S. ctdose-core: open, auditable CT dose surveillance from DICOM, with a
     physics reconstruction when the dose attributes are missing (Version 0.1.1)
-    [Software]. Zenodo, **2026**. https://doi.org/10.5281/zenodo.21636082
+    [Software]. Zenodo, **2026**. https://doi.org/10.5281/zenodo.21636719
 19. McCollough, C.; Bakalyar, D.M.; Bostani, M.; Brady, S.; Boedeker, K.; Boone, J.M.;
     Chen-Mayer, H.H.; Christianson, O.I.; Leng, S.; Li, B.; et al. Use of Water Equivalent
     Diameter for Calculating Patient Size and Size-Specific Dose Estimates (SSDE) in CT:
