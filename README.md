@@ -1,9 +1,15 @@
 # ctsegdose-core
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21817234.svg)](https://doi.org/10.5281/zenodo.21817234)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **Anatomy-weighted CTDIvol from routine CT metadata: organ-specific longitudinal
 tube-current modulation, using deep-learning organ segmentation.**
 
 Institute of One, LISIT Co., Ltd., Tokyo, Japan · MIT licence
+
+The DOI above is the *concept* DOI: it always resolves to the latest release. To cite the
+exact version a result came from, use that release's own version DOI.
 
 ---
 

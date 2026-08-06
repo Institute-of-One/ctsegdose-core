@@ -39,6 +39,10 @@ keywords:
   - reproducibility
 license: MIT
 version: 0.1.1
+# The *concept* DOI: it resolves to the latest version, which is what a citation of the
+# project should point at. A result should cite the version DOI of the release it was
+# produced with, so the paper names the exact snapshot it was run on.
+doi: 10.5281/zenodo.21817234
 references:
   - type: software
     title: >-
