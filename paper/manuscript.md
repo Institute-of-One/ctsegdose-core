@@ -18,19 +18,18 @@ CTDIvol is a scanner-output index, not a patient or organ dose, and cannot expre
 tube-current modulation varies along a patient. An organ-specific weighted CTDIvol
 addressing this problem has been reported previously, but primarily in single-institution
 cohorts and often using inputs that routine image archives do not retain. We
-operationalised that quantity openly across manufacturers, from routine DICOM metadata and
-automated segmentation alone; it is not an estimate of absorbed organ dose. Forty abdominal
-CT series, ten per manufacturer, were drawn from The Cancer Imaging Archive and twelve
-organs segmented with TotalSegmentator at inference only. Of 480 requested organ–series
-combinations, 455 were produced; the remaining 25 organs lay outside the scanned range. A
-rule-based acquisition-constancy criterion admitted 39 series. Modulation weights spanned
-0.59 to 1.69, so the index departs from the whole-scan CTDIvol by up to 70% within one
-acquisition. A recorded
-CTDIvol was retained in the archived headers of 29 of 40 series, was reconstructable in 5
-and unavailable in 6, differing markedly between manufacturers. Estimated organ mass was
-broadly consistent with ICRP 89 values for liver and kidneys. Conversion to absorbed organ
-dose requires Monte-Carlo coefficients this index does not replace. The implementation is
-openly available.
+operationalised it openly across manufacturers, from routine DICOM metadata and automated
+segmentation alone; it is not an estimate of absorbed organ dose. Forty abdominal CT
+series, ten per manufacturer, were drawn from The Cancer Imaging Archive and twelve organs
+segmented with TotalSegmentator at inference only. Of 480 requested organ–series
+combinations, 455 records were produced. A rule-based acquisition-constancy
+criterion admitted 39 of the 40 series to the quantitative modulation analysis. Modulation
+weights spanned 0.59 to 1.69, so the index departs from the whole-scan CTDIvol by up to
+70% within one acquisition. A recorded CTDIvol was retained in the archived headers of 29
+of 40 series, reconstructable in 5 and unavailable in 6, with availability differing
+markedly between manufacturers in this sample. Estimated organ mass was broadly consistent
+with ICRP 89 values for liver and kidneys. Conversion to absorbed organ dose requires
+Monte-Carlo coefficients this index does not replace; the implementation is open.
 
 **Keywords:** computed tomography; CTDIvol; tube-current modulation; deep-learning
 segmentation; TotalSegmentator; image-based dosimetry indices; reproducibility; open data
