@@ -15,21 +15,21 @@ Institute of One, LISIT Co., Ltd., Tokyo, Japan; yamamoto@lisit.jp; ORCID 0000-0
 ## Abstract
 
 CTDIvol is a scanner-output index, not a patient or organ dose, and cannot express how
-tube-current modulation varies along a patient. We derived an anatomy-weighted CTDIvol
-index from routine DICOM metadata and automated organ segmentation; it characterises
-organ-specific longitudinal tube-current modulation and is not an estimate of absorbed
-organ dose. Forty abdominal CT series, ten per manufacturer, were drawn from The Cancer
-Imaging Archive, and twelve organs segmented with TotalSegmentator at inference only. Of
-480 requested organ–series combinations, 455 were produced; the remaining 25 organs lay
-outside the scanned range. A prespecified acquisition-constancy criterion admitted 39 of
-the 40 series to the quantitative modulation analysis. Modulation weights spanned 0.59 to
-1.69, so the index departs from the whole-scan CTDIvol by up to 70% within one
-acquisition. A recorded CTDIvol was retained in the archived headers of 29 of 40 series,
-was reconstructable in 5 and unavailable in 6, differing markedly between manufacturers in
-this sample. Estimated organ mass was broadly consistent with ICRP 89 values for liver and
-kidneys; pancreas and spleen offsets were explored rather than corrected. Conversion to
-absorbed organ dose requires Monte-Carlo coefficients this index does not replace. The
-implementation and derived records are openly available.
+tube-current modulation varies along a patient. An organ-specific weighted CTDIvol
+addressing this has been reported previously, but on single-institution cohorts and often
+from data archives do not retain. We operationalised that quantity openly across
+manufacturers, from routine DICOM metadata and automated segmentation alone; it is not an
+estimate of absorbed organ dose. Forty abdominal CT series, ten per manufacturer, were
+drawn from The Cancer Imaging Archive and twelve organs segmented with TotalSegmentator at
+inference only. Of 480 requested organ–series combinations, 455 were produced; the
+remaining 25 organs lay outside the scanned range. A prespecified acquisition-constancy
+criterion admitted 39 of the 40 series. Modulation weights spanned 0.59 to 1.69, so the
+index departs from the whole-scan CTDIvol by up to 70% within one acquisition. A recorded
+CTDIvol was retained in the archived headers of 29 of 40 series, was reconstructable in 5
+and unavailable in 6, differing markedly between manufacturers. Estimated organ mass was
+broadly consistent with ICRP 89 values for liver and kidneys. Conversion to absorbed organ
+dose requires Monte-Carlo coefficients this index does not replace. The implementation and
+derived records are openly available.
 
 **Keywords:** computed tomography; CTDIvol; tube-current modulation; deep-learning
 segmentation; TotalSegmentator; image-based dosimetry indices; reproducibility; open data
@@ -39,48 +39,69 @@ segmentation; TotalSegmentator; image-based dosimetry indices; reproducibility; 
 Two different things are routinely conflated when CT dose is discussed. The first is that
 a *dose index* is not a *dose*: CTDIvol describes the output of a scanner into a standard
 cylinder of acrylic, and is a property of the acquisition rather than of the patient in
-it. The second is that a single value per series cannot express variation along the
-patient: almost every modern acquisition modulates the tube current longitudinally, so
-the exposure conditions over the liver and over the bladder are not the same, and one
-number for the series conceals that.
+it — a distinction set out explicitly by McCollough et al. [1]. The second is that a
+single value per series cannot express variation along the patient: almost every modern
+acquisition modulates the tube current longitudinally, so the conditions over the liver
+and over the bladder are not the same, and one number for the series conceals that.
 
-The information needed to describe the second is already in the file. The per-slice tube
-current is written into the image header as X-Ray Tube Current (0018,1151). What has been
-missing is not the exposure record but the anatomy: to weight the recorded current by an
-organ's own longitudinal extent, one must know where that organ lies, slice by slice, in
-that patient. Manual contouring of a dose-relevant organ set across a multi-vendor cohort
-has never been practical at scale.
+That second point is well established. Angel et al. showed that tube-current modulation
+changes organ dose substantially and size-dependently [2]. Khatonabadi et al. demonstrated
+that a *regional* or *organ-specific* CTDIvol, formed from the modulation profile over an
+organ's own location, tracks Monte-Carlo organ dose far better than the whole-scan value,
+raising the coefficient of determination for liver dose from 0.26 to 0.86 [3]. Tian et al.
+formalised a **weighted organ-specific CTDIvol** computed from the modulation profile and
+used it, with organ-dose coefficients, to predict organ dose prospectively [4]. Related
+work has validated Monte-Carlo modelling of modulation [5], generalised organ-dose
+estimation under modulation using patient-size descriptors [6], and recovered tube-current
+profiles where they were not directly available [7].
 
-Deep-learning segmentation removes that obstacle. A general-purpose segmenter such as
-TotalSegmentator [1] produces abdominal organ masks from a routine series in seconds on a
-consumer GPU, at inference only. The anatomy is now effectively free.
+**The quantity examined here is therefore not new, and no new index is proposed.** This
+study takes the organ-specific weighted CTDIvol already reported in that literature and
+asks a different question: what happens when it is operationalised openly, end to end, on
+heterogeneous archived data from four manufacturers, using automated segmentation and
+nothing but the metadata a scanner already writes?
 
-This study therefore constructs an **anatomy-weighted CTDIvol index**: the whole-scan
-CTDIvol scaled by a dimensionless, organ-specific weight formed from the recorded
-per-slice tube current over that organ's segmented longitudinal extent. The index
-quantifies organ-specific longitudinal modulation relative to the whole-scan value. It is
-explicitly *not* an estimate of absorbed organ dose, and Section 2.9 sets out what it does
-not account for.
+The existing work does not answer that, and the gap is structural rather than incidental.
+Those studies rest on single-institution cohorts and one or two scanner models; several
+require raw projection data or vendor-supplied modulation profiles, which archived DICOM
+does not retain; their organ contours are manual or semi-automatic; and neither their
+implementations nor their coefficient tables are openly redistributable. Three practical
+questions therefore remain open: whether the quantity can be computed at all from what
+public archives actually keep, how it behaves across manufacturers when it can, and what
+fraction of archived data supports it. Deep-learning segmentation removes the obstacle
+that previously made the attempt impractical at scale — a general-purpose segmenter such
+as TotalSegmentator [8], built on nnU-Net [9], produces abdominal organ masks from a
+routine series in seconds at inference only, so the anatomy is now effectively free.
+
+This study is accordingly an **open, multi-vendor operationalisation and empirical
+characterisation** of a previously reported quantity: the whole-scan CTDIvol scaled by a
+dimensionless, organ-specific weight formed from the recorded per-slice tube current over
+that organ's segmented longitudinal extent, referred to here as the anatomy-weighted
+CTDIvol index. It is explicitly *not* an estimate of absorbed organ dose, and Section 2.10
+sets out what it does not account for.
 
 Converting an index of this kind into an absorbed organ dose in milligray requires
 CTDIvol-normalised organ-dose coefficients, computed by Monte-Carlo simulation over
-anthropomorphic phantoms and corrected for patient size [2,3]. Such coefficient sets
+anthropomorphic phantoms and corrected for patient size [10,11,12]. Such coefficient sets
 exist, are well validated, and are in routine use; the index reported here does not
 replace them and is not offered as a surrogate for their output.
 
 The contributions are:
 
-1. An anatomy-weighted CTDIvol index computed entirely from data a scanner already
-   records, implemented as an openly licensed, provenance-carrying engine.
-2. A quantification of organ-specific longitudinal modulation across four manufacturers,
-   including its range within single acquisitions.
+1. An open, end-to-end implementation of the organ-specific weighted CTDIvol computed
+   entirely from data a scanner already records, requiring neither projection data nor
+   manual contouring.
+2. The first multi-vendor empirical characterisation of that quantity on public archive
+   data: its range, its within-acquisition spread, and its behaviour across four
+   manufacturers.
 3. A description, for this archive sample, of how often the required inputs are actually
-   retained in archived DICOM headers.
-4. An external reference comparison of attenuation-derived estimated organ mass against
-   ICRP 89 reference values [5].
-5. The practical limits an organ-level modulation analysis must handle: organ truncation
-   at the scan boundary, and acquisitions whose modulation does not vary across the
-   abdomen.
+   retained in archived DICOM headers — a precondition for any retrospective study of
+   this kind.
+4. A prespecified acquisition-constancy criterion that makes the assumption underlying
+   the weighting testable rather than implicit.
+5. An external reference comparison of attenuation-derived estimated organ mass against
+   ICRP 89 reference values [13], and the practical limits an organ-level modulation
+   analysis must handle.
 
 ## 2. Materials and Methods
 
@@ -92,9 +113,10 @@ irrelevant to this work. We therefore used a metadata-first procedure over the p
 REST API with four stages — index, screen, probe, download — in which only the last
 transfers a series.
 
-The candidate index was built from 47,181 CT series across 21 abdominal collections, read
-as series-level JSON with no pixel data. Candidates were seeded from the public-archive
-survey distributed with the companion software release [6] — a software record, not a
+All imaging was drawn from The Cancer Imaging Archive [19]. The candidate index was built
+from 47,181 CT series across 21 abdominal collections, read as series-level JSON with no
+pixel data. Candidates were seeded from the public-archive
+survey distributed with the companion software release [15] — a software record, not a
 peer-reviewed study — and supplemented by direct collection queries. A metadata screen then rejected, in order and with each rejection
 counted: non-patient collections (imaging phantoms and de-identification benchmarks);
 projection and raw-data series, of which 398 were refused at this stage; non-diagnostic
@@ -159,7 +181,7 @@ would blank essentially the whole image.
 
 ### 2.5. Segmentation
 
-Twelve abdominal organs were segmented with TotalSegmentator v2.17 [1], `total` task, 1.5
+Twelve abdominal organs were segmented with TotalSegmentator v2.17 [8], `total` task, 1.5
 mm full-resolution model, at inference only; no weights were trained, modified or
 redistributed. Inference runs in a separate child process, because nnU-Net spawns its own
 workers and doing so from a long-lived parent leaks processes on Windows.
@@ -171,15 +193,15 @@ rather than assumed. A mirrored segmentation would otherwise produce entirely pl
 volumes and Hounsfield values while pairing every organ with the wrong anatomy.
 
 The patient outline, used for the water-equivalent diameter, was taken from a
-deterministic threshold contour following AAPM Report 220 [7]. Figure 1 illustrates the
+deterministic threshold contour following AAPM Report 220 [16]. Figure 1 illustrates the
 segmentation output and its correspondence with the CT anatomy in the representative
 acquisition used for the end-to-end example.
 
 ### 2.6. Attenuation-Derived Estimated Organ Mass
 
 Hounsfield units were converted to mass density by piecewise-linear interpolation through
-reference tissue anchor points, taking the densities from ICRU Report 44 [8] and the
-construction from Schneider et al. [9]. Estimated organ mass is the sum of local density
+reference tissue anchor points, taking the densities from ICRU Report 44 [17] and the
+construction from Schneider et al. [18]. Estimated organ mass is the sum of local density
 over mask voxels multiplied by the voxel volume.
 
 These are **model-based estimates, not measurements**. Contrast enhancement, tube voltage,
@@ -245,7 +267,7 @@ modulation-weight and anatomy-weighted-index summaries.
 
 CTDIvol was taken from the image header (0018,9345) where present. Where absent, it was
 reconstructed from acquisition physics against an openly licensed normalised-CTDI database
-[4]; recorded and reconstructed values are never merged, and each series records which it
+[14]; recorded and reconstructed values are never merged, and each series records which it
 carries. A recorded value outside the physically possible range is treated as a corrupt
 attribute and falls through to reconstruction — one series records CTDIvol as
 −3.7 × 10^19 mGy.
@@ -377,7 +399,7 @@ distinguished by fill pattern as well as tone.
 ### 3.4. External Reference Comparison of Estimated Organ Mass
 
 Table 1 and Figure 4 place attenuation-derived estimated organ mass beside the ICRP 89
-reference adult male values [5], over the 177 untruncated records of the five solid
+reference adult male values [13], over the 177 untruncated records of the five solid
 organs.
 
 **Table 1.** Attenuation-derived estimated organ mass beside ICRP 89 reference adult male
@@ -441,6 +463,23 @@ current was distributed over an organ's own longitudinal extent in that patient.
 requires no phantom, no simulation and no additional acquisition — only metadata the
 scanner already writes and a segmentation obtained at inference.
 
+**Relation to previous work.** The quantity is that of Khatonabadi et al. [3] and Tian et
+al. [4]; what is new here is the conditions under which it was obtained. Those studies,
+and the related modulation dosimetry of Angel et al. [2] and Bostani et al. [5,6],
+established the concept and validated it against Monte-Carlo dose on single-institution
+cohorts, typically with one or two scanner models, manual or semi-automatic contours, and
+in several cases raw projection data or vendor-supplied modulation profiles. Archived
+DICOM retains none of the latter. This study consequently answers questions those designs
+were not positioned to address: that the quantity is computable from archived headers
+alone, on four manufacturers and 23 scanner models, with contours obtained at inference;
+that its range across such a cohort is 0.59 to 1.69; and — the finding with the most
+practical consequence — that the whole-scan CTDIvol it scales is missing from a
+manufacturer-associated fraction of archived series, which bounds any retrospective study
+of this kind before segmentation is even attempted. The contribution is therefore
+operationalisation and empirical characterisation, not a new index, and the reported
+values should be read as describing archived multi-vendor data rather than as improving
+on the Monte-Carlo validations already published.
+
 **What the index is, and what it is not.** As set out in Section 2.10, the index addresses
 longitudinal modulation alone. It does not account for scatter, for irradiation
 originating outside the organ's segmented extent, for angular modulation, for organ depth
@@ -453,7 +492,7 @@ broadly consistent with ICRP 89 reference values, which is the expected behaviou
 segmentation and the density model are working. The pancreas estimate sits 39% below the
 reference. The pancreas is the weakest of these organs in TotalSegmentator's own
 validation (Dice 0.887, against 0.965 for the liver, 0.983 for the spleen and 0.953 and
-0.939 for the kidneys [1]), which supports reduced boundary agreement; but Dice is
+0.939 for the kidneys [8]), which supports reduced boundary agreement; but Dice is
 symmetric and does not establish the *direction* of a disagreement, so it does not by
 itself demonstrate under-segmentation. Contrast phase, reconstruction kernel and genuine
 anatomical variation in this cohort are alternative contributors that the present design
@@ -502,18 +541,18 @@ The acquisition procedure, the analysis and the figures are each a single comman
 components differ in status and are not claimed as uniformly open: the imaging is publicly
 accessible under collection-specific licences; the segmentation software and the `total`
 task weights are openly redistributable; the normalised-CTDI database is CC BY; the
-HU-to-density anchor values are used by citation to ICRU Report 44 [8] and Schneider et
-al. [9] rather than redistributed; and no Monte-Carlo coefficient table is included at all.
+HU-to-density anchor values are used by citation to ICRU Report 44 [17] and Schneider et
+al. [18] rather than redistributed; and no Monte-Carlo coefficient table is included at all.
 
 **The boundary to absorbed organ dose.** Converting an anatomy-weighted index into an
 absorbed organ dose requires CTDIvol-normalised coefficients with a patient-size
-correction, of the kind established by Turner et al. [2] and extended over larger patient
-model libraries by Tian et al. [3], together with the transport considerations listed in
+correction, of the kind established by Turner et al. [10] and extended over larger patient
+model libraries by Tian et al. [11], together with the transport considerations listed in
 Section 2.9. Those coefficient sets are published in subscription journals or distributed
 with research software under terms granting use but not redistribution, which reflects a
 publishing convention for Monte-Carlo reference data rather than any deficiency in the
 coefficients themselves. Normalised-CTDI data of the kind used here to reconstruct a
-missing whole-scan index has been published under CC BY [4], which shows the convention is
+missing whole-scan index has been published under CC BY [14], which shows the convention is
 movable. The software accordingly refuses to emit a dose in milligray unless supplied with
 a coefficient table carrying its citation, DOI, licence and source hash.
 
@@ -539,9 +578,10 @@ rather than confounded.
 
 ## 5. Conclusions
 
-This study did not compute absorbed organ dose. It quantified organ-specific longitudinal
-tube-current modulation in routine abdominal CT by deriving an anatomy-weighted CTDIvol
-index from metadata a scanner already records and organ masks obtained at inference.
+This study did not compute absorbed organ dose, and did not propose a new index. It took
+an organ-specific weighted CTDIvol already reported in the literature and established what
+it yields when operationalised openly across manufacturers, from metadata a scanner
+already records and organ masks obtained at inference.
 Organ-specific modulation weights spanned 0.59 to 1.69, and two organs within one
 acquisition differed by a factor of 1.8 in their index, so the variation a single
 whole-scan value conceals is substantial. The approach ran across four manufacturers using
@@ -590,7 +630,7 @@ Creative Commons Attribution licences (33 under CC BY 4.0, 7 under CC BY 3.0) as
 per series; the licence terms of each originating collection and the TCIA Data Usage
 Policy apply.
 
-Segmentation used TotalSegmentator [1]. Its software code is distributed under the Apache
+Segmentation used TotalSegmentator [8]. Its software code is distributed under the Apache
 2.0 licence, and the `total` task model weights used here are likewise stated by the
 project to be openly available under Apache 2.0; other tasks in that project require a
 separate licence and were not used. No model weights are redistributed with this work.
@@ -617,32 +657,69 @@ author's, who takes full responsibility for the content of this article.
 
 ## References
 
-1. Wasserthal, J.; Breit, H.-C.; Meyer, M.T.; Pradella, M.; Hinck, D.; Sauter, A.W.; Heye,
+1. McCollough, C.H.; Leng, S.; Yu, L.; Cody, D.D.; Boone, J.M.; McNitt-Gray, M.F. CT Dose
+   Index and Patient Dose: They Are Not the Same Thing. *Radiology* **2011**, *259*,
+   311–316. https://doi.org/10.1148/radiol.11101800
+2. Angel, E.; Yaghmai, N.; Jude, C.M.; DeMarco, J.J.; Cagnon, C.H.; Goldin, J.G.; Primak,
+   A.N.; Stevens, D.M.; Cody, D.D.; McCollough, C.H.; McNitt-Gray, M.F. Monte Carlo
+   Simulations to Assess the Effects of Tube Current Modulation on Breast Dose for
+   Multidetector CT. *Phys. Med. Biol.* **2009**, *54*, 497–512.
+   https://doi.org/10.1088/0031-9155/54/3/003
+3. Khatonabadi, M.; Kim, H.J.; Lu, P.; McMillan, K.L.; Cagnon, C.H.; DeMarco, J.J.;
+   McNitt-Gray, M.F. The Feasibility of a Regional CTDIvol to Estimate Organ Dose from
+   Tube Current Modulated CT Exams. *Med. Phys.* **2013**, *40*, 051903.
+   https://doi.org/10.1118/1.4798561
+4. Tian, X.; Li, X.; Segars, W.P.; Frush, D.P.; Samei, E. Prospective Estimation of Organ
+   Dose in CT under Tube Current Modulation. *Med. Phys.* **2015**, *42*, 1575–1585.
+   https://doi.org/10.1118/1.4907955
+5. Bostani, M.; McMillan, K.; DeMarco, J.J.; Cagnon, C.H.; McNitt-Gray, M.F. Validation of
+   a Monte Carlo Model Used for Simulating Tube Current Modulation in Computed Tomography
+   over a Wide Range of Phantom Conditions/Challenges. *Med. Phys.* **2014**, *41*,
+   112101. https://doi.org/10.1118/1.4887807
+6. Bostani, M.; McMillan, K.; Lu, P.; Kim, G.H.J.; Cody, D.; Arbique, G.; Greenberg, S.B.;
+   DeMarco, J.J.; Cagnon, C.H.; McNitt-Gray, M.F. Estimating Organ Doses from Tube Current
+   Modulated CT Examinations Using a Generalized Linear Model. *Med. Phys.* **2017**, *44*,
+   1500–1513. https://doi.org/10.1002/mp.12119
+7. McMillan, K.; Bostani, M.; Cagnon, C.H.; Yu, L.; Leng, S.; McCollough, C.H.;
+   McNitt-Gray, M.F. Estimating Patient Dose from CT Exams That Use Automatic Exposure
+   Control: Development and Validation of Methods to Accurately Estimate Tube Current
+   Values. *Med. Phys.* **2017**, *44*, 4262–4275. https://doi.org/10.1002/mp.12314
+8. Wasserthal, J.; Breit, H.-C.; Meyer, M.T.; Pradella, M.; Hinck, D.; Sauter, A.W.; Heye,
    T.; Boll, D.T.; Cyriac, J.; Yang, S.; Bach, M.; Segeroth, M. TotalSegmentator: Robust
    Segmentation of 104 Anatomic Structures in CT Images. *Radiol. Artif. Intell.* **2023**,
    *5*, e230024. https://doi.org/10.1148/ryai.230024
-2. Turner, A.C.; Zhang, D.; Khatonabadi, M.; Zankl, M.; DeMarco, J.J.; Cagnon, C.H.; Cody,
-   D.D.; Stevens, D.M.; McCollough, C.H.; McNitt-Gray, M.F. The Feasibility of Patient
-   Size-Corrected, Scanner-Independent Organ Dose Estimates for Abdominal CT Exams. *Med.
-   Phys.* **2011**, *38*, 820–829. https://doi.org/10.1118/1.3533897
-3. Tian, X.; Li, X.; Segars, W.P.; Frush, D.P.; Paulson, E.K.; Samei, E. Dose Coefficients
-   in Pediatric and Adult Abdominopelvic CT Based on 100 Patient Models. *Phys. Med. Biol.*
-   **2013**, *58*, 8755–8768. https://doi.org/10.1088/0031-9155/58/24/8755
-4. Dinwiddie, L.E.; Baggett, J.M.; Kofler, J.M.; et al. Survey of Normalized CTDIvol Values
-   Across Four Major Computed Tomography Vendors for Use in the MIRDct Software. *J. Appl.
-   Clin. Med. Phys.* **2026**, *27*, e70473. https://doi.org/10.1002/acm2.70473
-5. ICRP. Basic Anatomical and Physiological Data for Use in Radiological Protection:
-   Reference Values. ICRP Publication 89. *Ann. ICRP* **2002**, *32* (3–4).
-6. Yamamoto, S. ctdose-core: open, auditable CT dose surveillance from DICOM, with a
-   physics reconstruction when the dose attributes are missing (Version 0.1.1)
-   [Software]. Zenodo, **2026**. https://doi.org/10.5281/zenodo.21636082
-7. McCollough, C.; Bakalyar, D.M.; Bostani, M.; Brady, S.; Boedeker, K.; Boone, J.M.;
-   Chen-Mayer, H.H.; Christianson, O.I.; Leng, S.; Li, B.; et al. Use of Water Equivalent
-   Diameter for Calculating Patient Size and Size-Specific Dose Estimates (SSDE) in CT: The
-   Report of AAPM Task Group 220. *AAPM Report No. 220*, **2014**.
-   https://doi.org/10.37206/146
-8. ICRU. Tissue Substitutes in Radiation Dosimetry and Measurement. ICRU Report 44; ICRU:
-   Bethesda, MD, USA, **1989**.
-9. Schneider, U.; Pedroni, E.; Lomax, A. The Calibration of CT Hounsfield Units for
-   Radiotherapy Treatment Planning. *Phys. Med. Biol.* **1996**, *41*, 111–124.
-   https://doi.org/10.1088/0031-9155/41/1/009
+9. Isensee, F.; Jaeger, P.F.; Kohl, S.A.A.; Petersen, J.; Maier-Hein, K.H. nnU-Net: A
+   Self-Configuring Method for Deep Learning-Based Biomedical Image Segmentation. *Nat.
+   Methods* **2021**, *18*, 203–211. https://doi.org/10.1038/s41592-020-01008-z
+10. Turner, A.C.; Zhang, D.; Khatonabadi, M.; Zankl, M.; DeMarco, J.J.; Cagnon, C.H.; Cody,
+    D.D.; Stevens, D.M.; McCollough, C.H.; McNitt-Gray, M.F. The Feasibility of Patient
+    Size-Corrected, Scanner-Independent Organ Dose Estimates for Abdominal CT Exams. *Med.
+    Phys.* **2011**, *38*, 820–829. https://doi.org/10.1118/1.3533897
+11. Tian, X.; Li, X.; Segars, W.P.; Frush, D.P.; Paulson, E.K.; Samei, E. Dose Coefficients
+    in Pediatric and Adult Abdominopelvic CT Based on 100 Patient Models. *Phys. Med.
+    Biol.* **2013**, *58*, 8755–8768. https://doi.org/10.1088/0031-9155/58/24/8755
+12. Sahbaee, P.; Segars, W.P.; Samei, E. Patient-Based Estimation of Organ Dose for a
+    Population of 58 Adult Patients across 13 Protocol Categories. *Med. Phys.* **2014**,
+    *41*, 072104. https://doi.org/10.1118/1.4883778
+13. ICRP. Basic Anatomical and Physiological Data for Use in Radiological Protection:
+    Reference Values. ICRP Publication 89. *Ann. ICRP* **2002**, *32* (3–4).
+14. Dinwiddie, L.E.; Baggett, J.M.; Kofler, J.M.; et al. Survey of Normalized CTDIvol
+    Values Across Four Major Computed Tomography Vendors for Use in the MIRDct Software.
+    *J. Appl. Clin. Med. Phys.* **2026**, *27*, e70473. https://doi.org/10.1002/acm2.70473
+15. Yamamoto, S. ctdose-core: open, auditable CT dose surveillance from DICOM, with a
+    physics reconstruction when the dose attributes are missing (Version 0.1.1)
+    [Software]. Zenodo, **2026**. https://doi.org/10.5281/zenodo.21636082
+16. McCollough, C.; Bakalyar, D.M.; Bostani, M.; Brady, S.; Boedeker, K.; Boone, J.M.;
+    Chen-Mayer, H.H.; Christianson, O.I.; Leng, S.; Li, B.; et al. Use of Water Equivalent
+    Diameter for Calculating Patient Size and Size-Specific Dose Estimates (SSDE) in CT:
+    The Report of AAPM Task Group 220. *AAPM Report No. 220*, **2014**.
+    https://doi.org/10.37206/146
+17. ICRU. Tissue Substitutes in Radiation Dosimetry and Measurement. ICRU Report 44; ICRU:
+    Bethesda, MD, USA, **1989**.
+18. Schneider, U.; Pedroni, E.; Lomax, A. The Calibration of CT Hounsfield Units for
+    Radiotherapy Treatment Planning. *Phys. Med. Biol.* **1996**, *41*, 111–124.
+    https://doi.org/10.1088/0031-9155/41/1/009
+19. Clark, K.; Vendt, B.; Smith, K.; Freymann, J.; Kirby, J.; Koppel, P.; Moore, S.;
+    Phillips, S.; Maffitt, D.; Pringle, M.; Tarbox, L.; Prior, F. The Cancer Imaging
+    Archive (TCIA): Maintaining and Operating a Public Information Repository. *J. Digit.
+    Imaging* **2013**, *26*, 1045–1057. https://doi.org/10.1007/s10278-013-9622-7

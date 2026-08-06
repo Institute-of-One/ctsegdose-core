@@ -136,6 +136,47 @@ def test_every_reference_is_cited_and_every_citation_resolves(raw):
     assert numbers <= cited, f"listed but never cited: {sorted(numbers - cited)}"
 
 
+def test_the_reference_list_is_the_size_an_original_article_needs(raw):
+    numbers = {int(n) for n in re.findall(r"^(\d+)\.\s", raw.split("## References")[1], re.M)}
+    assert 18 <= len(numbers) <= 22, f"{len(numbers)} references; the target is 18-22"
+
+
+def test_the_prior_art_for_the_quantity_is_cited(raw):
+    """The organ-specific weighted CTDIvol is a reported quantity, and the papers that
+    reported it must be visible in the Introduction, not only in the bibliography."""
+    intro = raw.split("## 2. Materials and Methods")[0]
+    for author in ("Khatonabadi", "Tian", "Angel", "McCollough"):
+        assert author in intro, f"the Introduction must situate the work against {author}"
+    assert "10.1118/1.4907955" in raw, "Tian et al. 2015 must be cited"
+    assert "10.1118/1.4798561" in raw, "Khatonabadi et al. 2013 must be cited"
+    assert "10.1007/s10278-013-9622-7" in raw, "the TCIA archive paper must be cited"
+
+
+def test_the_work_is_positioned_as_operationalisation_not_invention(raw):
+    """The claim is an open multi-vendor operationalisation of a reported quantity."""
+    assert "not new" in raw and "no new index is proposed" in raw
+    assert "operationalisation and empirical" in raw
+    assert "Relation to previous work" in raw
+    for overclaim in (
+        "This study therefore constructs an **anatomy-weighted CTDIvol index**",
+        "we propose a new index",
+        "a novel index",
+    ):
+        assert overclaim not in raw, f"invention framing remains: {overclaim!r}"
+
+
+def test_the_literature_gap_is_stated_in_both_introduction_and_discussion(raw):
+    intro = raw.split("## 2. Materials and Methods")[0]
+    discussion = raw.split("## 4. Discussion")[1].split("## 5. Conclusions")[0]
+    for section, name in ((intro, "Introduction"), (discussion, "Discussion")):
+        assert "projection data" in section, (
+            f"the {name} must say why archived data does not support the earlier designs"
+        )
+        assert "single-institution" in section, (
+            f"the {name} must name the cohort limitation of the prior work"
+        )
+
+
 def test_the_cohort_size_in_the_text_matches_the_results(text, tables):
     cohort = tables["cohort"]
     assert f"{cohort['n_series']} abdominal CT series" in text or f"{cohort['n_series']} series" in text
