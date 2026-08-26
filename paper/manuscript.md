@@ -176,6 +176,28 @@ series (localisers, dose reports, screen captures); series shorter than 40 or lo
 collection, and each manufacturer's quota was drawn round-robin across its collections so
 that manufacturer was not confounded with a single collection.
 
+Ten series per manufacturer was chosen for what the study measures. Every quantity
+reported here is a per-series or per-organ property computed by identical code, so the
+comparison that matters is between organs within a patient, where each series is its own
+control and 40 series yield 455 organ records. Ten per manufacturer supports a median and
+an interquartile range for a manufacturer, which is what is reported, and does not support
+a distributional claim about one, which is not. Nothing in the design is powered by adding
+series: a larger cohort would narrow those interquartile ranges without changing what the
+index is or whether its inputs survive archive curation.
+
+The selection is not a random sample of clinical CT and cannot be treated as one. Three
+stages shape it. The metadata screen keeps abdominal, diagnostic, reconstructed series of
+moderate length, so unusual acquisitions are removed by construction. The probe requires
+per-slice tube current recorded on every probed image and genuine modulation, which
+excludes fixed-current protocols entirely and, as Section 3.3 shows, correlates with
+manufacturer through what the archive retained. The collections themselves are
+oncological, so body habitus and organ appearance are those of a cancer population rather
+than of a screening one. The direction of each effect can be stated even though its size
+cannot: the cohort is biased towards modern modulated abdominal protocols on scanners
+whose archived headers are complete, which is the population in which an
+anatomy-weighted index is computable at all, and the availability fractions in Section 3.3
+are therefore an upper bound on what a less selective cohort would yield.
+
 ### 2.2. Inclusion Criteria and Header Probing
 
 Sixty-two surviving candidates were probed by fetching six image headers each and judged
@@ -365,9 +387,17 @@ the de-identified export rather than of the acquisition. *Negligible variation*:
 by less than a relative tolerance of 0.02, attributable to the numeric representation —
 exposure time is written as an integer number of milliseconds, so a one-unit step on a
 value of a few hundred is a rounding artefact. *Materially variable*: varying by at least
-that tolerance, which disqualifies the series. The tolerance is not fitted to these data:
-any value between roughly 1% and 50% classifies this cohort identically, because the only
-material variation observed is a factor of two.
+that tolerance, which disqualifies the series.
+
+The value of 2% follows from those two scales rather than from the data. Below it lies
+the representation: at the 400–700 ms exposure times these acquisitions use, the integer
+millisecond step alone moves a value by up to about 0.25%, and 2% sits an order of
+magnitude above that. Above it lies the smallest change of technique that can actually
+occur, since rotation time is switched in discrete steps and the smallest of those halves
+or doubles it — a change of 100%. The threshold therefore separates two regimes that are
+two orders of magnitude apart, and is not fitted to these data: any value between roughly
+1% and 50% classifies this cohort identically, because the only material variation
+observed is a factor of two.
 
 Tube voltage was verified constant in all 40 series, as were Image Type and convolution
 kernel, so no series mixes acquisition or reconstruction types. Exposure time was verified
@@ -613,6 +643,16 @@ eligible cohort, and within a single acquisition two organs differed by a factor
 anatomy-weighted index. Longitudinal modulation therefore produces organ-specific exposure
 conditions that a single whole-scan CTDIvol cannot represent, and the magnitude is large
 enough to matter for any organ-level analysis built on that value.
+
+The direction of that finding is the part likely to hold; the size of it is not. A weight
+span is a property of the protocols, patient habitus and modulation settings that happen
+to be present, and these 39 series were assembled from oncological collections by a
+vendor-balanced quota rather than sampled from any clinical population. A cohort with
+different body sizes, a different mix of examination types, or different modulation
+strength would produce a different span. What the numbers here establish is that the
+departure is not small and cannot be assumed away; they do not establish how large it is
+in any particular clinic, and the same caution applies to the availability fractions
+below.
 
 **Interpretation.** The weight is a direct, dimensionless summary of how the recorded tube
 current was distributed over an organ's own longitudinal extent in that patient. It
