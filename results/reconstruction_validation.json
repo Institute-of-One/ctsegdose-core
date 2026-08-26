@@ -1,0 +1,326 @@
+{
+  "what": "The open physics reconstruction of CTDIvol, run on the series that carry a recorded CTDIvol, compared against that recorded value.",
+  "by_model": {
+    "Aquilion ONE": {
+      "n": 1,
+      "relative_errors": [
+        -0.08290268813341051
+      ],
+      "median_relative_error": -0.08290268813341051
+    },
+    "Aquilion PRIME": {
+      "n": 2,
+      "relative_errors": [
+        -0.0838727509267495,
+        -0.09158842293332892
+      ],
+      "median_relative_error": -0.08773058693003921
+    },
+    "Aquilion Prime SP": {
+      "n": 2,
+      "relative_errors": [
+        0.5770265850385781,
+        0.5822317950654479
+      ],
+      "median_relative_error": 0.579629190052013
+    },
+    "SOMATOM Definition Flash": {
+      "n": 1,
+      "relative_errors": [
+        0.8400209575855768
+      ],
+      "median_relative_error": 0.8400209575855768
+    },
+    "iCT 256": {
+      "n": 2,
+      "relative_errors": [
+        -0.11748439753328255,
+        0.07714368304661678
+      ],
+      "median_relative_error": -0.02017035724333288
+    }
+  },
+  "by_model_note": "The disagreement is consistent within a scanner model rather than scattered across series, which points at the tabulated coefficient for that model rather than at the per-series acquisition inputs. Model resolution is exact after normalisation and rejects near misses, so a mis-resolved model is not the explanation.",
+  "why": "No series in this cohort carries both: the pipeline reconstructs only where the header has no usable value, so the recorded and reconstructed populations are disjoint by construction. Forcing the reconstruction on the recorded series is the only way to measure it against a known value.",
+  "limitation": "This measures the reconstruction where the header did retain CTDIvol. The series it is actually used on are those where the header did not, and if that omission correlates with anything that also moves the reconstruction, the agreement reported here is optimistic. It is an upper bound on accuracy, not an estimate of it.",
+  "n_recorded_series": 29,
+  "n_compared": 8,
+  "n_skipped": 21,
+  "agreement": {
+    "median_absolute_relative_error": 0.10453641023330573,
+    "max_absolute_relative_error": 0.8400209575855768,
+    "median_signed_relative_error": -0.0028795025433968613,
+    "within_10_percent": 0.5,
+    "within_20_percent": 0.625
+  },
+  "by_vendor": {
+    "Canon/Toshiba": {
+      "n": 5,
+      "median_absolute_relative_error": 0.09158842293332892,
+      "max_absolute_relative_error": 0.5822317950654479
+    },
+    "Philips": {
+      "n": 2,
+      "median_absolute_relative_error": 0.09731404028994967,
+      "max_absolute_relative_error": 0.11748439753328255
+    },
+    "Siemens": {
+      "n": 1,
+      "median_absolute_relative_error": 0.8400209575855768,
+      "max_absolute_relative_error": 0.8400209575855768
+    }
+  },
+  "coverage_of_use": {
+    "n_series_using_a_reconstructed_value": 5,
+    "n_on_a_measured_model": 1,
+    "n_on_an_unmeasured_model": 4,
+    "series": [
+      {
+        "vendor": "GE",
+        "model_name": "Discovery CT750 HD",
+        "ctdivol_mgy": 18.458844721653325,
+        "measured": false,
+        "median_relative_error": null
+      },
+      {
+        "vendor": "GE",
+        "model_name": "Optima CT660",
+        "ctdivol_mgy": 16.85960220714609,
+        "measured": false,
+        "median_relative_error": null
+      },
+      {
+        "vendor": "GE",
+        "model_name": "LightSpeed VCT",
+        "ctdivol_mgy": 6.891528436363637,
+        "measured": false,
+        "median_relative_error": null
+      },
+      {
+        "vendor": "GE",
+        "model_name": "LightSpeed16",
+        "ctdivol_mgy": 23.95669995885235,
+        "measured": false,
+        "median_relative_error": null
+      },
+      {
+        "vendor": "Philips",
+        "model_name": "iCT 256",
+        "ctdivol_mgy": 21.610235454545457,
+        "measured": true,
+        "median_relative_error": -0.02017035724333288
+      }
+    ],
+    "note": "A model can only be measured here if some series in the cohort carries a recorded CTDIvol for it. No GE series in this cohort retained one, so the reconstruction cannot be checked on any GE model -- which is where this study uses it most. The validation is unavailable precisely where the reconstruction carries the most weight, and that is a property of the archive rather than of the method."
+  },
+  "series": [
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.124862978740839397384301699389733909446",
+      "vendor": "Siemens",
+      "model_name": "SOMATOM Definition Flash",
+      "collection": "CMB-OV",
+      "recorded_mgy": 7.004302842996743,
+      "reconstructed_mgy": 12.888064024390244,
+      "relative_error": 0.8400209575855768,
+      "table_entry": "Siemens Definition Flash"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.6919.4624.125153249491081957890408272216",
+      "vendor": "Canon/Toshiba",
+      "model_name": "Aquilion PRIME",
+      "collection": "C4KC-KiTS",
+      "recorded_mgy": 6.9,
+      "reconstructed_mgy": 6.321278018605429,
+      "relative_error": -0.0838727509267495,
+      "table_entry": "Canon Prime"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1.12026969269299422966770921088977968852",
+      "vendor": "Canon/Toshiba",
+      "model_name": "Aquilion Prime SP",
+      "collection": "CMB-CRC",
+      "recorded_mgy": 5.0,
+      "reconstructed_mgy": 7.88513292519289,
+      "relative_error": 0.5770265850385781,
+      "table_entry": "Canon Prime"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.235815435552836713008925930681449087181",
+      "vendor": "Canon/Toshiba",
+      "model_name": "Aquilion PRIME",
+      "collection": "CMB-OV",
+      "recorded_mgy": 16.1,
+      "reconstructed_mgy": 14.625426390773406,
+      "relative_error": -0.09158842293332892,
+      "table_entry": "Canon Prime"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1.35060909971867492262237150543126705979",
+      "vendor": "Canon/Toshiba",
+      "model_name": "Aquilion Prime SP",
+      "collection": "CMB-PCA",
+      "recorded_mgy": 9.3,
+      "reconstructed_mgy": 14.714755694108666,
+      "relative_error": 0.5822317950654479,
+      "table_entry": "Canon Prime"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1078.3273.178159594418154823809776931651",
+      "vendor": "Canon/Toshiba",
+      "model_name": "Aquilion ONE",
+      "collection": "CPTAC-PDA",
+      "recorded_mgy": 9.0,
+      "reconstructed_mgy": 8.253875806799305,
+      "relative_error": -0.08290268813341051,
+      "table_entry": "Canon Aquiliion ONE"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.6919.4624.105596304219458852186973583847",
+      "vendor": "Philips",
+      "model_name": "iCT 256",
+      "collection": "C4KC-KiTS",
+      "recorded_mgy": 13.7,
+      "reconstructed_mgy": 12.090463753794028,
+      "relative_error": -0.11748439753328255,
+      "table_entry": "Philips iCT 256 Slice"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2857.3159.203983181868287072753321424140",
+      "vendor": "Philips",
+      "model_name": "iCT 256",
+      "collection": "CPTAC-CM",
+      "recorded_mgy": 12.79008620689655,
+      "reconstructed_mgy": 13.776760563380282,
+      "relative_error": 0.07714368304661678,
+      "table_entry": "Philips iCT 256 Slice"
+    }
+  ],
+  "skipped": [
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.169260120790039889716250759344671861678",
+      "vendor": "Siemens",
+      "model_name": "SOMATOM Definition AS+",
+      "reason": "CoefficientNotAvailable: SIEMENS 'SOMATOM Definition AS+' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.6919.4624.492444591845205280171152909620",
+      "vendor": "Siemens",
+      "model_name": "Sensation 64",
+      "reason": "CoefficientNotAvailable: SIEMENS 'Sensation 64' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.130269400384835727617577152120460443053",
+      "vendor": "Siemens",
+      "model_name": "Biograph64",
+      "reason": "CoefficientNotAvailable: SIEMENS 'Biograph64' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.117047503231020830753317635065264697398",
+      "vendor": "Siemens",
+      "model_name": "SOMATOM Definition AS",
+      "reason": "CoefficientNotAvailable: SIEMENS 'SOMATOM Definition AS' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1.11435509567176551466134346112512854888",
+      "vendor": "Siemens",
+      "model_name": "SOMATOM Definition AS",
+      "reason": "CoefficientNotAvailable: SIEMENS 'SOMATOM Definition AS' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.139028541272282999207461674394024845879",
+      "vendor": "Siemens",
+      "model_name": "SOMATOM Definition AS",
+      "reason": "CoefficientNotAvailable: SIEMENS 'SOMATOM Definition AS' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1.12144631656438139661502631773455627610",
+      "vendor": "Siemens",
+      "model_name": "SOMATOM Definition AS",
+      "reason": "CoefficientNotAvailable: SIEMENS 'SOMATOM Definition AS' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.120283006789263156233439135960658945231",
+      "vendor": "Siemens",
+      "model_name": "SOMATOM Definition AS",
+      "reason": "CoefficientNotAvailable: SIEMENS 'SOMATOM Definition AS' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.99.1071.24503530203089772620259137946948",
+      "vendor": "Siemens",
+      "model_name": "Biograph 40",
+      "reason": "CoefficientNotAvailable: SIEMENS 'Biograph 40' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.3098.5025.146217110450191920006308432033",
+      "vendor": "Canon/Toshiba",
+      "model_name": "Aquilion",
+      "reason": "CoefficientNotAvailable: TOSHIBA 'Aquilion' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.1.29343766386826411185462290976788394151",
+      "vendor": "Canon/Toshiba",
+      "model_name": "Aquilion",
+      "reason": "CoefficientNotAvailable: TOSHIBA 'Aquilion' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2932.1975.106756844835533656529983969250",
+      "vendor": "Canon/Toshiba",
+      "model_name": "Aquilion",
+      "reason": "CoefficientNotAvailable: TOSHIBA 'Aquilion' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2932.1975.101293628603821133332259852363",
+      "vendor": "Canon/Toshiba",
+      "model_name": "Aquilion",
+      "reason": "CoefficientNotAvailable: TOSHIBA 'Aquilion' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2099.3754.178917260616042842392917847989",
+      "vendor": "Canon/Toshiba",
+      "model_name": "Aquilion",
+      "reason": "CoefficientNotAvailable: TOSHIBA 'Aquilion' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.94531563816741245873445833243538669934",
+      "vendor": "Philips",
+      "model_name": "Incisive CT",
+      "reason": "CoefficientNotAvailable: Philips 'Incisive CT' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.35849535652939153577452390867555563110",
+      "vendor": "Philips",
+      "model_name": "Incisive CT",
+      "reason": "CoefficientNotAvailable: Philips 'Incisive CT' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.13789879393431026461197285453898279533",
+      "vendor": "Philips",
+      "model_name": "Incisive CT",
+      "reason": "CoefficientNotAvailable: Philips 'Incisive CT' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2932.1975.110136518027764333512179150738",
+      "vendor": "Philips",
+      "model_name": "Brilliance 64",
+      "reason": "CoefficientNotAvailable: Philips 'Brilliance 64' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2932.1975.119554862381870875314127355939",
+      "vendor": "Philips",
+      "model_name": "Brilliance 64",
+      "reason": "CoefficientNotAvailable: Philips 'Brilliance 64' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.3320.3273.114542284322103737687268266165",
+      "vendor": "Philips",
+      "model_name": "Brilliance 16",
+      "reason": "CoefficientNotAvailable: Philips 'Brilliance 16' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    },
+    {
+      "series_instance_uid": "1.3.6.1.4.1.14519.5.2.1.2932.1975.256749960592074016578641330855",
+      "vendor": "Philips",
+      "model_name": "Brilliance 64",
+      "reason": "CoefficientNotAvailable: Philips 'Brilliance 64' is not in the open coefficient database; this series is unrecoverable by reconstruction"
+    }
+  ]
+}
