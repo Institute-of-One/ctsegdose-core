@@ -24,6 +24,7 @@ import argparse
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -32,9 +33,15 @@ SOURCE = REPO / "paper" / "manuscript.md"
 DEFAULT_TAG = "submitted-tomography-r1"
 STEM = "manuscript_tomography_revised_highlighted"
 
-#: Structural lines are never highlighted: a heading whose section number moved is not
-#: a revision a reviewer needs to read, and marking it buries the ones that are.
-_STRUCTURAL = re.compile(r"^\s*(#{1,6}\s|!\[\]\(|<!--|\|)")
+#: Never wrapped in a span. Headings, images, tables and comments are structure rather
+#: than prose, and a heading whose section number moved is not a revision worth marking.
+#:
+#: The reference list is here for a harder reason. Wrapping it in a bracketed span
+#: collapses twenty list items into one paragraph, because a span is inline and an
+#: ordered list is not: the first build ran the whole bibliography together, entry
+#: numbers and DOIs flowing into each other mid-line. A reviewer sees a broken
+#: bibliography and stops trusting the rest of the document.
+_STRUCTURAL = re.compile(r"^\s*(#{1,6}\s|!\[\]\(|<!--|\||\d+\.\s+[A-Z])")
 
 
 def _submitted(tag: str) -> str:
@@ -83,10 +90,32 @@ def mark(current: str, submitted: str) -> tuple[str, int, int]:
 def build(tag: str, out_dir: Path) -> Path:
     import pypandoc
 
-    marked, changed, total = mark(SOURCE.read_text(encoding="utf-8"), _submitted(tag))
-    print(f"  {changed} of {total} prose paragraphs are new or rewritten")
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import build_submission
 
     with tempfile.TemporaryDirectory() as tmp:
+        # Through the same preparation as the clean build, and not around it. The first
+        # version of this script read the source directly, so the release placeholders
+        # were never resolved and {{RELEASE_TAG}} reached a document meant for an
+        # editor. Two build paths from one source must share the step that fills it in,
+        # or the second one silently ships what the first one refuses to.
+        prepared = Path(tmp) / "prepared.md"
+        build_submission.prepare(SOURCE, prepared, submission=True)
+
+        # Both sides go through it. Comparing a prepared current against a raw
+        # submitted would mark every paragraph the preparation touched as a revision,
+        # which is a lie about what changed.
+        was_raw = Path(tmp) / "submitted_raw.md"
+        was_raw.write_text(_submitted(tag), encoding="utf-8")
+        was_prepared = Path(tmp) / "submitted.md"
+        build_submission.prepare(was_raw, was_prepared, submission=False)
+
+        marked, changed, total = mark(
+            prepared.read_text(encoding="utf-8"),
+            was_prepared.read_text(encoding="utf-8"),
+        )
+        print(f"  {changed} of {total} prose paragraphs are new or rewritten")
+
         staged = Path(tmp) / "marked.md"
         staged.write_text(marked, encoding="utf-8")
         # The figures are referenced relatively, so they have to sit beside the source.

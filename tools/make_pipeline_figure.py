@@ -45,8 +45,12 @@ EDGE_STAGE = "#4a6fa5"
 EDGE_CHECK = "#c07a2c"
 EDGE_OUTPUT = "#2f7d5b"
 
-BODY = 7.4
-SMALL = 6.6
+#: Raised after the first build: at 7.4 pt the boxes were legible in the .docx but
+#: only just, and a figure that is only just legible on a reviewer's screen is one
+#: they will not read. The figure grows with the type rather than the type shrinking
+#: into the figure, so the print size is unchanged in proportion.
+BODY = 9.6
+SMALL = 8.6
 
 
 def _load(tag: str) -> dict[str, Any]:
@@ -155,13 +159,15 @@ def draw(tag: str, out_stem: Path) -> Path:
     apply_style(plt)
     counts = _counts(_load(tag))
 
-    fig, ax = plt.subplots(figsize=(6.6, 7.4))
+    fig, ax = plt.subplots(figsize=(6.6, 9.2))
     ax.set_xlim(0, 10)
     ax.set_ylim(0, 11.6)
     ax.axis("off")
 
-    left, right = 3.1, 7.9
-    wide, tall = (4.6, 0.82), (3.0, 0.72)
+    # The check boxes carry the longest lines in the figure; at 9.6 pt they need the
+    # room, so they sit wider and further left than the first layout allowed.
+    left, right = 2.9, 7.6
+    wide, tall = (4.6, 0.86), (3.6, 0.78)
 
     # -- acquisition ---------------------------------------------------------------
     stages = [

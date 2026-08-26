@@ -791,3 +791,59 @@ def test_the_response_letter_does_not_claim_changes_that_were_not_made(raw):
     assert "Already present in the submitted version" in letter
     assert "Largely present in the submitted version" in letter
     assert "We have not restated what was there" in letter
+
+
+BUILDS = (
+    REPO / "paper" / "manuscript_tomography.docx",
+    REPO / "paper" / "manuscript_tomography_revised_highlighted.docx",
+)
+
+
+def _document_xml(path: Path) -> str:
+    import zipfile
+
+    with zipfile.ZipFile(path) as archive:
+        return archive.read("word/document.xml").decode("utf-8")
+
+
+def _plain(path: Path) -> str:
+    return re.sub(r"<[^>]+>", "", _document_xml(path))
+
+
+def test_no_built_document_carries_an_unresolved_release_placeholder():
+    """The highlighted build read the source directly instead of going through the
+    preparation step, so {{RELEASE_TAG}} reached a document meant for an editor while
+    the clean build, which refuses to produce one, was fine. Both are checked now,
+    because a check that covers one of two build paths covers neither."""
+    for path in BUILDS:
+        if not path.is_file():
+            continue
+        left = _plain(path).count("{{")
+        assert left == 0, f"{path.name} carries {left} unresolved placeholder(s)"
+
+
+def test_the_reference_list_survives_as_separate_entries_in_every_build():
+    """Wrapping the bibliography in a highlight span collapsed twenty list items into
+    one paragraph: entry numbers and DOIs ran together mid-line. It renders, so nothing
+    upstream complains; a reviewer sees a broken bibliography."""
+    for path in BUILDS:
+        if not path.is_file():
+            continue
+        text = _plain(path)
+        run_on = re.findall(r"https://doi\.org/[^\s]+ \d+\. ", text)
+        assert not run_on, (
+            f"{path.name}: {len(run_on)} reference entries run into the next; the list "
+            "has been flattened into a paragraph"
+        )
+
+
+def test_the_highlighted_build_marks_some_paragraphs_and_not_all():
+    """A build that highlights nothing has silently stopped marking; one that
+    highlights everything tells a reviewer nothing about what changed."""
+    path = REPO / "paper" / "manuscript_tomography_revised_highlighted.docx"
+    if not path.is_file():
+        pytest.skip("highlighted revision not built in this checkout")
+    document = _document_xml(path)
+    marked = document.count("w:highlight")
+    assert marked > 0, "the highlighted build marks nothing"
+    assert marked < document.count("<w:r>"), "the highlighted build marks everything"
