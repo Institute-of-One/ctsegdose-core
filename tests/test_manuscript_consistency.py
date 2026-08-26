@@ -847,3 +847,50 @@ def test_the_highlighted_build_marks_some_paragraphs_and_not_all():
     marked = document.count("w:highlight")
     assert marked > 0, "the highlighted build marks nothing"
     assert marked < document.count("<w:r>"), "the highlighted build marks everything"
+
+
+REVIEW_DIR = REPO / "docs" / "review_r1"
+
+
+def _reports_plain() -> str:
+    path = REVIEW_DIR / "reviewer_reports.md"
+    if not path.is_file():
+        pytest.skip("reviewer reports not in this checkout")
+    lines = path.read_text(encoding="utf-8").splitlines()
+    stripped = [
+        line[2:] if line.startswith("> ") else ("" if line.strip() == ">" else line)
+        for line in lines
+    ]
+    return " ".join(" ".join(stripped).split())
+
+
+def test_every_comment_in_the_per_reviewer_replies_is_quoted_verbatim():
+    """SuSy's template asks for the reviewer's own words above each response. A
+    paraphrase there reads as an author answering a question that was not asked."""
+    report = _reports_plain()
+    seen = 0
+    for n in (1, 2):
+        path = REVIEW_DIR / f"response_reviewer_{n}.md"
+        if not path.is_file():
+            pytest.skip("per-reviewer replies not generated in this checkout")
+        text = path.read_text(encoding="utf-8")
+        for number, comment in re.findall(r"\*\*Comments (\d+):\*\* (.+)", text):
+            seen += 1
+            probe = " ".join(comment.split()).lstrip("1234567890) ")[:80]
+            assert probe in report, (
+                f"reviewer {n} comment {number} is not quoted verbatim from the report"
+            )
+    assert seen == 18, f"18 comments were received; the replies carry {seen}"
+
+
+def test_each_reply_pairs_every_comment_with_exactly_one_response():
+    for n in (1, 2):
+        path = REVIEW_DIR / f"response_reviewer_{n}.md"
+        if not path.is_file():
+            pytest.skip("per-reviewer replies not generated in this checkout")
+        text = path.read_text(encoding="utf-8")
+        comments = [int(x) for x in re.findall(r"\*\*Comments (\d+):\*\*", text)]
+        responses = [int(x) for x in re.findall(r"\*\*Response (\d+):\*\*", text)]
+        assert comments == responses == list(range(1, len(comments) + 1)), (
+            f"reviewer {n}: comments {comments} against responses {responses}"
+        )
