@@ -751,3 +751,43 @@ def test_no_equation_tag_survives_that_the_renderer_drops(raw):
         r"\tag{} does not render here; either number the equation another way or do "
         "not number it"
     )
+
+
+LETTER = REPO / "docs" / "review_r1" / "response_to_reviewers.md"
+
+
+def _letter():
+    if not LETTER.is_file():
+        pytest.skip("no response letter in this checkout")
+    return " ".join(LETTER.read_text(encoding="utf-8").split())
+
+
+def test_the_response_letter_points_at_sections_that_exist(raw):
+    """The letter is a copy of the manuscript's claims and drifts like every other
+    copy. A reply citing a section number the paper does not have is the worst kind of
+    error to make in front of an editor."""
+    letter = _letter()
+    for section in re.findall(r"Section (\d+\.\d+)", letter):
+        assert f"### {section}." in raw or f"## {section}." in raw, (
+            f"the reply cites Section {section}, which the manuscript does not have"
+        )
+
+
+def test_the_response_letter_quotes_the_manuscripts_own_numbers(raw):
+    letter = _letter()
+    references = len(re.findall(r"(?m)^\d+\.\s", raw.split("## References")[1]))
+    assert f"list to {references}" in letter, (
+        f"the reply says the list reaches a different number than the {references} present"
+    )
+    words = len(raw.split("## Abstract", 1)[1].split("**Keywords", 1)[0].split())
+    assert f"{words} words against" in letter, f"the abstract is {words} words"
+
+
+def test_the_response_letter_does_not_claim_changes_that_were_not_made(raw):
+    """Two comments are answered by pointing at text that was already there. The letter
+    must keep saying so: presenting an unchanged passage as a revision is the one thing
+    an editor can check instantly and will not forgive."""
+    letter = _letter()
+    assert "Already present in the submitted version" in letter
+    assert "Largely present in the submitted version" in letter
+    assert "We have not restated what was there" in letter
