@@ -25,22 +25,22 @@ data provenance are fully open so the work can be reproduced and extended.
 
 ## Abstract
 
-CTDIvol is a scanner-output index, not a patient or organ dose, and cannot express how
-tube-current modulation varies along a patient. An organ-specific weighted CTDIvol
-addressing this problem has been reported previously, but primarily in single-institution
-cohorts and often using inputs that routine image archives do not retain. We
-operationalised it openly across manufacturers, from routine DICOM metadata and automated
-segmentation alone; it is not an estimate of absorbed organ dose. Forty abdominal CT
-series, ten per manufacturer, were drawn from The Cancer Imaging Archive and twelve organs
-segmented with TotalSegmentator at inference only. Of 480 requested organ–series
-combinations, 455 records were produced. A rule-based acquisition-constancy
-criterion admitted 39 of the 40 series to the quantitative modulation analysis. Modulation
-weights spanned 0.59 to 1.69, so the index departs from the whole-scan CTDIvol by up to
-70% within one acquisition. A recorded CTDIvol was retained in the archived headers of 29
-of 40 series, reconstructable in 5 and unavailable in 6, with availability differing
-markedly between manufacturers in this sample. Estimated organ mass was broadly consistent
-with ICRP 89 values for liver and kidneys. Conversion to absorbed organ dose requires
-Monte-Carlo coefficients this index does not replace; the implementation is open.
+CTDIvol is a scanner-output index, not an organ dose, and cannot express how tube-current
+modulation varies along a patient. An organ-specific weighted CTDIvol addressing this has
+been reported before, in single-institution cohorts and often from inputs routine archives
+do not retain. New here is not the quantity but what an open, multi-vendor
+operationalisation reveals: whether its inputs survive archive curation, and what the
+fallback costs when they do not. Forty abdominal CT series, ten per manufacturer, were
+drawn from The Cancer Imaging Archive and twelve organs segmented with TotalSegmentator at
+inference. Of 480 requested organ–series combinations, 455 were produced. A rule-based
+acquisition-constancy criterion admitted 39 series. Modulation weights spanned
+0.59 to 1.69, so the index departs from the whole-scan CTDIvol by up to 70% within one
+acquisition. A recorded CTDIvol survived in 29 of 40 archived headers, was reconstructable
+in 5 and unavailable in 6, availability differing markedly between manufacturers. Forcing
+that reconstruction on series that did retain a value agreed to within 12% on three
+scanner models and diverged by 58% and 84% on two others. Estimated organ mass was broadly
+consistent with ICRP 89 for liver and kidneys. This index is not absorbed dose; the
+implementation is open.
 
 **Keywords:** computed tomography; CTDIvol; tube-current modulation; deep-learning
 segmentation; TotalSegmentator; image-based dosimetry indices; reproducibility; open data
@@ -99,21 +99,42 @@ anthropomorphic patient models and corrected for patient size [3]. Such coeffici
 exist, are well validated, and are in routine use; the index reported here does not
 replace them and is not offered as a surrogate for their output.
 
-The contributions are:
+The contributions are stated below in terms of what is computed and by what rule, since
+that is where the novelty of an operationalisation lies:
 
-1. An open, end-to-end implementation of the organ-specific weighted CTDIvol computed
-   entirely from data a scanner already records, requiring neither projection data nor
-   manual contouring.
-2. A multi-vendor empirical characterisation of that quantity on public archive data:
-   its range, its within-acquisition spread and its behaviour across four manufacturers.
-3. A description, for this archive sample, of how often the required inputs are actually
-   retained in archived DICOM headers — a precondition for any retrospective study of
-   this kind, and one that has not been well characterised.
-4. A rule-based acquisition-constancy criterion that makes the assumption underlying the
-   weighting testable rather than implicit.
-5. An external reference comparison of attenuation-derived estimated organ mass against
-   ICRP 89 reference values [9], and the practical limits an organ-level modulation
-   analysis must handle.
+1. **An end-to-end computation from archived metadata alone.** Per-slice tube current
+   I(z) is read from (0018,1151) on every image; the series is resampled onto a uniform
+   slice grid; twelve organ masks are obtained from a general-purpose segmenter at
+   inference; each organ's longitudinal extent is taken from the extreme slices of its
+   own mask; and the organ weight is the mean of I(z) over that extent divided by the
+   mean over the whole series. The index is that weight times the whole-scan CTDIvol.
+   Nothing in the chain requires projection data, a manual contour, or a value the
+   scanner did not already write.
+2. **A multi-vendor empirical characterisation of the resulting quantity** — its range,
+   its within-acquisition spread and its behaviour across four manufacturers — computed
+   by the same code on all series, so that between-vendor differences cannot arise from
+   between-site processing.
+3. **A measurement of how often the inputs survive archive curation, and of what happens
+   when one of them does not.** The measurement is a direct inspection of the archived
+   headers of all 40 series for the two attributes the index needs: per-slice tube
+   current, and a whole-scan CTDIvol in (0018,9345). Where the second is absent it can
+   sometimes be rebuilt from acquisition physics, and Section 3.5 reports how far that
+   reconstruction agrees with the recorded value on the series where both can be
+   obtained. What is new is the pairing: retention rates measured on a multi-vendor
+   archive sample, together with the accuracy and the coverage of the fallback that the
+   gaps force a retrospective study onto.
+4. **A rule-based acquisition-constancy criterion** that makes the proportionality
+   assumption behind the weighting testable rather than implicit: a series is admitted
+   only if every attribute that governs scanner output other than tube current is
+   constant within it, to a tolerance justified in Section 2.9 from the resolution at
+   which those attributes are stored.
+5. **An external reference comparison of attenuation-derived estimated organ mass against
+   ICRP 89 values [9].** This is not a separate study but the only external check
+   available to the pipeline: no ground-truth organ mass exists for archived series, and
+   organ mass is the one intermediate quantity the pipeline produces that can be compared
+   with a published reference at all. Agreement bounds how far the segmentation and the
+   Hounsfield-to-density mapping can jointly be wrong, which is what makes the weights
+   downstream of them worth reporting.
 
 ## 2. Materials and Methods
 
@@ -498,7 +519,38 @@ manufacturer, in this TCIA sample. A series counted unrecoverable retained no CT
 its header and its scanner lies outside the open coefficient database. Segments are
 distinguished by fill pattern as well as tone.
 
-### 3.4. External Reference Comparison of Estimated Organ Mass
+### 3.4. How Far the Reconstructed CTDIvol Agrees With a Recorded One
+
+Where the header retains no CTDIvol, the value is rebuilt from acquisition physics and
+an open coefficient table [12], and the two origins are kept apart in every record
+because the uncertainty they carry differs. That difference has to be quantified rather
+than asserted.
+
+It cannot be quantified in the way one would first attempt. No series in this cohort
+carries both values: the reconstruction runs only where the header has none, so the
+recorded and reconstructed populations are disjoint by construction. The comparison was
+therefore made by forcing the reconstruction on the series that do carry a recorded
+value, where the recorded value plays no part in producing the reconstructed one.
+
+Of the 29 series with a recorded CTDIvol, 8 could be reconstructed; the remainder are on
+scanner models absent from the open table. Across those 8 the median absolute difference
+is 10.5%, but the differences do not form a spread. Five agree to within 12% — two
+Aquilion PRIME at −8.8%, one Aquilion ONE at −8.3%, two iCT 256 at a median −2.0% — and
+three do not, two Aquilion Prime SP at a median +58.0% and one SOMATOM Definition Flash
+at +84.0%. The disagreement is consistent within a scanner model rather than scattered
+across series, which locates it in the tabulated coefficient for those models and not in
+the per-series inputs; model resolution is exact after normalisation and rejects near
+misses, and the spiral pitch, checked on all 8, is recorded in every case.
+
+The limitation of this measurement is more important than its result. A model can be
+checked here only if some series in the cohort retained a recorded CTDIvol for it, and
+no GE series retained one. Of the 5 series whose index rests on a reconstructed CTDIvol,
+1 is a Philips iCT 256, measured at +7.7%; the other 4 are GE, on models the comparison
+cannot reach. The reconstruction is therefore unverified precisely where this study
+leans on it hardest, and that is a property of what the archive kept rather than of the
+method. Results resting on a reconstructed value are marked as such throughout.
+
+### 3.5. External Reference Comparison of Estimated Organ Mass
 
 Table 1 and Figure 5 place attenuation-derived estimated organ mass beside the ICRP 89
 reference adult male values [9], over the 177 untruncated records of the five solid
@@ -529,7 +581,7 @@ bar is the median across all manufacturers. Organs truncated by the scan boundar
 excluded. Manufacturer is encoded by marker shape as well as colour, so the figure is
 readable in greyscale.
 
-### 3.5. What Limits an Organ-Level Modulation Analysis
+### 3.6. What Limits an Organ-Level Modulation Analysis
 
 Two conditions reduce what such an analysis can measure, and both differ across the
 sampled manufacturers (Figure 6).

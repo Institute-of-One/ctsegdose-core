@@ -692,3 +692,40 @@ def test_no_laterality_or_inversion_failure_is_claimed_that_the_checks_contradic
     ]
     if "None was a laterality\nfailure".replace("\n", " ") in text.replace("\n", " "):
         assert not lateral, f"the text claims no laterality failure; {len(lateral)} exist"
+
+
+def _reconstruction_validation():
+    path = REPO / "results" / "reconstruction_validation.json"
+    if not path.is_file():
+        pytest.skip("run tools/validate_reconstruction.py")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def test_the_reconstruction_agreement_quoted_in_the_text_is_the_measured_one(text):
+    """Section 3.4 was written for the round-1 revision and every number in it is a
+    measurement, so every number in it can go stale."""
+    v = _reconstruction_validation()
+    assert f"{v['n_recorded_series']} series with a recorded CTDIvol" in text
+    assert f"{v['n_compared']} could be reconstructed" in text
+    median = v["agreement"]["median_absolute_relative_error"]
+    assert f"{median:.1%}" in text, f"the median absolute difference is {median:.1%}"
+
+    for model, stats in v["by_model"].items():
+        rendered = f"{stats['median_relative_error']:+.1%}".replace("+", "+").replace(
+            "-", "−"
+        )
+        plain = f"{stats['median_relative_error']:+.1%}"
+        assert rendered in text or plain in text, (
+            f"{model} differs by {plain}; the manuscript does not quote that number"
+        )
+
+
+def test_the_coverage_of_the_reconstruction_check_is_stated(text):
+    """The limitation is the point of the section: the models the study reconstructs
+    for are mostly not the models the check could reach."""
+    coverage = _reconstruction_validation()["coverage_of_use"]
+    assert (
+        f"{coverage['n_series_using_a_reconstructed_value']} series whose index rests"
+        in text
+    )
+    assert f"the other {coverage['n_on_an_unmeasured_model']} are GE" in text
