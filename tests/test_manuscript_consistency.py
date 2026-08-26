@@ -729,3 +729,25 @@ def test_the_coverage_of_the_reconstruction_check_is_stated(text):
         in text
     )
     assert f"the other {coverage['n_on_an_unmeasured_model']} are GE" in text
+
+
+def test_the_index_is_defined_as_display_mathematics(raw):
+    """Reviewer 1 objected that the formula was presented "as a single line". It was:
+    an ASCII transliteration with sigma written as a letter. It is now LaTeX display
+    mathematics, which pandoc renders as Word equation objects rather than printing
+    the source, and this pins the notation so it cannot drift back."""
+    section = raw.split("### 2.8.", 1)[1].split("###", 1)[0]
+    assert section.count("$$") >= 6, "the index must be defined in display mathematics"
+    for token in (r"\frac", r"\sum_z", r"\bar{I}", r"\mathrm{CTDIvol}"):
+        assert token in section, f"the definition no longer uses {token}"
+    # The transliterated form, and anything like it, must not come back.
+    assert "Σ_z" not in raw, "a sigma written as a letter is not an equation"
+
+
+def test_no_equation_tag_survives_that_the_renderer_drops(raw):
+    r"""\tag{} is silently dropped on the Word and Typst paths, so an equation number
+    written that way appears in the source and not in the document a reader gets."""
+    assert r"\tag{" not in raw, (
+        r"\tag{} does not render here; either number the equation another way or do "
+        "not number it"
+    )
