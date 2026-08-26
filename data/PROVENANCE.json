@@ -2,10 +2,10 @@
   "provenance": {
     "layer": "1 - patient data acquisition for patient-specific organ dose",
     "generated_by": "tools/select_and_download.py --stage download",
-    "ctsegdose_core_version": "0.1.0",
+    "ctsegdose_core_version": "0.1.1",
     "archive": "The Cancer Imaging Archive (TCIA), public NBIA REST API",
-    "access_started_utc": "2026-08-03T15:39:58+00:00",
-    "access_finished_utc": "2026-08-03T16:01:07+00:00",
+    "access_started_utc": "2026-08-11T14:02:19+00:00",
+    "access_finished_utc": "2026-08-11T14:21:53+00:00",
     "redistribution": "No DICOM is redistributed by this repository. Each series is identified by its Series Instance UID, collection and licence so that a reader retrieves it from the archive directly; see docs/REPRODUCING_DATA.md."
   },
   "parameters": {
@@ -223,7 +223,7 @@
       "tube_current_spread": 0.2,
       "licence": "Creative Commons Attribution 3.0 Unported License",
       "licence_uri": "http://creativecommons.org/licenses/by/3.0/",
-      "retrieved_utc": "2026-08-03T15:40:11+00:00",
+      "retrieved_utc": "2026-08-11T14:02:19+00:00",
       "local_path": "data/GE/ACRIN-NSCLC-FDG-PET__ACRIN-NSCLC-FDG-PET-048/1.3.6.1.4.1.14519.5.2.1.7009.2403.104753627722770752924713208933",
       "selection_source": "tcia-index"
     },
@@ -251,7 +251,7 @@
       "tube_current_spread": 0.352,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:40:19+00:00",
+      "retrieved_utc": "2026-08-11T14:02:29+00:00",
       "local_path": "data/GE/Adrenal-ACC-Ki67-Seg__Adrenal_Ki67_Seg_044/1.3.6.1.4.1.14519.5.2.1.124206625223954387033910217866425393091",
       "selection_source": "tcia-index"
     },
@@ -279,7 +279,7 @@
       "tube_current_spread": 0.4339,
       "licence": "Creative Commons Attribution 3.0 Unported License",
       "licence_uri": "http://creativecommons.org/licenses/by/3.0/",
-      "retrieved_utc": "2026-08-03T15:40:56+00:00",
+      "retrieved_utc": "2026-08-11T14:03:07+00:00",
       "local_path": "data/GE/Anti-PD-1_Lung__PD-1-Lung-00041/1.3.6.1.4.1.14519.5.2.1.3098.5025.104712617917450619399991479763",
       "selection_source": "tcia-index"
     },
@@ -307,7 +307,7 @@
       "tube_current_spread": 0.2715,
       "licence": "Creative Commons Attribution 3.0 Unported License",
       "licence_uri": "http://creativecommons.org/licenses/by/3.0/",
-      "retrieved_utc": "2026-08-03T15:41:13+00:00",
+      "retrieved_utc": "2026-08-11T14:03:24+00:00",
       "local_path": "data/GE/C4KC-KiTS__KiTS-00086/1.3.6.1.4.1.14519.5.2.1.6919.4624.102552799280450622384605073116",
       "selection_source": "tcia-index"
     },
@@ -335,7 +335,7 @@
       "tube_current_spread": 0.048,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:41:43+00:00",
+      "retrieved_utc": "2026-08-11T14:03:49+00:00",
       "local_path": "data/GE/CMB-BRCA__MSB-07132/1.3.6.1.4.1.14519.5.2.1.126451157075786057396180437022526798077",
       "selection_source": "tcia-index"
     },
@@ -363,7 +363,7 @@
       "tube_current_spread": 0.1912,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:42:03+00:00",
+      "retrieved_utc": "2026-08-11T14:04:07+00:00",
       "local_path": "data/GE/CMB-LCA__MSB-04332/1.3.6.1.4.1.14519.5.2.1.1.14850002370218603822287426909654457044",
       "selection_source": "tcia-index"
     },
@@ -391,7 +391,7 @@
       "tube_current_spread": 0.7587,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:42:32+00:00",
+      "retrieved_utc": "2026-08-11T14:04:31+00:00",
       "local_path": "data/GE/CMB-OV__MSB-06302/1.3.6.1.4.1.14519.5.2.1.110412737079958828416643878868827236377",
       "selection_source": "tcia-index"
     },
@@ -419,7 +419,7 @@
       "tube_current_spread": 0.3778,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:42:50+00:00",
+      "retrieved_utc": "2026-08-11T14:04:46+00:00",
       "local_path": "data/GE/CPTAC-CCRCC__C3L-01960/1.3.6.1.4.1.14519.5.2.1.190738758608436907826741043480210378147",
       "selection_source": "tcia-index"
     },
@@ -447,7 +447,7 @@
       "tube_current_spread": 0.1226,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:44:15+00:00",
+      "retrieved_utc": "2026-08-11T14:06:16+00:00",
       "local_path": "data/GE/CPTAC-CM__C3N-03614/1.3.6.1.4.1.14519.5.2.1.2932.1975.126887613559064617057929801994",
       "selection_source": "tcia-index"
     },
@@ -475,7 +475,7 @@
       "tube_current_spread": 0.1361,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:44:42+00:00",
+      "retrieved_utc": "2026-08-11T14:06:37+00:00",
       "local_path": "data/GE/CPTAC-LUAD__C3L-03717/1.3.6.1.4.1.14519.5.2.1.4320.5885.101839196455054321363367605040",
       "selection_source": "tcia-index"
     },
@@ -503,7 +503,7 @@
       "tube_current_spread": 0.3637,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:44:54+00:00",
+      "retrieved_utc": "2026-08-11T14:06:51+00:00",
       "local_path": "data/Siemens/Adrenal-ACC-Ki67-Seg__Adrenal_Ki67_Seg_039/1.3.6.1.4.1.14519.5.2.1.169260120790039889716250759344671861678",
       "selection_source": "tcia-index"
     },
@@ -531,7 +531,7 @@
       "tube_current_spread": 0.1344,
       "licence": "Creative Commons Attribution 3.0 Unported License",
       "licence_uri": "http://creativecommons.org/licenses/by/3.0/",
-      "retrieved_utc": "2026-08-03T15:45:03+00:00",
+      "retrieved_utc": "2026-08-11T14:07:02+00:00",
       "local_path": "data/Siemens/C4KC-KiTS__KiTS-00056/1.3.6.1.4.1.14519.5.2.1.6919.4624.492444591845205280171152909620",
       "selection_source": "iorn004-survey"
     },
@@ -559,7 +559,7 @@
       "tube_current_spread": 0.5067,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:45:38+00:00",
+      "retrieved_utc": "2026-08-11T14:07:28+00:00",
       "local_path": "data/Siemens/CC-Tumor-Heterogeneity__CCTH-B02/1.3.6.1.4.1.14519.5.2.1.130269400384835727617577152120460443053",
       "selection_source": "iorn004-survey"
     },
@@ -587,7 +587,7 @@
       "tube_current_spread": 0.7438,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:46:06+00:00",
+      "retrieved_utc": "2026-08-11T14:07:56+00:00",
       "local_path": "data/Siemens/CMB-BRCA__MSB-08850/1.3.6.1.4.1.14519.5.2.1.117047503231020830753317635065264697398",
       "selection_source": "tcia-index"
     },
@@ -615,7 +615,7 @@
       "tube_current_spread": 0.9414,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:46:29+00:00",
+      "retrieved_utc": "2026-08-11T14:08:17+00:00",
       "local_path": "data/Siemens/CMB-CRC__MSB-09991/1.3.6.1.4.1.14519.5.2.1.1.11435509567176551466134346112512854888",
       "selection_source": "tcia-index"
     },
@@ -643,7 +643,7 @@
       "tube_current_spread": 0.582,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:46:46+00:00",
+      "retrieved_utc": "2026-08-11T14:08:30+00:00",
       "local_path": "data/Siemens/CMB-GEC__MSB-00142/1.3.6.1.4.1.14519.5.2.1.139028541272282999207461674394024845879",
       "selection_source": "tcia-index"
     },
@@ -671,7 +671,7 @@
       "tube_current_spread": 0.4107,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:46:52+00:00",
+      "retrieved_utc": "2026-08-11T14:08:34+00:00",
       "local_path": "data/Siemens/CMB-MEL__MSB-09774/1.3.6.1.4.1.14519.5.2.1.1.12144631656438139661502631773455627610",
       "selection_source": "tcia-index"
     },
@@ -699,7 +699,7 @@
       "tube_current_spread": 0.9788,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:47:10+00:00",
+      "retrieved_utc": "2026-08-11T14:08:48+00:00",
       "local_path": "data/Siemens/CMB-OV__MSB-09351/1.3.6.1.4.1.14519.5.2.1.124862978740839397384301699389733909446",
       "selection_source": "tcia-index"
     },
@@ -727,7 +727,7 @@
       "tube_current_spread": 0.407,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:47:41+00:00",
+      "retrieved_utc": "2026-08-11T14:09:13+00:00",
       "local_path": "data/Siemens/CMB-PCA__MSB-02368/1.3.6.1.4.1.14519.5.2.1.120283006789263156233439135960658945231",
       "selection_source": "tcia-index"
     },
@@ -755,7 +755,7 @@
       "tube_current_spread": 0.3405,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:48:14+00:00",
+      "retrieved_utc": "2026-08-11T14:09:44+00:00",
       "local_path": "data/Siemens/COVID-19-NY-SBU__A636688/1.3.6.1.4.1.14519.5.2.1.99.1071.24503530203089772620259137946948",
       "selection_source": "tcia-index"
     },
@@ -783,7 +783,7 @@
       "tube_current_spread": 0.5441,
       "licence": "Creative Commons Attribution 3.0 Unported License",
       "licence_uri": "http://creativecommons.org/licenses/by/3.0/",
-      "retrieved_utc": "2026-08-03T15:48:26+00:00",
+      "retrieved_utc": "2026-08-11T14:09:56+00:00",
       "local_path": "data/Canon_Toshiba/Anti-PD-1_Lung__PD-1-Lung-00024/1.3.6.1.4.1.14519.5.2.1.3098.5025.146217110450191920006308432033",
       "selection_source": "iorn004-survey"
     },
@@ -811,7 +811,7 @@
       "tube_current_spread": 0.5412,
       "licence": "Creative Commons Attribution 3.0 Unported License",
       "licence_uri": "http://creativecommons.org/licenses/by/3.0/",
-      "retrieved_utc": "2026-08-03T15:48:35+00:00",
+      "retrieved_utc": "2026-08-11T14:10:05+00:00",
       "local_path": "data/Canon_Toshiba/C4KC-KiTS__KiTS-00166/1.3.6.1.4.1.14519.5.2.1.6919.4624.125153249491081957890408272216",
       "selection_source": "iorn004-survey"
     },
@@ -839,7 +839,7 @@
       "tube_current_spread": 0.1236,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:48:44+00:00",
+      "retrieved_utc": "2026-08-11T14:10:13+00:00",
       "local_path": "data/Canon_Toshiba/CMB-CRC__MSB-03258/1.3.6.1.4.1.14519.5.2.1.1.12026969269299422966770921088977968852",
       "selection_source": "tcia-index"
     },
@@ -867,7 +867,7 @@
       "tube_current_spread": 0.6849,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:48:55+00:00",
+      "retrieved_utc": "2026-08-11T14:10:24+00:00",
       "local_path": "data/Canon_Toshiba/CMB-MML__MSB-05283/1.3.6.1.4.1.14519.5.2.1.1.29343766386826411185462290976788394151",
       "selection_source": "iorn004-survey"
     },
@@ -895,7 +895,7 @@
       "tube_current_spread": 1.5349,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:49:21+00:00",
+      "retrieved_utc": "2026-08-11T14:10:42+00:00",
       "local_path": "data/Canon_Toshiba/CMB-OV__MSB-09899/1.3.6.1.4.1.14519.5.2.1.235815435552836713008925930681449087181",
       "selection_source": "iorn004-survey"
     },
@@ -923,7 +923,7 @@
       "tube_current_spread": 0.3124,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:49:48+00:00",
+      "retrieved_utc": "2026-08-11T14:11:11+00:00",
       "local_path": "data/Canon_Toshiba/CMB-PCA__MSB-08178/1.3.6.1.4.1.14519.5.2.1.1.35060909971867492262237150543126705979",
       "selection_source": "tcia-index"
     },
@@ -951,7 +951,7 @@
       "tube_current_spread": 0.3555,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:50:52+00:00",
+      "retrieved_utc": "2026-08-11T14:12:03+00:00",
       "local_path": "data/Canon_Toshiba/CPTAC-CCRCC__C3N-00380/1.3.6.1.4.1.14519.5.2.1.2932.1975.106756844835533656529983969250",
       "selection_source": "tcia-index"
     },
@@ -979,7 +979,7 @@
       "tube_current_spread": 0.9276,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:51:45+00:00",
+      "retrieved_utc": "2026-08-11T14:12:50+00:00",
       "local_path": "data/Canon_Toshiba/CPTAC-CM__C3N-02040/1.3.6.1.4.1.14519.5.2.1.2932.1975.101293628603821133332259852363",
       "selection_source": "tcia-index"
     },
@@ -1007,7 +1007,7 @@
       "tube_current_spread": 0.5527,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:51:58+00:00",
+      "retrieved_utc": "2026-08-11T14:13:06+00:00",
       "local_path": "data/Canon_Toshiba/CPTAC-PDA__C3L-03356/1.3.6.1.4.1.14519.5.2.1.1078.3273.178159594418154823809776931651",
       "selection_source": "tcia-index"
     },
@@ -1035,7 +1035,7 @@
       "tube_current_spread": 0.457,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:52:51+00:00",
+      "retrieved_utc": "2026-08-11T14:13:48+00:00",
       "local_path": "data/Canon_Toshiba/CPTAC-STAD__C3L-06774/1.3.6.1.4.1.14519.5.2.1.2099.3754.178917260616042842392917847989",
       "selection_source": "iorn004-survey"
     },
@@ -1063,7 +1063,7 @@
       "tube_current_spread": 0.3211,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:53:02+00:00",
+      "retrieved_utc": "2026-08-11T14:14:00+00:00",
       "local_path": "data/Philips/Adrenal-ACC-Ki67-Seg__Adrenal_Ki67_Seg_051/1.3.6.1.4.1.14519.5.2.1.122681232740719558092171043097976012159",
       "selection_source": "tcia-index"
     },
@@ -1091,7 +1091,7 @@
       "tube_current_spread": 0.1244,
       "licence": "Creative Commons Attribution 3.0 Unported License",
       "licence_uri": "http://creativecommons.org/licenses/by/3.0/",
-      "retrieved_utc": "2026-08-03T15:53:15+00:00",
+      "retrieved_utc": "2026-08-11T14:14:10+00:00",
       "local_path": "data/Philips/C4KC-KiTS__KiTS-00138/1.3.6.1.4.1.14519.5.2.1.6919.4624.105596304219458852186973583847",
       "selection_source": "iorn004-survey"
     },
@@ -1119,7 +1119,7 @@
       "tube_current_spread": 0.491,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:53:57+00:00",
+      "retrieved_utc": "2026-08-11T14:14:55+00:00",
       "local_path": "data/Philips/CMB-BRCA__MSB-02137/1.3.6.1.4.1.14519.5.2.1.94531563816741245873445833243538669934",
       "selection_source": "tcia-index"
     },
@@ -1147,7 +1147,7 @@
       "tube_current_spread": 0.8985,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:54:43+00:00",
+      "retrieved_utc": "2026-08-11T14:15:37+00:00",
       "local_path": "data/Philips/CMB-CRC__MSB-08327/1.3.6.1.4.1.14519.5.2.1.35849535652939153577452390867555563110",
       "selection_source": "tcia-index"
     },
@@ -1175,7 +1175,7 @@
       "tube_current_spread": 0.8037,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:55:30+00:00",
+      "retrieved_utc": "2026-08-11T14:16:26+00:00",
       "local_path": "data/Philips/CMB-LCA__MSB-01772/1.3.6.1.4.1.14519.5.2.1.13789879393431026461197285453898279533",
       "selection_source": "tcia-index"
     },
@@ -1203,7 +1203,7 @@
       "tube_current_spread": 0.5987,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:57:10+00:00",
+      "retrieved_utc": "2026-08-11T14:17:53+00:00",
       "local_path": "data/Philips/CPTAC-CCRCC__C3N-01524/1.3.6.1.4.1.14519.5.2.1.2932.1975.110136518027764333512179150738",
       "selection_source": "tcia-index"
     },
@@ -1231,7 +1231,7 @@
       "tube_current_spread": 0.7064,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:57:36+00:00",
+      "retrieved_utc": "2026-08-11T14:18:18+00:00",
       "local_path": "data/Philips/CPTAC-CM__C3L-00275/1.3.6.1.4.1.14519.5.2.1.2857.3159.203983181868287072753321424140",
       "selection_source": "tcia-index"
     },
@@ -1259,7 +1259,7 @@
       "tube_current_spread": 0.6381,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:59:03+00:00",
+      "retrieved_utc": "2026-08-11T14:19:45+00:00",
       "local_path": "data/Philips/CPTAC-LSCC__C3N-04167/1.3.6.1.4.1.14519.5.2.1.2932.1975.119554862381870875314127355939",
       "selection_source": "tcia-index"
     },
@@ -1287,7 +1287,7 @@
       "tube_current_spread": 0.2439,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T15:59:28+00:00",
+      "retrieved_utc": "2026-08-11T14:20:15+00:00",
       "local_path": "data/Philips/CPTAC-PDA__C3N-00512/1.3.6.1.4.1.14519.5.2.1.3320.3273.114542284322103737687268266165",
       "selection_source": "tcia-index"
     },
@@ -1315,7 +1315,7 @@
       "tube_current_spread": 0.8671,
       "licence": "Creative Commons Attribution 4.0 International License",
       "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
-      "retrieved_utc": "2026-08-03T16:01:07+00:00",
+      "retrieved_utc": "2026-08-11T14:21:53+00:00",
       "local_path": "data/Philips/CPTAC-SAR__C3N-03232/1.3.6.1.4.1.14519.5.2.1.2932.1975.256749960592074016578641330855",
       "selection_source": "tcia-index"
     }

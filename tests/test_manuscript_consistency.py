@@ -137,8 +137,13 @@ def test_every_reference_is_cited_and_every_citation_resolves(raw):
 
 
 def test_the_reference_list_is_the_size_an_original_article_needs(raw):
+    """The floor was 18 until the Tomography Academic Editor asked, at pre-check, that the
+    several citations to Prof. Samei and Prof. McNitt-Gray be reduced to one representative
+    paper each. That removed seven entries the list could not replace without citing work
+    the argument does not rest on, so the floor follows the editor rather than the reverse.
+    """
     numbers = {int(n) for n in re.findall(r"^(\d+)\.\s", raw.split("## References")[1], re.M)}
-    assert 18 <= len(numbers) <= 24, f"{len(numbers)} references; the target is 18-22"
+    assert 14 <= len(numbers) <= 24, f"{len(numbers)} references; the target is 14-22"
 
 
 def test_references_are_numbered_in_order_of_first_mention(raw):
@@ -163,12 +168,16 @@ def test_references_are_numbered_in_order_of_first_mention(raw):
 def test_a_software_reference_naming_a_version_cites_that_version_doi(raw):
     """A concept DOI resolves to whichever release is latest, so pairing it with an
     explicit version number cites two different things at once. The companion software is
-    cited at Version 0.1.1, so it must carry that version's DOI, not the concept DOI."""
+    cited at Version 0.1.1, so it must carry that version's DOI, not the concept DOI.
+
+    The entry is located by its content rather than by its number: the number moves
+    whenever a reference is added or removed, and pinning it made this test fail with an
+    IndexError that said nothing about the DOI it exists to guard.
+    """
     refs = raw.split("## References")[1]
-    entry = next(
-        (line for line in refs.split("\n18. ")[1].split("\n19. ")[0].splitlines()),
-        "",
-    ) + refs.split("\n18. ")[1].split("\n19. ")[0]
+    entries = re.split(r"^\d+\.\s", refs, flags=re.M)
+    entry = next((e for e in entries if "ctdose-core" in e), "")
+    assert entry, "the companion software reference is missing from the bibliography"
     assert "Version 0.1.1" in entry
     assert "zenodo.21636719" in entry, "must be the v0.1.1 version DOI"
     assert "zenodo.21636082" not in entry, (
@@ -210,9 +219,15 @@ def test_priority_claims_are_not_overstated(raw):
 
 def test_the_prior_art_for_the_quantity_is_cited(raw):
     """The organ-specific weighted CTDIvol is a reported quantity, and the papers that
-    reported it must be visible in the Introduction, not only in the bibliography."""
+    reported it must be visible in the Introduction, not only in the bibliography.
+
+    Angel et al. was dropped from this list when the Academic Editor asked for one
+    representative paper per author: it supported the *magnitude* of the modulation effect,
+    which Khatonabadi and Tian also carry, whereas those two are the attribution for the
+    quantity itself and are therefore the ones that may never leave the Introduction.
+    """
     intro = raw.split("## 2. Materials and Methods")[0]
-    for author in ("Khatonabadi", "Tian", "Angel", "McCollough"):
+    for author in ("Khatonabadi", "Tian", "McCollough"):
         assert author in intro, f"the Introduction must situate the work against {author}"
     assert "10.1118/1.4907955" in raw, "Tian et al. 2015 must be cited"
     assert "10.1118/1.4798561" in raw, "Khatonabadi et al. 2013 must be cited"
