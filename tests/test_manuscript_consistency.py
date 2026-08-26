@@ -894,3 +894,24 @@ def test_each_reply_pairs_every_comment_with_exactly_one_response():
         assert comments == responses == list(range(1, len(comments) + 1)), (
             f"reviewer {n}: comments {comments} against responses {responses}"
         )
+
+
+def test_the_revision_cover_letter_is_a_revision_letter_not_a_submission_one(raw):
+    """The portal pre-fills the box with the original submission's cover letter, which
+    opens "I am pleased to submit ... for consideration". Sending that back with a
+    revision tells an editor nobody read the screen."""
+    path = REVIEW_DIR / "cover_letter_revision.txt"
+    if not path.is_file():
+        pytest.skip("no revision cover letter in this checkout")
+    letter = " ".join(path.read_text(encoding="utf-8").split())
+    assert "pleased to submit" not in letter
+    assert "revised version of manuscript tomography-4516935" in letter
+
+    references = len(re.findall(r"(?m)^\d+\.\s", raw.split("## References")[1]))
+    assert references == 20 and "twenty" in letter, (
+        f"the letter says twenty references and the manuscript holds {references}"
+    )
+    for section in re.findall(r"Section (\d+\.\d+)", letter):
+        assert f"### {section}." in raw, (
+            f"the cover letter cites Section {section}, which does not exist"
+        )
