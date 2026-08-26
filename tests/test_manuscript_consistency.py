@@ -8,6 +8,7 @@ reads the quoted values back out of the text and compares them with
 
 from __future__ import annotations
 
+import collections
 import json
 import re
 from pathlib import Path
@@ -596,15 +597,27 @@ def test_every_figure_is_referenced_captioned_and_present(raw):
     if not figures.exists():
         pytest.skip("figures not generated in this checkout")
 
-    discussed = [int(n) for n in re.findall(r"\bFigure (\d)\b", raw)]
-    assert set(discussed) == {1, 2, 3, 4, 5}, f"the text discusses figures {sorted(set(discussed))}"
+    # Derived from the manuscript rather than written as a literal. A hardcoded
+    # {1..5} fails the moment a figure is added, which says nothing about whether the
+    # numbering is right -- and adding a figure is exactly when this test should be
+    # doing its job rather than demanding to be edited.
+    captioned = sorted({int(n) for n in re.findall(r"\*\*Figure (\d+)\.\*\*", raw)})
+    assert captioned, "the manuscript captions no figures"
+    assert captioned == list(range(1, len(captioned) + 1)), (
+        f"figure captions are numbered {captioned}; they must run 1..n"
+    )
+
+    discussed = [int(n) for n in re.findall(r"\bFigure (\d+)\b", raw)]
+    assert set(discussed) == set(captioned), (
+        f"the text discusses figures {sorted(set(discussed))} and captions {captioned}"
+    )
 
     # MDPI, like every journal, numbers figures by first mention.
     first_mention: list[int] = []
     for n in discussed:
         if n not in first_mention:
             first_mention.append(n)
-    assert first_mention == [1, 2, 3, 4, 5], (
+    assert first_mention == captioned, (
         f"figures are first mentioned in the order {first_mention}; they must be numbered "
         "in order of first mention"
     )
@@ -613,15 +626,20 @@ def test_every_figure_is_referenced_captioned_and_present(raw):
     # implicit figures instead would make the renderer add its own "Figure N:" on top of
     # the caption's own label, which is where the doubled numbering came from.
     embedded = re.findall(r"!\[\]\(figures/([^){]+)\)", raw)
-    assert len(embedded) == 5, f"expected five embedded figures, found {len(embedded)}"
+    assert len(embedded) == len(captioned), (
+        f"{len(embedded)} figures are embedded and {len(captioned)} are captioned"
+    )
     for i, filename in enumerate(embedded, 1):
         assert (figures / filename.strip()).exists(), f"missing {filename}"
         assert filename.startswith(f"fig{i}"), (
             f"figure {i} embeds {filename}; the file stem must match its number"
         )
 
-    captions = {int(n) for n in re.findall(r"^\*\*Figure (\d)\.\*\* ", raw, re.M)}
-    assert captions == {1, 2, 3, 4, 5}, f"figures captioned: {sorted(captions)}"
+    # The stem check above is why the files were renamed when the pipeline flowchart
+    # became Figure 1: without it, fig1_segmentation could sit under "Figure 2" and
+    # nothing would notice until someone opened the wrong image.
+    labelled = {int(n) for n in re.findall(r"^\*\*Figure (\d+)\.\*\* ", raw, re.M)}
+    assert labelled == set(captioned), f"figures captioned: {sorted(labelled)}"
 
 
 def test_no_figure_caption_carries_a_doubled_number(raw):
@@ -630,3 +648,47 @@ def test_no_figure_caption_carries_a_doubled_number(raw):
     assert not re.search(r"!\[\*\*Figure", raw), (
         "a caption inside the image alt text makes the renderer number it twice"
     )
+
+
+def _segmentation_checks():
+    path = REPO / "results" / "segmentation_checks_1.5mm.json"
+    if not path.is_file():
+        pytest.skip("segmentation checks not present in this checkout")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def test_the_segmentation_quality_control_counts_are_the_computed_ones(text):
+    """Added for the round-1 revision. Both reviewers asked whether the segmentation
+    was checked; the answer is a number, and a number in prose goes stale."""
+    checks = _segmentation_checks()
+    flags = [
+        check
+        for report in checks["reports"]
+        for check in report["checks"]
+        if not check.get("passed", True)
+    ]
+    assert f"{checks['n_series_with_failures']} of the {checks['n_series_checked']}" in text
+    assert f"{len(flags)} flags in all" in text
+
+    by_name = collections.Counter(check.get("name", "?") for check in flags)
+    mass = sum(n for name, n in by_name.items() if "mass plausible" in name)
+    bracket = sum(n for name, n in by_name.items() if "bracket the scan mean" in name)
+    assert f"{mass} were organ masses outside" in text
+    assert f"{bracket} were the weights\nfailing".replace("\n", " ") in text.replace(
+        "\n", " "
+    )
+
+
+def test_no_laterality_or_inversion_failure_is_claimed_that_the_checks_contradict(text):
+    """The manuscript says none was a laterality failure. If one ever appears, the
+    sentence becomes false and this is what says so."""
+    checks = _segmentation_checks()
+    lateral = [
+        check
+        for report in checks["reports"]
+        for check in report["checks"]
+        if not check.get("passed", True)
+        and ("left" in check.get("name", "") and "right" in check.get("name", ""))
+    ]
+    if "None was a laterality\nfailure".replace("\n", " ") in text.replace("\n", " "):
+        assert not lateral, f"the text claims no laterality failure; {len(lateral)} exist"

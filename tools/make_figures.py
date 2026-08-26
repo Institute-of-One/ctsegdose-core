@@ -224,7 +224,7 @@ def figure_segmentation(payload, tag: str, out: Path, series_uid: str) -> dict[s
     ]
     fig.legend(handles=handles, loc="lower center", ncols=6, frameon=False, fontsize=7.5,
                handletextpad=0.4, columnspacing=1.1, bbox_to_anchor=(0.5, -0.035))
-    save(fig, out, "fig1_segmentation")
+    save(fig, out, "fig2_segmentation")
     return {"series": row, "levels": levels, "organs_shown": shown}
 
 
@@ -289,7 +289,7 @@ def figure_mass(organs: list[dict[str, Any]], tables: dict[str, Any], out: Path)
     strip_chrome(ax)
     vendor_legend(ax, loc="upper left")
     ax.set_title("Estimated organ mass beside a published reference value", loc="left", pad=8)
-    save(fig, out, "fig4_organ_mass_vs_icrp89")
+    save(fig, out, "fig5_organ_mass_vs_icrp89")
 
 
 # --- figure 2: dose-index availability ---------------------------------------------------
@@ -345,7 +345,7 @@ def figure_availability(tables: dict[str, Any], out: Path) -> None:
     )
     ax.set_title("Whole-scan dose index in the archived headers", loc="left", pad=16)
     ax.text(0, 1.06, note, transform=ax.transAxes, fontsize=7.5, color=INK_SECONDARY)
-    save(fig, out, "fig3_dose_index_availability")
+    save(fig, out, "fig4_dose_index_availability")
 
 
 # --- figure 3: one acquisition, end to end ------------------------------------------------
@@ -431,7 +431,7 @@ def figure_demonstration(
         f"{series['n_slices']} slices",
         x=0.005, y=1.0, ha="left", fontsize=8, color=INK_SECONDARY, fontweight="normal",
     )
-    save(fig, out, "fig2_demonstration_case")
+    save(fig, out, "fig3_demonstration_case")
     return series
 
 
@@ -481,7 +481,7 @@ def figure_limits(tables: dict[str, Any], series_rows: list[dict[str, Any]], out
     strip_chrome(right)
     right.set_title("(b) does the modulation vary across the organs?", loc="left",
                     pad=6, fontsize=8)
-    save(fig, out, "fig5_study_limits")
+    save(fig, out, "fig6_study_limits")
 
 
 # --- driver ------------------------------------------------------------------------------
