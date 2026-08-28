@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ctsegdose-core"
-version = "0.1.1"
+version = "0.1.2"
 description = "Anatomy-weighted CTDIvol from routine CT metadata: organ-specific longitudinal tube-current modulation, using deep-learning organ segmentation. Not an estimate of absorbed organ dose."
 readme = "README.md"
 license = { text = "MIT" }

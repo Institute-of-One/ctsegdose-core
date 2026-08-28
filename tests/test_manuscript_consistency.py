@@ -1078,3 +1078,41 @@ def test_the_ai_usage_statement_is_in_the_methods_where_the_editor_asked(raw):
     back_matter = flat.split("Use of Generative Artificial Intelligence", 1)[-1]
     for section, where in ((methods, "Methods"), (back_matter, "back matter")):
         assert model in section, f"the {where} statement does not name the model version"
+
+
+def test_the_release_the_paper_cites_contains_the_results_the_paper_quotes():
+    """The Data Availability Statement claims the machine-readable results the
+    manuscript quotes are in the repository at the release it names. That claim was
+    false after the round-2 revision: the sensitivity analysis and its result file were
+    added after v0.1.1, which is the release the statement pointed at, so a reader
+    following the DOI would not have found the analysis the Discussion describes.
+
+    Checked against the git tag rather than the working tree, because the working tree
+    is exactly what the reader does not get.
+    """
+    import subprocess
+
+    metadata = REPO / "paper" / "release_metadata.json"
+    if not metadata.is_file():
+        pytest.skip("no release metadata in this checkout")
+    tag = json.loads(metadata.read_text(encoding="utf-8-sig")).get("RELEASE_TAG")
+    if not tag:
+        pytest.skip("no release tag recorded yet")
+
+    listed = subprocess.run(
+        ["git", "ls-tree", "-r", "--name-only", tag],
+        cwd=REPO, capture_output=True, text=True,
+    )
+    if listed.returncode:
+        pytest.skip(f"tag {tag} is not in this checkout")
+    inside = set(listed.stdout.split())
+
+    required = {
+        path.relative_to(REPO).as_posix()
+        for path in (REPO / "results").glob("*.json")
+    }
+    missing = sorted(required - inside)
+    assert not missing, (
+        f"the manuscript cites release {tag}, which does not contain "
+        f"{missing}. Cut a new release and update paper/release_metadata.json."
+    )
