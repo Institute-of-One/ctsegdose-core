@@ -1056,9 +1056,25 @@ def test_the_ai_usage_statement_is_in_the_methods_where_the_editor_asked(raw):
     """The assistant editor asked for it in the Methods section. The manuscript already
     carried one in the back matter, which is the version of this request most easily
     marked as already done."""
-    methods = raw.split("## 2. Materials and Methods", 1)[1].split("## 3. Results", 1)[0]
+    # Flattened: these are phrase assertions, and prose rewraps. The module docstring
+    # makes the same point -- a test that fails on reflowing trains its reader to ignore
+    # it -- and this one failed that way the moment the statement was rewrapped.
+    methods = " ".join(
+        raw.split("## 2. Materials and Methods", 1)[1].split("## 3. Results", 1)[0].split()
+    )
     assert "Generative Artificial Intelligence" in methods, (
         "the AI usage statement is not in the Methods section"
     )
-    assert "Claude, Anthropic" in methods
     assert "not used to generate, impute or select any reported value" in methods
+
+    # Naming the model, not just the product. MDPI asked which version was used after
+    # the round-1 revision, and a statement that says only "Claude" invites the same
+    # question again. Both statements must name it, and must name the same one.
+    flat = " ".join(raw.split())
+    named = set(re.findall(r"\(Claude ([\w. ]+?), Anthropic\)", flat))
+    assert named, "the AI usage statement does not name a model version"
+    assert len(named) == 1, f"the two statements name different models: {named}"
+    model = f"(Claude {next(iter(named))}, Anthropic)"
+    back_matter = flat.split("Use of Generative Artificial Intelligence", 1)[-1]
+    for section, where in ((methods, "Methods"), (back_matter, "back matter")):
+        assert model in section, f"the {where} statement does not name the model version"

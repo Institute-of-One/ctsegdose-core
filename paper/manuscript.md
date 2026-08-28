@@ -515,15 +515,15 @@ Statement, and the command for each layer is in its README rather than here.
 
 ### 2.13. Use of Generative Artificial Intelligence
 
-A generative artificial intelligence assistant (Claude, Anthropic) was used as a tool in
-developing the software described in Sections 2.1 to 2.12 and in drafting and editing the
-text of this manuscript. It was not used to generate, impute or select any reported value.
-Every number in this article is produced by executable code in the cited repository, is
-re-derived from the per-series records by the automated test suite described above, and
-was verified by the author against the underlying records. The study design, the
-eligibility rules, the quality-control criteria and all scientific judgements,
-interpretations and conclusions are the author's, who takes full responsibility for the
-content of this article.
+A generative artificial intelligence assistant (Claude Opus 5, Anthropic) was used as a
+tool in developing the software described in Sections 2.1 to 2.12 and in drafting and
+editing the text of this manuscript. It was not used to generate, impute or select any
+reported value. Every number in this article is produced by executable code in the cited
+repository, is re-derived from the per-series records by the automated test suite
+described above, and was verified by the author against the underlying records. The
+study design, the eligibility rules, the quality-control criteria and all scientific
+judgements, interpretations and conclusions are the author's, who takes full
+responsibility for the content of this article.
 
 ## 3. Results
 
@@ -935,12 +935,13 @@ proprietary clinical data were used; all imaging is publicly available and de-id
 
 ## Use of Generative Artificial Intelligence
 
-A generative artificial intelligence assistant (Claude, Anthropic) was used as a tool in
-the development of the software and in drafting and editing the text of this manuscript.
-All reported results are produced by executable code contained in the cited repository,
-are re-derived from the underlying per-series records by an automated test suite, and were
-verified by the author. All scientific judgements, interpretations and conclusions are the
-author's, who takes full responsibility for the content of this article.
+A generative artificial intelligence assistant (Claude Opus 5, Anthropic) was used as a
+tool in the development of the software and in drafting and editing the text of this
+manuscript. All reported results are produced by executable code contained in the cited
+repository, are re-derived from the underlying per-series records by an automated test
+suite, and were verified by the author. All scientific judgements, interpretations and
+conclusions are the author's, who takes full responsibility for the content of this
+article.
 
 ## References
 
