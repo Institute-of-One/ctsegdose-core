@@ -53,3 +53,6 @@ docs/*
 # belongs in a release.
 paper/manuscript_tomography_internal.*
 paper/release_metadata.json
+
+# manuscript copies returned by the journal portal (our own file, versioned there)
+paper/tomography-*.docx

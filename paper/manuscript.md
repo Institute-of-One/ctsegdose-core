@@ -324,6 +324,28 @@ homogeneous parenchyma. The cohort is drawn from oncological collections, in whi
 enlargement is common; a plausibility band built on reference values for a healthy adult
 is therefore expected to flag real anatomy, and does.
 
+The opposite tail does not admit that explanation. The smallest mass in the cohort is a
+left kidney of 4.3 g on a Philips Brilliance 64 series, segmented at 4.0 cm³ and not
+truncated by the scan boundary. No adult kidney is that size, so this is a failed mask
+rather than unusual anatomy: the mass plausibility check flagged it, and it is the one
+segmentation failure the cohort contains. It is reported here and retained in the
+analysis rather than removed, because a cohort with its failures deleted cannot be
+audited. Its effect is small and is stated so that the reader does not have to take that
+on trust: excluding it moves the published median left-kidney modulation weight from 1.036 to
+1.035.
+It is annotated in the mass comparison of Section 3.5.
+
+That case also marks the boundary of what these checks can do. They are automated
+assertions about laterality, ordering and mass, applied without a reference segmentation,
+because none exists for this cohort — the images are public and de-identified, and no
+manually corrected masks accompany them. Checks of that kind detect gross failure
+reliably: a mirrored volume, an inverted ordering, a mask that has collapsed or leaked far
+enough to move the organ's mass outside a wide band. They cannot detect a mask that is
+systematically displaced yet plausible — a boundary drawn a few millimetres into
+neighbouring tissue throughout, which leaves laterality, ordering and mass all within
+range. Quantifying that residual error would require a manually corrected reference
+standard, which this study does not have and does not claim.
+
 Segmentation error enters the index through one channel only, and it is not the channel
 intuition suggests. The weight is the mean tube current over the organ's longitudinal
 extent, relative to the scan mean, so an error that moves the superior or inferior
@@ -491,6 +513,18 @@ count surviving each, and the verification step attached to each. The repository
 release tag, commit hash and archived version DOI are given in the Data Availability
 Statement, and the command for each layer is in its README rather than here.
 
+### 2.13. Use of Generative Artificial Intelligence
+
+A generative artificial intelligence assistant (Claude, Anthropic) was used as a tool in
+developing the software described in Sections 2.1 to 2.12 and in drafting and editing the
+text of this manuscript. It was not used to generate, impute or select any reported value.
+Every number in this article is produced by executable code in the cited repository, is
+re-derived from the per-series records by the automated test suite described above, and
+was verified by the author against the underlying records. The study design, the
+eligibility rules, the quality-control criteria and all scientific judgements,
+interpretations and conclusions are the author's, who takes full responsibility for the
+content of this article.
+
 ## 3. Results
 
 ### 3.1. Cohort and Records
@@ -589,8 +623,8 @@ misses, and the spiral pitch, checked on all 8, is recorded in every case.
 The limitation of this measurement is more important than its result. A model can be
 checked here only if some series in the cohort retained a recorded CTDIvol for it, and
 no GE series retained one. Of the 5 series whose index rests on a reconstructed CTDIvol,
-1 is a Philips iCT 256, measured at +7.7%; the other 4 are GE, on models the comparison
-cannot reach. The reconstruction is therefore unverified precisely where this study
+1 is a Philips iCT 256, a model measured above at a median −2.0%; the other 4 are GE, on
+models the comparison cannot reach. The reconstruction is therefore unverified precisely where this study
 leans on it hardest, and that is a property of what the archive kept rather than of the
 method. Results resting on a reconstructed value are marked as such throughout.
 
@@ -623,7 +657,8 @@ explanations are examined in Section 4.
 adult male mass, by manufacturer. Each marker is one organ in one series; the horizontal
 bar is the median across all manufacturers. Organs truncated by the scan boundary are
 excluded. Manufacturer is encoded by marker shape as well as colour, so the figure is
-readable in greyscale.
+readable in greyscale. The annotated point is the one mask the quality control of Section
+2.6 flagged as a segmentation failure, retained here rather than removed.
 
 ### 3.6. What Limits an Organ-Level Modulation Analysis
 
@@ -745,6 +780,25 @@ organ-level analysis drawn from an archive will lose a manufacturer-associated f
 its cohort before segmentation is considered, and a study that does not report which
 series were lost will under-represent that manufacturer silently.
 
+**What the reconstructed values do to the index, and what they do not.** Section 3.4
+measures how far a reconstructed CTDIvol departs from a recorded one; the question that
+follows is what such a departure does to the index built on it, and the two halves of the
+answer are of different kinds. The first is structural. The modulation weight is a ratio of
+tube currents, as defined in Section 2.8, and CTDIvol does not enter it; the index is that
+weight multiplied by CTDIvol. An error in CTDIvol therefore appears in the index at 1:1
+and cannot reach the weight at all, so the modulation results of Section 3.2 are
+independent of it by construction rather than by measurement. The second half is
+empirical, and concerns how much of the cohort is exposed. Of the 33 series carrying an
+index, 4 rest on a reconstructed CTDIvol, covering 44 of 334 organ records. Recomputing
+every table over the series with a recorded value alone moves the per-organ median
+modulation weight by at most 0.048 and the per-organ median anatomy-weighted CTDIvol by at
+most 1.11 mGy. The conclusions of this study do not depend on those 4 series — but the
+reason for saying so is not that they can be discarded. Removing them removes GE from the
+weighted tables entirely, from 3 series to none, because no GE series in this cohort
+retained a recorded CTDIvol at all. The multi-vendor reach of the modulation results rests
+on values whose accuracy Section 3.4 could not check, and that is the honest statement of
+where this study is weakest.
+
 **Why acquisition constancy has to be screened.** The acquisition-constancy criterion
 identified one series in which tube current alone was not proportional to scanner output,
 because the acquisition changed rotation and exposure time part-way through. Excluding it
@@ -779,7 +833,13 @@ a coefficient table carrying its citation, DOI, licence and source hash.
 
 **Limitations.** Ten series per manufacturer supports a median and an interquartile range,
 not a distributional claim, and series within the archive are not independent with respect
-to collection, site, scanner model or export pathway. The cohort is oncological and not a
+to collection, site, scanner model or export pathway. The design is balanced by
+manufacturer and not by scanner model, and the two are not interchangeable: those ten
+series per manufacturer are spread over 9 distinct GE models, 6 Siemens, 4 Canon/Toshiba
+and 4 Philips, so most individual models are represented by one to three series. Anything
+stated here about a manufacturer is therefore a statement about a small, model-diverse
+sample of that manufacturer's installed base, and nothing in this study supports a claim
+at the level of a particular scanner model. The cohort is oncological and not a
 reference population. Contrast phase, tube voltage and reconstruction kernel were not
 controlled, and all affect attenuation-derived mass estimates. A single segmentation model
 was used, so segmentation behaviour and cohort anatomy cannot be separated. There is no

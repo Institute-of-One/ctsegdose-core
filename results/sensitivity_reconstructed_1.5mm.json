@@ -1,0 +1,577 @@
+{
+  "what": "Sensitivity of the anatomy-weighted index to the CTDIvol values that were reconstructed rather than read from the header. Answers reviewer 2, round 2.",
+  "structural": {
+    "weight_definition": "w_o = [sum_z n_o(z) I(z) / sum_z n_o(z)] / mean_z I(z)",
+    "ctdivol_appears_in_the_weight": false,
+    "propagation_into_the_index": "organ-weighted CTDIvol = CTDIvol * w_o, so a relative error in CTDIvol appears as the same relative error in the index, and none of it reaches w_o"
+  },
+  "exposure": {
+    "n_series_analysed": 33,
+    "n_series_on_a_reconstructed_value": 4,
+    "n_organ_records_analysed": 334,
+    "n_organ_records_on_a_reconstructed_value": 44,
+    "series": [
+      {
+        "vendor": "GE",
+        "model_name": "Optima CT660",
+        "ctdivol_mgy": 16.86,
+        "n_organ_records": 12
+      },
+      {
+        "vendor": "GE",
+        "model_name": "LightSpeed VCT",
+        "ctdivol_mgy": 6.89,
+        "n_organ_records": 11
+      },
+      {
+        "vendor": "GE",
+        "model_name": "LightSpeed16",
+        "ctdivol_mgy": 23.96,
+        "n_organ_records": 12
+      },
+      {
+        "vendor": "Philips",
+        "model_name": "iCT 256",
+        "ctdivol_mgy": 21.61,
+        "n_organ_records": 9
+      }
+    ]
+  },
+  "vendor_reach": {
+    "published": {
+      "GE": 3,
+      "Siemens": 10,
+      "Canon/Toshiba": 10,
+      "Philips": 10
+    },
+    "recorded_only": {
+      "GE": 0,
+      "Siemens": 10,
+      "Canon/Toshiba": 10,
+      "Philips": 9
+    }
+  },
+  "by_organ": {
+    "adrenal_gland_left": {
+      "relative_weight": {
+        "published_median": 1.018,
+        "recorded_only_median": 0.983,
+        "delta": -0.035,
+        "published_n": 31,
+        "recorded_only_n": 27
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 10.95,
+        "recorded_only_median": 10.87,
+        "delta": -0.08
+      }
+    },
+    "adrenal_gland_right": {
+      "relative_weight": {
+        "published_median": 1.035,
+        "recorded_only_median": 1.025,
+        "delta": -0.01,
+        "published_n": 32,
+        "recorded_only_n": 28
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 10.71,
+        "recorded_only_median": 10.46,
+        "delta": -0.25
+      }
+    },
+    "colon": {
+      "relative_weight": {
+        "published_median": 1.04,
+        "recorded_only_median": 1.042,
+        "delta": 0.002,
+        "published_n": 24,
+        "recorded_only_n": 21
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 10.49,
+        "recorded_only_median": 10.39,
+        "delta": -0.1
+      }
+    },
+    "gallbladder": {
+      "relative_weight": {
+        "published_median": 1.066,
+        "recorded_only_median": 1.065,
+        "delta": -0.001,
+        "published_n": 25,
+        "recorded_only_n": 22
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 10.87,
+        "recorded_only_median": 9.91,
+        "delta": -0.96
+      }
+    },
+    "kidney_left": {
+      "relative_weight": {
+        "published_median": 1.036,
+        "recorded_only_median": 1.027,
+        "delta": -0.009,
+        "published_n": 28,
+        "recorded_only_n": 24
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 12.38,
+        "recorded_only_median": 11.27,
+        "delta": -1.11
+      }
+    },
+    "kidney_right": {
+      "relative_weight": {
+        "published_median": 1.063,
+        "recorded_only_median": 1.072,
+        "delta": 0.009,
+        "published_n": 29,
+        "recorded_only_n": 25
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 11.66,
+        "recorded_only_median": 10.87,
+        "delta": -0.79
+      }
+    },
+    "liver": {
+      "relative_weight": {
+        "published_median": 1.001,
+        "recorded_only_median": 0.977,
+        "delta": -0.024,
+        "published_n": 27,
+        "recorded_only_n": 23
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 10.83,
+        "recorded_only_median": 10.56,
+        "delta": -0.27
+      }
+    },
+    "pancreas": {
+      "relative_weight": {
+        "published_median": 1.037,
+        "recorded_only_median": 1.018,
+        "delta": -0.019,
+        "published_n": 29,
+        "recorded_only_n": 25
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 11.71,
+        "recorded_only_median": 10.87,
+        "delta": -0.84
+      }
+    },
+    "small_bowel": {
+      "relative_weight": {
+        "published_median": 1.058,
+        "recorded_only_median": 1.059,
+        "delta": 0.001,
+        "published_n": 24,
+        "recorded_only_n": 21
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 10.45,
+        "recorded_only_median": 10.05,
+        "delta": -0.4
+      }
+    },
+    "spleen": {
+      "relative_weight": {
+        "published_median": 1.014,
+        "recorded_only_median": 0.966,
+        "delta": -0.048,
+        "published_n": 31,
+        "recorded_only_n": 27
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 10.64,
+        "recorded_only_median": 10.41,
+        "delta": -0.23
+      }
+    },
+    "stomach": {
+      "relative_weight": {
+        "published_median": 1.013,
+        "recorded_only_median": 0.973,
+        "delta": -0.04,
+        "published_n": 30,
+        "recorded_only_n": 26
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 11.76,
+        "recorded_only_median": 10.69,
+        "delta": -1.07
+      }
+    },
+    "urinary_bladder": {
+      "relative_weight": {
+        "published_median": 1.058,
+        "recorded_only_median": 1.058,
+        "delta": 0.0,
+        "published_n": 24,
+        "recorded_only_n": 21
+      },
+      "organ_weighted_ctdivol_mgy": {
+        "published_median": 10.9,
+        "recorded_only_median": 10.51,
+        "delta": -0.39
+      }
+    }
+  },
+  "n_series": {
+    "published": 33,
+    "recorded_only": 29
+  },
+  "per_series_weights_recorded_only": {
+    "1.3.6.1.4.1.14519.5.2.1.169260120790039889716250759344671861678": {
+      "kidney_right": 1.0987,
+      "kidney_left": 1.035,
+      "adrenal_gland_right": 1.0333,
+      "pancreas": 0.9559,
+      "liver": 0.9006,
+      "gallbladder": 0.8958,
+      "stomach": 0.8765,
+      "adrenal_gland_left": 0.8645,
+      "spleen": 0.8603
+    },
+    "1.3.6.1.4.1.14519.5.2.1.6919.4624.492444591845205280171152909620": {
+      "adrenal_gland_left": 1.0183,
+      "adrenal_gland_right": 1.017,
+      "pancreas": 1.0169,
+      "gallbladder": 1.0161,
+      "kidney_left": 1.016,
+      "colon": 1.0154,
+      "small_bowel": 1.0152,
+      "urinary_bladder": 1.0152,
+      "kidney_right": 1.0151,
+      "spleen": 1.0144,
+      "stomach": 1.0135,
+      "liver": 1.001
+    },
+    "1.3.6.1.4.1.14519.5.2.1.130269400384835727617577152120460443053": {
+      "urinary_bladder": 1.2794,
+      "small_bowel": 1.0301,
+      "colon": 1.0044,
+      "pancreas": 0.7775,
+      "kidney_left": 0.7747,
+      "kidney_right": 0.7745,
+      "adrenal_gland_left": 0.7702,
+      "adrenal_gland_right": 0.7659,
+      "liver": 0.7189,
+      "stomach": 0.7084,
+      "spleen": 0.6913
+    },
+    "1.3.6.1.4.1.14519.5.2.1.117047503231020830753317635065264697398": {
+      "urinary_bladder": 1.3371,
+      "small_bowel": 1.1836,
+      "colon": 1.1108,
+      "pancreas": 1.001,
+      "kidney_right": 0.9815,
+      "kidney_left": 0.9785,
+      "gallbladder": 0.9748,
+      "liver": 0.9701,
+      "stomach": 0.9649,
+      "adrenal_gland_left": 0.9498,
+      "adrenal_gland_right": 0.9368,
+      "spleen": 0.9146
+    },
+    "1.3.6.1.4.1.14519.5.2.1.1.11435509567176551466134346112512854888": {
+      "urinary_bladder": 1.5816,
+      "small_bowel": 1.1062,
+      "colon": 1.0736,
+      "kidney_left": 0.9864,
+      "kidney_right": 0.9476,
+      "gallbladder": 0.938,
+      "pancreas": 0.929,
+      "adrenal_gland_left": 0.908,
+      "spleen": 0.9072,
+      "adrenal_gland_right": 0.9038,
+      "stomach": 0.8869,
+      "liver": 0.8596
+    },
+    "1.3.6.1.4.1.14519.5.2.1.139028541272282999207461674394024845879": {
+      "gallbladder": 1.242,
+      "kidney_right": 1.241,
+      "kidney_left": 1.217,
+      "pancreas": 1.2076,
+      "stomach": 1.1753,
+      "colon": 1.1474,
+      "adrenal_gland_left": 1.1457,
+      "liver": 1.1114,
+      "adrenal_gland_right": 1.1104,
+      "small_bowel": 1.1034,
+      "spleen": 1.0407,
+      "urinary_bladder": 0.9713
+    },
+    "1.3.6.1.4.1.14519.5.2.1.1.12144631656438139661502631773455627610": {},
+    "1.3.6.1.4.1.14519.5.2.1.124862978740839397384301699389733909446": {
+      "urinary_bladder": 1.2227,
+      "colon": 0.8584,
+      "small_bowel": 0.804,
+      "kidney_right": 0.7739,
+      "kidney_left": 0.7557,
+      "pancreas": 0.7363,
+      "gallbladder": 0.7293,
+      "adrenal_gland_left": 0.7176,
+      "adrenal_gland_right": 0.6581,
+      "liver": 0.6163,
+      "stomach": 0.6055,
+      "spleen": 0.5898
+    },
+    "1.3.6.1.4.1.14519.5.2.1.120283006789263156233439135960658945231": {
+      "gallbladder": 1.0642,
+      "urinary_bladder": 1.0581,
+      "small_bowel": 1.0578,
+      "kidney_left": 1.0467,
+      "colon": 1.042,
+      "kidney_right": 1.0355,
+      "pancreas": 1.0171,
+      "stomach": 0.9271,
+      "liver": 0.9198,
+      "adrenal_gland_left": 0.9178,
+      "spleen": 0.8924,
+      "adrenal_gland_right": 0.8878
+    },
+    "1.3.6.1.4.1.14519.5.2.1.99.1071.24503530203089772620259137946948": {
+      "urinary_bladder": 1.0721,
+      "pancreas": 0.9958,
+      "gallbladder": 0.9927,
+      "colon": 0.9886,
+      "adrenal_gland_left": 0.9834,
+      "liver": 0.9755,
+      "stomach": 0.9694,
+      "spleen": 0.9657,
+      "kidney_right": 0.9527,
+      "small_bowel": 0.948,
+      "kidney_left": 0.9379,
+      "adrenal_gland_right": 0.9228
+    },
+    "1.3.6.1.4.1.14519.5.2.1.3098.5025.146217110450191920006308432033": {
+      "adrenal_gland_right": 1.519,
+      "spleen": 1.3341
+    },
+    "1.3.6.1.4.1.14519.5.2.1.6919.4624.125153249491081957890408272216": {
+      "kidney_right": 0.931,
+      "stomach": 0.9273,
+      "adrenal_gland_left": 0.9166,
+      "adrenal_gland_right": 0.9149,
+      "kidney_left": 0.9129,
+      "spleen": 0.9114,
+      "pancreas": 0.9083,
+      "liver": 0.9076,
+      "gallbladder": 0.9008
+    },
+    "1.3.6.1.4.1.14519.5.2.1.1.12026969269299422966770921088977968852": {
+      "urinary_bladder": 1.0575,
+      "small_bowel": 1.0346,
+      "colon": 1.0238,
+      "kidney_left": 0.9551,
+      "kidney_right": 0.9434,
+      "gallbladder": 0.9405,
+      "pancreas": 0.9363,
+      "stomach": 0.9361,
+      "spleen": 0.9354,
+      "liver": 0.935,
+      "adrenal_gland_left": 0.9348,
+      "adrenal_gland_right": 0.9348
+    },
+    "1.3.6.1.4.1.14519.5.2.1.1.29343766386826411185462290976788394151": {
+      "adrenal_gland_left": 1.549,
+      "adrenal_gland_right": 1.549,
+      "stomach": 1.4796,
+      "spleen": 1.4637,
+      "pancreas": 1.4395,
+      "liver": 1.4184,
+      "kidney_left": 1.2828,
+      "kidney_right": 1.2103,
+      "gallbladder": 1.1822,
+      "colon": 1.0186,
+      "small_bowel": 0.9608,
+      "urinary_bladder": 0.7678
+    },
+    "1.3.6.1.4.1.14519.5.2.1.235815435552836713008925930681449087181": {
+      "small_bowel": 1.686,
+      "colon": 1.639,
+      "urinary_bladder": 1.2763,
+      "kidney_right": 1.2196,
+      "pancreas": 1.067,
+      "gallbladder": 1.066,
+      "stomach": 0.943,
+      "kidney_left": 0.9359,
+      "liver": 0.6971,
+      "adrenal_gland_left": 0.6802,
+      "spleen": 0.6664,
+      "adrenal_gland_right": 0.6422
+    },
+    "1.3.6.1.4.1.14519.5.2.1.1.35060909971867492262237150543126705979": {
+      "adrenal_gland_left": 1.1688,
+      "gallbladder": 1.1688,
+      "kidney_left": 1.1688,
+      "kidney_right": 1.1688,
+      "pancreas": 1.1688,
+      "small_bowel": 1.1674,
+      "adrenal_gland_right": 1.1658,
+      "stomach": 1.1515,
+      "spleen": 1.1443,
+      "colon": 1.1381,
+      "liver": 1.136,
+      "urinary_bladder": 0.9056
+    },
+    "1.3.6.1.4.1.14519.5.2.1.2932.1975.106756844835533656529983969250": {
+      "adrenal_gland_left": 1.0589,
+      "adrenal_gland_right": 1.0589,
+      "kidney_left": 1.0589,
+      "kidney_right": 1.0589,
+      "pancreas": 1.0589,
+      "small_bowel": 1.0589,
+      "stomach": 1.0589,
+      "urinary_bladder": 1.0589,
+      "colon": 1.0589,
+      "spleen": 1.0588,
+      "liver": 1.0586
+    },
+    "1.3.6.1.4.1.14519.5.2.1.2932.1975.101293628603821133332259852363": {
+      "kidney_left": 1.397,
+      "kidney_right": 1.3917,
+      "pancreas": 1.2335,
+      "gallbladder": 1.2058,
+      "adrenal_gland_left": 1.1692,
+      "adrenal_gland_right": 1.1356,
+      "spleen": 1.1206,
+      "stomach": 1.11,
+      "liver": 0.9807
+    },
+    "1.3.6.1.4.1.14519.5.2.1.1078.3273.178159594418154823809776931651": {
+      "urinary_bladder": 1.1674,
+      "small_bowel": 1.1163,
+      "colon": 1.0915,
+      "kidney_right": 1.0716,
+      "gallbladder": 1.0695,
+      "kidney_left": 1.0186,
+      "pancreas": 1.018,
+      "adrenal_gland_right": 0.9771,
+      "stomach": 0.9771,
+      "liver": 0.9769,
+      "adrenal_gland_left": 0.9733,
+      "spleen": 0.8989
+    },
+    "1.3.6.1.4.1.14519.5.2.1.2099.3754.178917260616042842392917847989": {
+      "adrenal_gland_right": 1.2611,
+      "adrenal_gland_left": 1.2554,
+      "spleen": 1.2261,
+      "stomach": 1.2106,
+      "pancreas": 1.1851,
+      "liver": 1.1624,
+      "kidney_right": 1.1586,
+      "kidney_left": 1.1296,
+      "gallbladder": 1.1119,
+      "colon": 1.1069,
+      "small_bowel": 1.0631,
+      "urinary_bladder": 0.8528
+    },
+    "1.3.6.1.4.1.14519.5.2.1.6919.4624.105596304219458852186973583847": {
+      "small_bowel": 1.0531,
+      "colon": 1.0361,
+      "urinary_bladder": 1.0128,
+      "kidney_right": 1.0043,
+      "kidney_left": 0.9924,
+      "pancreas": 0.9745,
+      "adrenal_gland_left": 0.9604,
+      "adrenal_gland_right": 0.9558,
+      "spleen": 0.9368,
+      "stomach": 0.9351
+    },
+    "1.3.6.1.4.1.14519.5.2.1.94531563816741245873445833243538669934": {
+      "adrenal_gland_left": 1.3722,
+      "pancreas": 1.3614,
+      "kidney_right": 1.3402,
+      "adrenal_gland_right": 1.3023
+    },
+    "1.3.6.1.4.1.14519.5.2.1.35849535652939153577452390867555563110": {
+      "gallbladder": 0.8426,
+      "adrenal_gland_left": 0.7536,
+      "stomach": 0.7521,
+      "spleen": 0.7487,
+      "adrenal_gland_right": 0.7288
+    },
+    "1.3.6.1.4.1.14519.5.2.1.13789879393431026461197285453898279533": {
+      "adrenal_gland_right": 1.4394,
+      "adrenal_gland_left": 1.417,
+      "stomach": 1.3828,
+      "spleen": 1.3549
+    },
+    "1.3.6.1.4.1.14519.5.2.1.2932.1975.110136518027764333512179150738": {
+      "adrenal_gland_right": 1.2836,
+      "kidney_left": 1.2806,
+      "adrenal_gland_left": 1.275,
+      "spleen": 1.2498,
+      "stomach": 1.248,
+      "liver": 1.2432,
+      "pancreas": 1.2403,
+      "gallbladder": 1.2376,
+      "kidney_right": 1.206,
+      "colon": 1.0898,
+      "small_bowel": 1.0714,
+      "urinary_bladder": 1.0113
+    },
+    "1.3.6.1.4.1.14519.5.2.1.2857.3159.203983181868287072753321424140": {
+      "gallbladder": 1.4677,
+      "adrenal_gland_right": 1.4504,
+      "pancreas": 1.4429,
+      "kidney_left": 1.4412,
+      "adrenal_gland_left": 1.4183,
+      "kidney_right": 1.389,
+      "liver": 1.3665,
+      "stomach": 1.3149,
+      "small_bowel": 1.231,
+      "spleen": 1.2125,
+      "colon": 1.1597,
+      "urinary_bladder": 0.8833
+    },
+    "1.3.6.1.4.1.14519.5.2.1.2932.1975.119554862381870875314127355939": {
+      "adrenal_gland_right": 1.1691,
+      "adrenal_gland_left": 1.169,
+      "urinary_bladder": 1.1595,
+      "spleen": 1.1444,
+      "liver": 1.1197,
+      "stomach": 1.1191,
+      "kidney_right": 1.1107,
+      "pancreas": 1.1094,
+      "kidney_left": 1.0909,
+      "gallbladder": 1.0893,
+      "small_bowel": 1.0858,
+      "colon": 1.0387
+    },
+    "1.3.6.1.4.1.14519.5.2.1.3320.3273.114542284322103737687268266165": {
+      "stomach": 1.1283,
+      "spleen": 1.1268,
+      "liver": 1.1174,
+      "adrenal_gland_left": 1.1173,
+      "adrenal_gland_right": 1.1168,
+      "pancreas": 1.1055,
+      "gallbladder": 1.0907,
+      "kidney_left": 1.0835,
+      "kidney_right": 1.0718,
+      "small_bowel": 1.0061,
+      "colon": 0.9978,
+      "urinary_bladder": 0.904
+    },
+    "1.3.6.1.4.1.14519.5.2.1.2932.1975.256749960592074016578641330855": {
+      "urinary_bladder": 1.1236,
+      "adrenal_gland_right": 0.8801,
+      "adrenal_gland_left": 0.8782,
+      "colon": 0.8773,
+      "pancreas": 0.8599,
+      "spleen": 0.8566,
+      "stomach": 0.8442,
+      "kidney_left": 0.8405,
+      "liver": 0.8281,
+      "kidney_right": 0.8145,
+      "gallbladder": 0.8096,
+      "small_bowel": 0.7779
+    }
+  }
+}

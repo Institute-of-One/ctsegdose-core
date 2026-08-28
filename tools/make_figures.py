@@ -249,6 +249,11 @@ def figure_mass(organs: list[dict[str, Any]], tables: dict[str, Any], out: Path)
         if o["organ"] in order and not o["truncated"]
     ]
     top_of_axis = max(ratios) * 1.08
+    # The same argument applies at the bottom, where a floor at zero was doing what
+    # the paragraph above warns against: the smallest ratio in the cohort is a mask
+    # the quality control flagged, and it is the point a reader checking that control
+    # goes looking for. At a floor of zero its marker is drawn half outside the axes.
+    bottom_of_axis = min(ratios) - max(ratios) * 0.025
 
     ax.axhline(1.0, color=INK_SECONDARY, linewidth=1.0, zorder=2)
     ax.text(len(order) - 0.42, 1.0, "ICRP 89\nreference", fontsize=7,
@@ -278,12 +283,39 @@ def figure_mass(organs: list[dict[str, Any]], tables: dict[str, Any], out: Path)
         ax.text(x, median, f" {median:.2f}", fontsize=7, color=INK_PRIMARY,
                 va="bottom", ha="center", fontweight="bold", zorder=5)
 
+    # Name the failed mask rather than leaving it as an unexplained point near zero.
+    # Reviewer 2 asked what the segmentation quality control can and cannot catch, and
+    # this is the one case in the cohort where it caught something: a left kidney
+    # segmented at a few cubic centimetres, which no patient has. It is annotated, not
+    # removed -- Section 2.6 reports what it does to the result.
+    lowest = min(
+        (
+            (o["mass_g"] / ICRP89_REFERENCE_MASS_G[o["organ"]], o)
+            for o in organs
+            if o["organ"] in order and not o["truncated"]
+        ),
+        key=lambda pair: pair[0],
+    )
+    ratio, record = lowest
+    ax.annotate(
+        "flagged by\nquality control",
+        xy=(order.index(record["organ"]) + 0.24, ratio),
+        # Left and low: the space between two clusters, rather than over the next
+        # organ's points, which is where a label to the right of this one lands.
+        xytext=(order.index(record["organ"]) - 0.36, ratio + top_of_axis * 0.05),
+        fontsize=6.5, color=INK_SECONDARY, va="center", ha="right", linespacing=1.3,
+        arrowprops=dict(arrowstyle="-", color=INK_SECONDARY, linewidth=0.7,
+                        shrinkA=0, shrinkB=3),
+        zorder=6,
+    )
+
     ax.set_xticks(range(len(order)), [ORGAN_LABEL[o] for o in order])
     # Names both sides of the ratio: what was measured is an attenuation-derived
     # estimate, and what it is placed beside is a published reference-adult value, not a
     # ground truth for these subjects.
     ax.set_ylabel("estimated mass / ICRP 89 reference adult male mass")
-    ax.set_ylim(0, top_of_axis)
+    ax.set_ylim(bottom_of_axis, top_of_axis)
+    ax.set_yticks([t for t in ax.get_yticks() if t >= 0 and t <= top_of_axis])
     ax.set_xlim(-0.6, len(order) - 0.15)
     ax.grid(axis="x", visible=False)
     strip_chrome(ax)

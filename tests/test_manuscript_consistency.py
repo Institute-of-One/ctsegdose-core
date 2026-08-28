@@ -730,6 +730,19 @@ def test_the_coverage_of_the_reconstruction_check_is_stated(text):
     )
     assert f"the other {coverage['n_on_an_unmeasured_model']} are GE" in text
 
+    # The one series on a model the check could reach must be quoted at the error that
+    # record holds. It was quoted at +7.7% -- one of the two per-series errors for that
+    # model -- two paragraphs after the same model was reported at its median of -2.0%,
+    # so the section disagreed with itself on the number a reviewer asking about
+    # reconstruction accuracy would go looking for.
+    measured = [s for s in coverage["series"] if s["measured"]]
+    for s in measured:
+        rendered = f"{s['median_relative_error']:+.1%}"
+        assert rendered in text or rendered.replace("-", "−") in text, (
+            f"the {s['model_name']} series using a reconstructed value is recorded at "
+            f"{rendered}; the manuscript quotes a different number for it"
+        )
+
 
 def test_the_index_is_defined_as_display_mathematics(raw):
     """Reviewer 1 objected that the formula was presented "as a single line". It was:
@@ -915,3 +928,137 @@ def test_the_revision_cover_letter_is_a_revision_letter_not_a_submission_one(raw
         assert f"### {section}." in raw, (
             f"the cover letter cites Section {section}, which does not exist"
         )
+
+
+# --- round-2 additions -------------------------------------------------------
+
+
+def _sensitivity():
+    path = REPO / "results" / "sensitivity_reconstructed_1.5mm.json"
+    if not path.is_file():
+        pytest.skip("run tools/sensitivity_reconstructed.py")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def test_the_sensitivity_numbers_in_the_discussion_are_the_computed_ones(text):
+    """Reviewer 2 asked what a reconstructed CTDIvol does to the index. The answer is a
+    measurement, so it can go stale exactly like every other measurement here."""
+    s = _sensitivity()
+    e = s["exposure"]
+    assert f"{e['n_series_analysed']} series carrying an" in text
+    assert f"{e['n_series_on_a_reconstructed_value']} rest on a reconstructed" in text
+    assert (
+        f"{e['n_organ_records_on_a_reconstructed_value']} of "
+        f"{e['n_organ_records_analysed']} organ records" in text
+    )
+
+    worst_weight = max(
+        abs(r["relative_weight"]["delta"]) for r in s["by_organ"].values()
+    )
+    worst_index = max(
+        abs(r["organ_weighted_ctdivol_mgy"]["delta"]) for r in s["by_organ"].values()
+    )
+    assert f"at most {worst_weight:.3f}" in text, (
+        f"the largest weight shift is {worst_weight:.3f}"
+    )
+    assert f"at most {worst_index:.2f} mGy" in text, (
+        f"the largest index shift is {worst_index:.2f} mGy"
+    )
+
+
+def test_the_ge_consequence_is_not_dropped_from_the_discussion(text):
+    """The least convenient number in the sensitivity analysis, and the one a response
+    letter is most tempted to leave out."""
+    reach = _sensitivity()["vendor_reach"]
+    assert reach["recorded_only"]["GE"] == 0
+    assert f"from {reach['published']['GE']} series to none" in text
+    assert "no GE series in this cohort" in text
+
+
+def test_the_per_model_counts_in_the_limitations_are_the_cohort_s(text, tables):
+    """Reviewer 2 asked about sample size per manufacturer. The sharper number is per
+    model, and it is the one a reader cannot get from the cohort table."""
+    path = REPO / "results" / "series_1.5mm.csv"
+    if not path.is_file():
+        pytest.skip("run tools/make_analysis.py")
+    import csv
+
+    rows = list(csv.DictReader(path.open(encoding="utf-8")))
+    per_vendor = {
+        vendor: len({r["model_name"] for r in rows if r["vendor"] == vendor})
+        for vendor in ("GE", "Siemens", "Canon/Toshiba", "Philips")
+    }
+    assert (
+        f"{per_vendor['GE']} distinct GE models, {per_vendor['Siemens']} Siemens, "
+        f"{per_vendor['Canon/Toshiba']} Canon/Toshiba and {per_vendor['Philips']} Philips"
+        in text
+    ), f"the cohort holds {per_vendor}"
+
+
+def test_the_failed_mask_is_reported_with_what_removing_it_does(text):
+    """Section 2.6 explained only the high tail of the mass flags. The low tail is a
+    segmentation failure, and reporting it without its effect would be an admission
+    with no number attached."""
+    import copy
+
+    from ctsegdose_core.analysis import weighted_ctdivol
+    from ctsegdose_core.eligibility import assess
+
+    records = REPO / "results" / "organ_dose_1.5mm.json"
+    constancy = REPO / "results" / "acquisition_constancy.json"
+    if not (records.is_file() and constancy.is_file()):
+        pytest.skip("run tools/run_organ_dose.py")
+    payload = json.loads(records.read_text(encoding="utf-8"))
+    eligible = {
+        uid
+        for uid, e in assess(json.loads(constancy.read_text(encoding="utf-8"))).items()
+        if e.eligible
+    }
+
+    worst = min(
+        (
+            o
+            for s in payload["series"]
+            for o in s.get("organs", [])
+            if o["organ"] == "kidney_left" and not o.get("truncated") and o.get("mass_g")
+        ),
+        key=lambda o: float(o["mass_g"]),
+    )
+    assert f"{float(worst['mass_g']):.1f} g" in text
+    assert f"{float(worst['volume_cm3']):.1f} cm" in text
+
+    # Recomputed through the published code path, not over the raw CSV. Quoting a
+    # median from a looser population than the table the paper prints is how a
+    # sentence ends up almost right: the first draft of this one said 1.037 to 1.036,
+    # which is the pair for records that skip the acquisition-constancy screen.
+    def median_for(series):
+        return weighted_ctdivol(series, eligible)["by_organ"]["kidney_left"][
+            "relative_weight"
+        ]["median"]
+
+    trimmed = copy.deepcopy(payload["series"])
+    for s in trimmed:
+        s["organs"] = [
+            o for o in s.get("organs", [])
+            if not (
+                o["organ"] == "kidney_left"
+                and o.get("mass_g")
+                and float(o["mass_g"]) == float(worst["mass_g"])
+            )
+        ]
+    with_it, without = median_for(payload["series"]), median_for(trimmed)
+    assert f"from {with_it:.3f} to {without:.3f}" in text, (
+        f"removing it moves the published median from {with_it:.3f} to {without:.3f}"
+    )
+
+
+def test_the_ai_usage_statement_is_in_the_methods_where_the_editor_asked(raw):
+    """The assistant editor asked for it in the Methods section. The manuscript already
+    carried one in the back matter, which is the version of this request most easily
+    marked as already done."""
+    methods = raw.split("## 2. Materials and Methods", 1)[1].split("## 3. Results", 1)[0]
+    assert "Generative Artificial Intelligence" in methods, (
+        "the AI usage statement is not in the Methods section"
+    )
+    assert "Claude, Anthropic" in methods
+    assert "not used to generate, impute or select any reported value" in methods
