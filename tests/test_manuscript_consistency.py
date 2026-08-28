@@ -1116,3 +1116,45 @@ def test_the_release_the_paper_cites_contains_the_results_the_paper_quotes():
         f"the manuscript cites release {tag}, which does not contain "
         f"{missing}. Cut a new release and update paper/release_metadata.json."
     )
+
+
+def test_the_archive_metadata_declares_the_version_the_package_does():
+    """Zenodo builds the deposit from .zenodo.json, so a stale version there labels the
+    archived snapshot with the number of the previous release -- in metadata a minted
+    DOI makes permanent. It was stale when v0.1.2 was being prepared, which is how this
+    check came to exist.
+    """
+    path = REPO / ".zenodo.json"
+    if not path.is_file():
+        pytest.skip("no Zenodo metadata in this checkout")
+    declared = re.search(
+        r'^version = "([^"]+)"',
+        (REPO / "pyproject.toml").read_text(encoding="utf-8"),
+        re.M,
+    )
+    assert declared, "pyproject.toml declares no version"
+    archive = json.loads(path.read_text(encoding="utf-8"))
+    assert archive["version"] == declared.group(1), (
+        f".zenodo.json says {archive['version']}, pyproject says {declared.group(1)}"
+    )
+
+    citation = REPO / "CITATION.cff"
+    if citation.is_file():
+        assert f"version: {declared.group(1)}" in citation.read_text(encoding="utf-8"), (
+            "CITATION.cff declares a different version again"
+        )
+
+
+def test_the_concept_doi_is_a_relation_and_not_a_top_level_doi():
+    """A top-level "doi" in .zenodo.json tells Zenodo the DOI was assigned elsewhere and
+    stops it minting a version DOI for the release. The file's own notes say so; this
+    keeps a later edit from undoing it."""
+    path = REPO / ".zenodo.json"
+    if not path.is_file():
+        pytest.skip("no Zenodo metadata in this checkout")
+    archive = json.loads(path.read_text(encoding="utf-8"))
+    assert "doi" not in archive, (
+        "a top-level doi in .zenodo.json stops Zenodo versioning this release"
+    )
+    relations = {r["relation"] for r in archive.get("related_identifiers", [])}
+    assert "isVersionOf" in relations, "the concept DOI is not recorded as a relation"

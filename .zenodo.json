@@ -4,7 +4,7 @@
   "upload_type": "software",
   "license": "MIT",
   "access_right": "open",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "language": "eng",
   "creators": [
     {
@@ -44,5 +44,5 @@
       "scheme": "doi"
     }
   ],
-  "notes": "The concept DOI 10.5281/zenodo.21817234 is recorded as a relation rather than as a top-level 'doi', which would tell Zenodo the DOI was assigned elsewhere and stop it versioning releases. Add the article DOI as an isSupplementTo relation once the accompanying manuscript is accepted."
+  "notes": "The concept DOI 10.5281/zenodo.21817234 is recorded as a relation rather than as a top-level 'doi', which would tell Zenodo the DOI was assigned elsewhere and stop it versioning releases. The manuscript was accepted by Tomography (MDPI) on 2026-08-28; add the article DOI as an isSupplementTo relation once MDPI assigns it at publication. This release exists because v0.1.1 did not contain two result files the paper quotes."
 }
