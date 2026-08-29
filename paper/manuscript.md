@@ -25,30 +25,32 @@ data provenance are fully open so the work can be reproduced and extended.
 
 ## Abstract
 
-**Background/Objectives:** CTDIvol is a scanner-output index, not an organ dose, and
-cannot express how tube-current modulation varies along a patient. An organ-specific
-weighted CTDIvol addressing this has been reported before, in single-institution cohorts
-and often from inputs routine archives do not retain. New here is not the quantity but
-what an open, multi-vendor operationalisation reveals: whether its inputs survive archive
-curation, and what the fallback costs when they do not. **Methods:** Forty abdominal CT
-series, ten per manufacturer, were drawn from The Cancer Imaging Archive and twelve organs
-segmented with TotalSegmentator at inference. Of 480 requested organ–series combinations,
-455 were produced. A rule-based acquisition-constancy criterion admitted 39 series.
-**Results:** Modulation weights spanned 0.59 to 1.69, so the index departs from the
-whole-scan CTDIvol by up to 70% within one acquisition. A recorded CTDIvol survived in 29
-of 40 archived headers, was reconstructable in 5 and unavailable in 6, availability
-differing markedly between manufacturers. Forcing that reconstruction on series that did
-retain a value agreed to within 12% on three scanner models and diverged by 58% and 84% on
-two others. Estimated organ mass was broadly consistent with ICRP 89 for liver and
-kidneys. **Conclusions:** This index is not absorbed dose; the implementation is open.
+**Background/Objectives:** The volume computed tomography (CT) dose index (CTDIvol) is a
+scanner output, not an organ dose, and cannot express how tube-current modulation varies
+along a patient. An organ-specific weighted CTDIvol has been reported before, in
+single-institution cohorts and often from inputs routine archives do not retain. New is
+not the quantity but what an open, multi-vendor operationalisation reveals: whether its
+inputs survive archive curation, and what the fallback costs. **Methods:** Forty abdominal
+CT series, ten per manufacturer, were drawn from The Cancer Imaging Archive and twelve
+organs segmented with TotalSegmentator at inference. Of 480 requested organ–series
+combinations, 455 were produced. A rule-based acquisition-constancy criterion admitted 39
+series. **Results:** Modulation weights spanned 0.59 to 1.69, so the index departs from
+the whole-scan CTDIvol by up to 70% within one acquisition. A recorded CTDIvol survived in
+29 of 40 archived headers, was reconstructable in 5 and unavailable in 6, differing
+markedly between manufacturers. Forcing that reconstruction on series that did retain a
+value agreed within 12% on three scanner models and diverged by 58% and 84% on two others.
+Estimated organ mass was broadly consistent with International Commission on Radiological
+Protection (ICRP) Publication 89 for liver and kidneys. **Conclusions:** This index is not
+absorbed dose; the implementation is open.
 
 **Keywords:** computed tomography; CTDIvol; tube-current modulation; deep-learning
 segmentation; TotalSegmentator; image-based dosimetry indices; reproducibility; open data
 
 ## 1. Introduction
 
-Two different things are routinely conflated when CT dose is discussed. The first is that
-a *dose index* is not a *dose*: CTDIvol describes the output of a scanner into a standard
+Two different things are routinely conflated when computed tomography (CT) dose is
+discussed. The first is that a *dose index* is not a *dose*: the volume CT dose index
+(CTDIvol) describes the output of a scanner into a standard
 cylinder of acrylic, and is a property of the acquisition rather than of the patient in
 it — a distinction set out explicitly by McCollough et al. [1]. The second is that a
 single value per series cannot express variation along the patient: almost every modern
@@ -129,7 +131,7 @@ that is where the novelty of an operationalisation lies:
    constant within it, to a tolerance justified in Section 2.9 from the resolution at
    which those attributes are stored.
 5. **An external reference comparison of attenuation-derived estimated organ mass against
-   ICRP 89 values [10].** This is not a separate study but the only external check
+   International Commission on Radiological Protection (ICRP) Publication 89 values [10].** This is not a separate study but the only external check
    available to the pipeline: no ground-truth organ mass exists for archived series, and
    organ mass is the one intermediate quantity the pipeline produces that can be compared
    with a published reference at all. Agreement bounds how far the segmentation and the
@@ -636,8 +638,8 @@ Table 1 and Figure 5 place attenuation-derived estimated organ mass beside the I
 reference adult male values [10], over the 177 untruncated records of the five solid
 organs.
 
-**Table 1.** Attenuation-derived estimated organ mass beside ICRP 89 reference adult male
-values, untruncated organs only. The reference is an external anchor, not a subject-level
+**Table 1.** Attenuation-derived estimated organ mass beside International Commission on
+Radiological Protection (ICRP) Publication 89 reference adult male values, untruncated organs only. The reference is an external anchor, not a subject-level
 ground truth.
 
 | organ | n | median estimated mass | ratio to ICRP 89 |
