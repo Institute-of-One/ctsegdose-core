@@ -16,8 +16,11 @@ Usage::
         --replies docs/proof/comment_replies.md \\
         --out docs/proof/manuscript.v9.replied.docx
 
-The reply text is read from the markdown so the two cannot drift: what is checked
-in the repository is what lands in the document.
+The reply text is read from the markdown rather than embedded here, so one file is
+edited and one file ships. Note that it is not a checked-in file: .gitignore
+excludes docs/ entirely, because that is where reviewer reports live and those are
+confidential. Correspondence in this programme is deliberately outside git, so the
+guarantee is "one source within a run", not "the repository records what was sent".
 """
 
 from __future__ import annotations
