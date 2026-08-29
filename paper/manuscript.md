@@ -27,20 +27,21 @@ data provenance are fully open so the work can be reproduced and extended.
 
 **Background/Objectives:** The volume computed tomography (CT) dose index (CTDIvol) is a
 scanner output, not an organ dose, and cannot express how tube-current modulation varies
-along a patient. An organ-specific weighted CTDIvol has been reported before, in
-single-institution cohorts and often from inputs routine archives do not retain. New is
-not the quantity but what an open, multi-vendor operationalisation reveals: whether its
-inputs survive archive curation, and what the fallback costs. **Methods:** Forty abdominal
-CT series, ten per manufacturer, were drawn from The Cancer Imaging Archive and twelve
-organs segmented with TotalSegmentator at inference. Of 480 requested organ–series
-combinations, 455 were produced. A rule-based acquisition-constancy criterion admitted 39
-series. **Results:** Modulation weights spanned 0.59 to 1.69, so the index departs from
-the whole-scan CTDIvol by up to 70% within one acquisition. A recorded CTDIvol survived in
-29 of 40 archived headers, was reconstructable in 5 and unavailable in 6, differing
-markedly between manufacturers. Forcing that reconstruction on series that did retain a
-value agreed within 12% on three scanner models and diverged by 58% and 84% on two others.
-Estimated organ mass was broadly consistent with International Commission on Radiological
-Protection (ICRP) Publication 89 for liver and kidneys. **Conclusions:** This index is not
+along a patient. An organ-specific weighted CTDIvol addressing this has been reported
+before, in single-institution cohorts and often from inputs routine archives do not
+retain. New here is not the quantity but what an open, multi-vendor operationalisation
+reveals: whether its inputs survive archive curation and what the fallback costs when they
+do not. **Methods:** Forty abdominal CT series, ten per manufacturer, were drawn from the
+Cancer Imaging Archive and twelve organs segmented with TotalSegmentator at inference. Of
+480 requested organ–series combinations, 455 were produced. A rule-based
+acquisition-constancy criterion admitted 39 series. **Results:** Modulation weights
+spanned 0.59 to 1.69, so the index departs from the whole-scan CTDIvol by up to 70% within
+one acquisition. A recorded CTDIvol survived in 29 of 40 archived headers and was
+reconstructable in 5 and unavailable in 6, availability differing markedly between
+manufacturers. Forcing that reconstruction on series that did retain a value agreed to
+within 12% on three scanner models and diverged by 58% and 84% on two others. Estimated
+organ mass was broadly consistent with International Commission on Radiological Protection
+(ICRP) Publication 89 for liver and kidneys. **Conclusions:** This index is not an
 absorbed dose; the implementation is open.
 
 **Keywords:** computed tomography; CTDIvol; tube-current modulation; deep-learning
