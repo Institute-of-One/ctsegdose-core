@@ -1242,3 +1242,36 @@ def test_no_line_break_splits_a_hyphenated_word(raw):
         "a line break inside a hyphenated word renders as a space:\n"
         + "\n".join(offenders)
     )
+
+
+def test_a_cover_letter_for_a_web_form_is_not_hard_wrapped():
+    """SuSy's cover-letter box is a textarea: it keeps the newlines it is given.
+
+    A letter wrapped at 90 columns for readability in the repository arrives in the
+    editor's box broken mid-sentence on every line. It happened on this proof, and the
+    fix is one line per paragraph with blank lines between them.
+
+    Scoped to docs/proof/, which is the letter being sent. The round-1 and round-2
+    letters are records of what was already submitted and are left as they were sent.
+    """
+    directory = REPO / "docs" / "proof"
+    letters = sorted(directory.glob("cover_letter*.txt")) if directory.is_dir() else []
+    if not letters:
+        pytest.skip("no cover letter staged for a proof return")
+    for path in letters:
+        lines = path.read_text(encoding="utf-8").split("\n")
+        for i, line in enumerate(lines[:-1]):
+            nxt = lines[i + 1]
+            if not line or not nxt:
+                continue
+            # A continued line whose predecessor does not close a sentence is a wrap.
+            if not line.rstrip().endswith((".", ",", ":", ";", '"', "?", "!")):
+                continue
+            assert not (line.rstrip().endswith(",") and nxt[:1].islower()), (
+                f"{path.name} line {i + 1} looks hard-wrapped: {line[-40:]!r}"
+            )
+        longest = max(len(l) for l in lines)
+        assert longest > 120, (
+            f"{path.name} has no line longer than {longest} characters, which means its "
+            "paragraphs are wrapped; a textarea keeps those newlines"
+        )
