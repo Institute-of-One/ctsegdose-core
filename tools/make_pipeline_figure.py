@@ -77,6 +77,17 @@ def _load(tag: str) -> dict[str, Any]:
     }
 
 
+def _grouped(n: int) -> str:
+    """Thousands separators from five digits up, not from four.
+
+    MDPI house style, as the production editor put it: "Commas are only used for
+    numbers with five or more digits." The cohort figure carries one four-digit
+    count, and writing it 4,768 is a correction the editor has to make by hand on
+    an image they cannot edit. The figure now writes what the journal prints.
+    """
+    return f"{n:,}" if n >= 10000 else str(n)
+
+
 def _counts(data: dict[str, Any]) -> dict[str, Any]:
     """Read every count, and fail rather than substitute when one is absent.
 
@@ -171,12 +182,12 @@ def draw(tag: str, out_stem: Path) -> Path:
 
     # -- acquisition ---------------------------------------------------------------
     stages = [
-        (10.9, f"Archive index, metadata only\n{counts['indexed']:,} CT series"),
-        (9.7, f"Metadata screen\n{counts['screened']:,} series remain"),
+        (10.9, f"Archive index, metadata only\n{_grouped(counts['indexed'])} CT series"),
+        (9.7, f"Metadata screen\n{_grouped(counts['screened'])} series remain"),
         (
             8.5,
             f"One series per patient, vendor-balanced queue\n"
-            f"{counts['one_per_patient']:,} series, {counts['queued']} queued",
+            f"{_grouped(counts['one_per_patient'])} series, {counts['queued']} queued",
         ),
         (
             7.3,
@@ -193,7 +204,7 @@ def draw(tag: str, out_stem: Path) -> Path:
     # The screen and the probe are themselves verification; say what they reject.
     _box(
         ax, (right, 9.7), tall,
-        "rejects: not abdominal,\nnot a reconstructed image,\ntoo few or too many slices",
+        "Rejects: not abdominal,\nnot a reconstructed image,\ntoo few or too many slices",
         fill=FILL_CHECK, edge=EDGE_CHECK,
     )
     _arrow(ax, (left + wide[0] / 2, 9.7), (right - tall[0] / 2, 9.7), dashed=True)
@@ -202,7 +213,7 @@ def draw(tag: str, out_stem: Path) -> Path:
     # that only thins one series per patient would say the wrong thing.
     _box(
         ax, (right, 7.3), tall,
-        "rejects: tube current not modulated,\nno per-slice tube current,\n"
+        "Rejects: tube current not modulated,\nno per-slice tube current,\n"
         "not a reconstructed image",
         fill=FILL_CHECK, edge=EDGE_CHECK,
     )
@@ -249,7 +260,7 @@ def draw(tag: str, out_stem: Path) -> Path:
     _arrow(ax, (left, 3.7 - wide[1] / 2), (left, 2.5 + wide[1] / 2))
     _box(
         ax, (right, 2.5), tall,
-        f"output-governing attributes\nconstant to {counts['tolerance']:.0%}\n"
+        f"Output-governing attributes\nconstant to {counts['tolerance']:.0%}\n"
         f"within the series",
         fill=FILL_CHECK, edge=EDGE_CHECK,
     )

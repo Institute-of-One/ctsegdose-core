@@ -74,19 +74,49 @@ def _abstract(raw: str) -> str:
     return raw.split("## Abstract", 1)[1].split("**Keywords", 1)[0]
 
 
+#: The subheadings Tomography's production editor asked for at proof, in the order
+#: they asked for them. They are the journal's, not ours: the first version of this
+#: file asserted the opposite, that the abstract must carry none of them.
+ABSTRACT_SUBHEADINGS = (
+    "Background/Objectives:",
+    "Methods:",
+    "Results:",
+    "Conclusions:",
+)
+
+
 def test_the_abstract_fits_the_journal_limit(raw):
     """Tomography (MDPI) asks for about 200 words. An abstract grows during revision, so
-    the limit is pinned rather than checked once."""
-    assert len(_abstract(raw).split()) <= 200
+    the limit is pinned rather than checked once.
+
+    The four mandated subheadings are not counted: they are labels the journal requires,
+    not abstract prose, and counting them would make the limit depend on the journal's
+    own formatting.
+    """
+    body = _abstract(raw)
+    for label in ABSTRACT_SUBHEADINGS:
+        body = body.replace(f"**{label}**", "").replace(label, "")
+    assert len(body.split()) <= 200
 
 
-def test_the_abstract_is_one_paragraph_without_structured_headings(raw):
-    """MDPI wants the background-to-conclusion arc woven into a single paragraph, not
-    the Purpose:/Methods:/Results: labels a structured abstract uses."""
+def test_the_abstract_carries_the_subheadings_the_journal_requires(raw):
+    """This test asserted the reverse until the proof arrived.
+
+    It read: "MDPI wants the background-to-conclusion arc woven into a single paragraph,
+    not the Purpose:/Methods:/Results: labels a structured abstract uses." The production
+    editor asked for exactly those labels. The journal is the authority on its own
+    template, so the assertion is inverted rather than argued with.
+    """
     body = _abstract(raw).strip()
-    assert "\n\n" not in body, "the abstract must be a single paragraph"
-    for label in ("Purpose:", "Background:", "Methods:", "Results:", "Conclusions:"):
-        assert label not in body, f"remove the structured-abstract label {label!r}"
+    assert "\n\n" not in body, "the abstract must still be a single paragraph"
+    positions = []
+    for label in ABSTRACT_SUBHEADINGS:
+        assert label in body, f"the abstract is missing the subheading {label!r}"
+        positions.append(body.index(label))
+    assert positions == sorted(positions), (
+        f"the subheadings are out of order: they must run {ABSTRACT_SUBHEADINGS}"
+    )
+    assert "Purpose:" not in body, "the journal's label is Background/Objectives"
 
 
 def test_the_mdpi_back_matter_sections_are_present_and_ordered(raw):
@@ -578,7 +608,10 @@ def test_no_absorbed_dose_in_milligray_is_claimed_anywhere(text):
 
 
 def test_the_affiliation_convention_holds(raw):
-    assert "Institute of One, LISIT Co., Ltd., Tokyo, Japan" in raw
+    # The postal code sits between the company and the city, as MDPI prints it, so the
+    # string is matched in two halves rather than as one literal.
+    assert "Institute of One, LISIT Co., Ltd." in raw
+    assert "Tokyo, Japan" in raw
     assert "0000-0001-9211-1071" in raw
     assert "National Cancer Center" not in raw and "NCC" not in raw
 
@@ -787,13 +820,22 @@ def test_the_response_letter_points_at_sections_that_exist(raw):
 
 
 def test_the_response_letter_quotes_the_manuscripts_own_numbers(raw):
+    """The round-1 letter, checked against what the manuscript said when it was sent.
+
+    The abstract word count was checked here too, until the production editor asked at
+    proof for the four MDPI subheadings. Adding them changed the count, and the round-1
+    letter is a document that was sent in August: it cannot be wrong about a manuscript
+    that changed after it. A historical letter is validated against its own state, not
+    against the current one, so the coupling is removed rather than the letter edited.
+
+    The reference count stays: the letter's claim about the size of the bibliography is
+    about a list that has not changed and must not silently drift.
+    """
     letter = _letter()
     references = len(re.findall(r"(?m)^\d+\.\s", raw.split("## References")[1]))
     assert f"list to {references}" in letter, (
         f"the reply says the list reaches a different number than the {references} present"
     )
-    words = len(raw.split("## Abstract", 1)[1].split("**Keywords", 1)[0].split())
-    assert f"{words} words against" in letter, f"the abstract is {words} words"
 
 
 def test_the_response_letter_does_not_claim_changes_that_were_not_made(raw):
@@ -1158,3 +1200,15 @@ def test_the_concept_doi_is_a_relation_and_not_a_top_level_doi():
     )
     relations = {r["relation"] for r in archive.get("related_identifiers", [])}
     assert "isVersionOf" in relations, "the concept DOI is not recorded as a relation"
+
+
+def test_the_affiliation_carries_a_postal_code(raw):
+    """MDPI production asks for it at proof on every submission, and it was asked for
+    twice before it went into the source. Carrying it in the manuscript stops the same
+    comment arriving on the next paper built from this repository."""
+    header = raw.split("## Simple Summary", 1)[0]
+    assert re.search(r"\b\d{3}-\d{4}\b", header), (
+        "the affiliation line has no postal code; MDPI asks for one at proof"
+    )
+    assert "Institute of One, LISIT Co., Ltd." in header
+    assert "0000-0001-9211-1071" in header

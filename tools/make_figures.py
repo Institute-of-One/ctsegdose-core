@@ -30,6 +30,7 @@ from ctsegdose_core.figures import (  # noqa: E402
     AVAILABILITY_STYLE,
     INK_PRIMARY,
     INK_SECONDARY,
+    SURFACE,
     VENDOR_COLOURS,
     VENDOR_HATCHES,
     VENDOR_MARKERS,
@@ -280,8 +281,13 @@ def figure_mass(organs: list[dict[str, Any]], tables: dict[str, Any], out: Path)
         median = float(np.median(pooled))
         ax.plot([x - 0.36, x + 0.36], [median, median], color=INK_PRIMARY,
                 linewidth=1.8, solid_capstyle="round", zorder=4)
+        # Backed with the surface colour: the label sits on its own median bar and,
+        # in the denser columns, over data points. The production editor asked
+        # whether overlapping content here impedes reading; this removes the part
+        # that does, without moving any point.
         ax.text(x, median, f" {median:.2f}", fontsize=7, color=INK_PRIMARY,
-                va="bottom", ha="center", fontweight="bold", zorder=5)
+                va="bottom", ha="center", fontweight="bold", zorder=6,
+                bbox=dict(facecolor=SURFACE, edgecolor="none", pad=0.8))
 
     # Name the failed mask rather than leaving it as an unexplained point near zero.
     # Reviewer 2 asked what the segmentation quality control can and cannot catch, and
@@ -304,6 +310,7 @@ def figure_mass(organs: list[dict[str, Any]], tables: dict[str, Any], out: Path)
         # organ's points, which is where a label to the right of this one lands.
         xytext=(order.index(record["organ"]) - 0.36, ratio + top_of_axis * 0.05),
         fontsize=6.5, color=INK_SECONDARY, va="center", ha="right", linespacing=1.3,
+        bbox=dict(facecolor=SURFACE, edgecolor="none", pad=0.8),
         arrowprops=dict(arrowstyle="-", color=INK_SECONDARY, linewidth=0.7,
                         shrinkA=0, shrinkB=3),
         zorder=6,
@@ -443,12 +450,24 @@ def figure_demonstration(
     bottom.axvline(series["ctdivol_mgy"], color=INK_SECONDARY, linewidth=1.0,
                    linestyle=(0, (4, 2)), zorder=4)
     # Below the last bar, not above the first: above collides with the panel title.
+    # Below is not enough on its own -- at journal column width the label started
+    # where the last bar's weight label ended and the two ran together, which is
+    # what the production editor saw. The axis is extended to make a clear row for
+    # it, and the label sits in that row rather than beside the bars.
+    # Set before invert_yaxis below, which flips whatever limits are in place.
+    bottom.set_ylim(-0.65, len(organs) + 0.15)
     bottom.text(series["ctdivol_mgy"], len(organs) - 0.35,
                 f" scan CTDIvol {series['ctdivol_mgy']:.1f} mGy",
                 fontsize=7, color=INK_SECONDARY, va="center")
     for bar, o in zip(bars, organs, strict=True):
+        # Backed with the surface colour: where an organ's index sits close to the
+        # scan CTDIvol, the dashed line runs through the middle of this label and
+        # strikes the digits out. Two organs did that, and it is the second half of
+        # what the production editor flagged as overlap in this panel.
         bottom.text(bar.get_width() + max(values) * 0.015, bar.get_y() + bar.get_height() / 2,
-                    f"×{o['relative_weight']:.2f}", fontsize=7, color=INK_PRIMARY, va="center")
+                    f"×{o['relative_weight']:.2f}", fontsize=7, color=INK_PRIMARY, va="center",
+                    zorder=5,
+                    bbox=dict(facecolor=SURFACE, edgecolor="none", pad=0.8))
     bottom.set_yticks(y, [ORGAN_LABEL.get(o["organ"], o["organ"]) for o in organs])
     bottom.invert_yaxis()
     bottom.set_xlabel("organ-weighted CTDIvol index (mGy)")

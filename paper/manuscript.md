@@ -8,7 +8,7 @@ tests/test_manuscript_consistency.py; no number in this document is typed by han
 
 **Shuji Yamamoto**
 
-Institute of One, LISIT Co., Ltd., Tokyo, Japan; yamamoto@lisit.jp; ORCID 0000-0001-9211-1071
+Institute of One, LISIT Co., Ltd., 150-0044 Tokyo, Japan; yamamoto@lisit.jp; ORCID 0000-0001-9211-1071
 
 **Correspondence:** yamamoto@lisit.jp
 
@@ -25,22 +25,22 @@ data provenance are fully open so the work can be reproduced and extended.
 
 ## Abstract
 
-CTDIvol is a scanner-output index, not an organ dose, and cannot express how tube-current
-modulation varies along a patient. An organ-specific weighted CTDIvol addressing this has
-been reported before, in single-institution cohorts and often from inputs routine archives
-do not retain. New here is not the quantity but what an open, multi-vendor
-operationalisation reveals: whether its inputs survive archive curation, and what the
-fallback costs when they do not. Forty abdominal CT series, ten per manufacturer, were
-drawn from The Cancer Imaging Archive and twelve organs segmented with TotalSegmentator at
-inference. Of 480 requested organ–series combinations, 455 were produced. A rule-based
-acquisition-constancy criterion admitted 39 series. Modulation weights spanned
-0.59 to 1.69, so the index departs from the whole-scan CTDIvol by up to 70% within one
-acquisition. A recorded CTDIvol survived in 29 of 40 archived headers, was reconstructable
-in 5 and unavailable in 6, availability differing markedly between manufacturers. Forcing
-that reconstruction on series that did retain a value agreed to within 12% on three
-scanner models and diverged by 58% and 84% on two others. Estimated organ mass was broadly
-consistent with ICRP 89 for liver and kidneys. This index is not absorbed dose; the
-implementation is open.
+**Background/Objectives:** CTDIvol is a scanner-output index, not an organ dose, and
+cannot express how tube-current modulation varies along a patient. An organ-specific
+weighted CTDIvol addressing this has been reported before, in single-institution cohorts
+and often from inputs routine archives do not retain. New here is not the quantity but
+what an open, multi-vendor operationalisation reveals: whether its inputs survive archive
+curation, and what the fallback costs when they do not. **Methods:** Forty abdominal CT
+series, ten per manufacturer, were drawn from The Cancer Imaging Archive and twelve organs
+segmented with TotalSegmentator at inference. Of 480 requested organ–series combinations,
+455 were produced. A rule-based acquisition-constancy criterion admitted 39 series.
+**Results:** Modulation weights spanned 0.59 to 1.69, so the index departs from the
+whole-scan CTDIvol by up to 70% within one acquisition. A recorded CTDIvol survived in 29
+of 40 archived headers, was reconstructable in 5 and unavailable in 6, availability
+differing markedly between manufacturers. Forcing that reconstruction on series that did
+retain a value agreed to within 12% on three scanner models and diverged by 58% and 84% on
+two others. Estimated organ mass was broadly consistent with ICRP 89 for liver and
+kidneys. **Conclusions:** This index is not absorbed dose; the implementation is open.
 
 **Keywords:** computed tomography; CTDIvol; tube-current modulation; deep-learning
 segmentation; TotalSegmentator; image-based dosimetry indices; reproducibility; open data
@@ -152,8 +152,10 @@ with what it rejects.
 
 **Figure 1.** Data formation and verification. Blue: stages that produce or transform
 data, with the number of series or records carried forward. Orange: verification, each
-box naming what its stage rejects or flags. Green: the reported quantity. Every count is
-read from the shipped result files.
+box naming what its stage rejects or flags. Green: the reported quantity. Solid arrows
+carry the surviving data from one stage to the next; dashed arrows point from a stage to
+what that stage rejects or flags, and carry no data onward. Every count is read from the
+shipped result files.
 
 All series in this study are public, de-identified data from The Cancer Imaging Archive,
 used under the individual collection licences recorded in the provenance file that
