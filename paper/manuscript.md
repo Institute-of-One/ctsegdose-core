@@ -8,7 +8,7 @@ tests/test_manuscript_consistency.py; no number in this document is typed by han
 
 **Shuji Yamamoto**
 
-Institute of One, LISIT Co., Ltd., 150-0044 Tokyo, Japan; yamamoto@lisit.jp; ORCID 0000-0001-9211-1071
+Institute of One, LISIT Co., Ltd., Tokyo 150-0044, Japan; yamamoto@lisit.jp; ORCID 0000-0001-9211-1071
 
 **Correspondence:** yamamoto@lisit.jp
 

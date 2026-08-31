@@ -1208,15 +1208,28 @@ def test_the_concept_doi_is_a_relation_and_not_a_top_level_doi():
     assert "isVersionOf" in relations, "the concept DOI is not recorded as a relation"
 
 
-def test_the_affiliation_carries_a_postal_code(raw):
-    """MDPI production asks for it at proof on every submission, and it was asked for
-    twice before it went into the source. Carrying it in the manuscript stops the same
-    comment arriving on the next paper built from this repository."""
+#: The affiliation exactly as Crossref carries it for this author's published paper,
+#: 10.3390/jimaging12080392, checked on 2026-08-30. City before postcode.
+CANONICAL_AFFILIATION = "Institute of One, LISIT Co., Ltd., Tokyo 150-0044, Japan"
+
+
+def test_the_affiliation_is_the_string_the_published_record_carries(raw):
+    """Not merely "has a postal code" -- the exact string, in the exact order.
+
+    The second Tomography proof went out reading "150-0044 Tokyo", while the author's
+    already-published Journal of Imaging paper is indexed as "Tokyo 150-0044". Affiliation
+    matching, and the ROR curation this programme is building towards, compare these
+    strings: one author with two orderings is one author who looks like two.
+
+    MDPI production also asks for the postal code at proof on every submission, and asked
+    twice before it went into the source, so carrying the whole string here stops both
+    problems at once.
+    """
     header = raw.split("## Simple Summary", 1)[0]
-    assert re.search(r"\b\d{3}-\d{4}\b", header), (
-        "the affiliation line has no postal code; MDPI asks for one at proof"
+    assert CANONICAL_AFFILIATION in header, (
+        "the affiliation must read exactly as the published record carries it:\n"
+        f"  {CANONICAL_AFFILIATION}"
     )
-    assert "Institute of One, LISIT Co., Ltd." in header
     assert "0000-0001-9211-1071" in header
 
 
