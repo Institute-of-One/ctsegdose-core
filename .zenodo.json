@@ -42,6 +42,12 @@
       "relation": "isVersionOf",
       "resource_type": "software",
       "scheme": "doi"
+    },
+    {
+      "identifier": "10.3390/tomography12090125",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-article",
+      "scheme": "doi"
     }
   ],
   "notes": "The concept DOI 10.5281/zenodo.21817234 is recorded as a relation rather than as a top-level 'doi', which would tell Zenodo the DOI was assigned elsewhere and stop it versioning releases. The manuscript was accepted by Tomography (MDPI) on 2026-08-28; add the article DOI as an isSupplementTo relation once MDPI assigns it at publication. This release exists because v0.1.1 did not contain two result files the paper quotes."
